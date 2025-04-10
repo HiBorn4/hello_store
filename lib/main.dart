@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'screens/category_screen.dart';
+import 'package:hello_store/screens/product_details_screen/product_details_screen.dart';
+// import 'screens/category_screen.dart';
 
 void main() {
   runApp(const App());
@@ -15,7 +16,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Your App Name',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: CategoryScreen(), // Set your desired starting screen
+      home: ProductDetailsScreen(), // Set your desired starting screen
     );
   }
 }
