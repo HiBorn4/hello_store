@@ -1,20 +1,5 @@
 import 'package:flutter/material.dart';
-
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'E-Commerce Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Roboto',
-      ),
-      home: CategoryScreen(),
-    );
-  }
-}
+import '../controllers/category_controller.dart';
 
 class CategoryScreen extends StatefulWidget {
   @override
@@ -22,351 +7,602 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+  // Controller instance
+  final CategoryController _controller = CategoryController();
+
+  // UI State
   int _currentIndex = 0;
   final PageController _bannerController = PageController();
   int _currentBannerPage = 0;
-  final List<bool> _favorites = List.generate(8, (index) => false);
-
-  final List<Map<String, dynamic>> categories = [
-    {'name': 'T.V. &...', 'icon': Icons.tv},
-    {'name': 'Washing...', 'icon': Icons.local_laundry_service},
-    {'name': 'Refrigera...', 'icon': Icons.kitchen},
-    {'name': 'Kitchen...', 'icon': Icons.blender},
-    {'name': 'Small...', 'icon': Icons.blender},
-    {'name': 'Air...', 'icon': Icons.ac_unit},
-    {'name': 'Coolers...', 'icon': Icons.water_damage},
-    {'name': 'Fan...', 'icon': Icons.electric_bolt},
-    {'name': 'Other...', 'icon': Icons.more_horiz},
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
-        ),
-        title: Text("Shopsy", style: TextStyle(color: Colors.black)),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications_none, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
         backgroundColor: Colors.white,
         elevation: 0,
+        toolbarHeight: screenHeight * 0.07,
+        leadingWidth: screenWidth * 0.12,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_outlined,
+            color: Colors.black,
+            size: screenWidth * 0.06,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        titleSpacing: 0,
+        title: _buildSearchBar(screenWidth, screenHeight),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildBannerCarousel(),
-            _buildCategoryGrid(),
-            _buildSectionTitle("Deals on electronics"),
-            _buildDealsCarousel(),
-            _buildSectionTitle("Our Top Brands"),
-            _buildBrandsList(),
-            _buildSectionTitle("Featured Products"),
-            _buildProductGrid(),
+            Divider(color: Colors.grey, height: screenHeight * 0.005, thickness: screenHeight*0.002,),
+            _buildBannerCarousel(screenHeight, screenWidth),
+            _buildCategoryGrid(screenHeight, screenWidth),
+            SizedBox(height: screenHeight * 0.02),
+            Divider(color: Colors.grey, height: screenHeight * 0.005, thickness: screenHeight*0.002,),
+            SizedBox(height: screenHeight * 0.02),
+            _buildSectionTitle("Deals on electronics", screenWidth),
+            _buildDealsCarousel(screenHeight, screenWidth),
+            Divider(color: Colors.grey, height: screenHeight * 0.005, thickness: screenHeight*0.002,),
+            _buildSectionTitle("Our Top Brands", screenWidth),
+            _buildBrandsList(screenHeight, screenWidth),
+            Divider(color: Colors.grey, height: screenHeight * 0.04, thickness: screenHeight*0.002,),
+            _buildSectionTitle("Featured Products", screenWidth),
+            Divider(color: Colors.grey, height: screenHeight * 0.04, thickness: screenHeight*0.002,),
+            _buildProductGrid(screenHeight, screenWidth),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Wishlist'),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
-        ],
-        onTap: (index) => setState(() => _currentIndex = index),
-      ),
+      bottomNavigationBar: _buildBottomNavBar(screenWidth),
     );
   }
 
-  Widget _buildBannerCarousel() {
-    return Column(
-      children: [
-        SizedBox(
-          height: 200,
-          child: PageView.builder(
-            controller: _bannerController,
-            itemCount: 3,
-            onPageChanged: (index) => setState(() => _currentBannerPage = index),
-            itemBuilder: (context, index) => Container(
-              margin: EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                // image: DecorationImage(
-                //   image: NetworkImage('https://picsum.photos/800/200?random=$index'),
-                //   fit: BoxFit.cover,
-                // ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text("Restaurant Equipment's\nUPTO 70%",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  ],
-                ),
+  Widget _buildSearchBar(double width, double height) {
+    return Container(
+      height: height * 0.055,
+      margin: EdgeInsets.only(right: width * 0.03),
+      padding: EdgeInsets.symmetric(horizontal: width * 0.03),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(width * 0.035),
+        border: Border.all(color: Colors.grey[500]!, width: 1),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.search,
+            color: Colors.grey,
+            size: width * 0.055,
+          ),
+          SizedBox(width: width * 0.02),
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search "pooja needs"',
+                border: InputBorder.none,
+                isDense: true,
+                hintStyle: TextStyle(fontSize: width * 0.038),
               ),
             ),
           ),
-        ),
-        SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(3, (index) => Container(
-            width: 8,
-            height: 8,
-            margin: EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _currentBannerPage == index ? Colors.blue : Colors.grey,
-            ),
-          )),
-        ),
-        SizedBox(height: 16),
-      ],
-    );
-  }
-
-  Widget _buildCategoryGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        childAspectRatio: 0.8,
-      ),
-      itemCount: categories.length,
-      itemBuilder: (context, index) => Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(categories[index]['icon'], size: 32),
-            SizedBox(height: 8),
-            Text(categories[index]['name'], 
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12)),
-          ],
-        ),
+          Container(
+            height: height * 0.025,
+            width: 1,
+            color: Colors.grey[400],
+            margin: EdgeInsets.symmetric(horizontal: width * 0.02),
+          ),
+          Icon(
+            Icons.mic,
+            color: Colors.grey,
+            size: width * 0.055,
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildBannerCarousel(double height, double width) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: height * 0.02, horizontal: width * 0.04),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(width * 0.04),
+        child: Image.asset(
+          'assets/category_poster.png',
+          fit: BoxFit.cover,
+          height: height * 0.22,
+          width: double.infinity,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryGrid(double height, double width) {
+    final int crossAxisCount = 2;
+    final int itemCount = _controller.categories.length;
+    final int columns = (itemCount / crossAxisCount).ceil();
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: height * 0.01, horizontal: width * 0.04),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(columns, (columnIndex) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: List.generate(crossAxisCount, (rowIndex) {
+                int actualIndex = columnIndex * crossAxisCount + rowIndex;
+                if (actualIndex >= itemCount) {
+                  return SizedBox(width: width * 0.22, height: height * 0.12);
+                }
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: height*0.008),
+                  child: SizedBox(
+                    width: width * 0.22,
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(width * 0.03),
+                          child: Image.asset(
+                            _controller.categories[actualIndex]['image'],
+                            width: width * 0.16,
+                            height: width * 0.16,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        SizedBox(height: height * 0.005),
+                        Text(
+                          _controller.categories[actualIndex]['name'],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: width * 0.032, fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title, double width) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: width * 0.04, vertical: width * 0.02),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            )),
-          TextButton(
-            onPressed: () {},
-            child: Text("View All",
-              style: TextStyle(color: Colors.blue)),
+          Text(
+            title,
+            style: TextStyle(fontSize: width * 0.05, fontWeight: FontWeight.bold),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildDealsCarousel() {
-    return SizedBox(
-      height: 240,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        itemCount: 5,
-        itemBuilder: (context, index) => Container(
-          width: 160,
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ClipRRect(
-                //   borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                //   child: Image.network(
-                //     'https://picsum.photos/200/150?random=$index',
-                //     height: 120,
-                //     width: double.infinity,
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
-                Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Product ${index + 1}",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 4),
-                      Row(
+  Widget _buildDealsCarousel(double height, double width) {
+  return Container(
+    color: Colors.white,
+    padding: EdgeInsets.symmetric(vertical: height * 0.015),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Horizontal scrollable cards
+        SizedBox(
+          height: height * 0.41,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: width * 0.02),
+            itemCount: _controller.deals.length,
+            itemBuilder: (context, index) {
+              final deal = _controller.deals[index];
+
+              return Container(
+                width: width * 0.45,
+                margin: EdgeInsets.symmetric(horizontal: width * 0.02),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(width * 0.035),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Product Image
+                    ClipRRect(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(width * 0.035)),
+                      child: Image.asset(
+                        deal['image'],
+                        height: height * 0.22,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+
+                    // Content Section
+                    Padding(
+                      padding: EdgeInsets.all(width * 0.03),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("₹2999",
+                          // Product Name
+                          Text(
+                            deal['name'],
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.grey,
-                            )),
-                          SizedBox(width: 8),
-                          Text("₹2189",
-                            style: TextStyle(
-                              color: Colors.red,
                               fontWeight: FontWeight.bold,
-                            )),
+                              fontSize: width * 0.036,
+                            ),
+                          ),
+                          SizedBox(height: height * 0.005),
+
+                          // Rating & Count
+                          Row(
+                            children: [
+                              Text(
+                                "${deal['rating']}.0",
+                                style: TextStyle(fontSize: width * 0.032),
+                              ),
+                              SizedBox(width: width * 0.01),
+                              ...List.generate(
+                                5,
+                                (i) => Icon(
+                                  Icons.star,
+                                  color: i < deal['rating']
+                                      ? Colors.amber
+                                      : Colors.grey.shade300,
+                                  size: width * 0.04,
+                                ),
+                              ),
+                              SizedBox(width: width * 0.01),
+                              Text(
+                                "4764",
+                                style: TextStyle(fontSize: width * 0.032),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: height * 0.005),
+
+                          // Bought Count
+                          Text(
+                            deal['bought'],
+                            style: TextStyle(
+                              fontSize: width * 0.032,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          SizedBox(height: height * 0.005),
+
+                          // Pricing
+                          Row(
+                            children: [
+                              Text(
+                                "₹${deal['originalPrice']}",
+                                style: TextStyle(
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Colors.black,
+                                  fontSize: width * 0.05,
+                                ),
+                              ),
+                              SizedBox(width: width * 0.02),
+                              Text(
+                                "₹${deal['discountPrice']}",
+                                style: TextStyle(
+                                  color: Colors.grey.shade800,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: width * 0.05,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: height * 0.005),
+
+                          // Limited Time Deal Tag
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: width * 0.02,
+                              vertical: height * 0.002,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(width * 0.01),
+                            ),
+                            child: Text(
+                              "Limited Time Deal",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: width * 0.03,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                      SizedBox(height: 4),
-                      Row(
-                        children: List.generate(5, (i) => Icon(
-                          Icons.star,
-                          color: i < 4 ? Colors.amber : Colors.grey,
-                          size: 16,
-                        )),
-                      ),
-                    ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+
+        SizedBox(height: height * 0.03),
+
+        // View All Products Link
+        Padding(
+          padding: EdgeInsets.only(left: width * 0.04),
+          child: GestureDetector(
+            onTap: () {
+              // TODO: Handle navigation
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "View All Products",
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.w500,
+                    fontSize: width * 0.052,
                   ),
+                ),
+                SizedBox(width: width * 0.03),
+                Icon(
+                  Icons.arrow_forward_ios_sharp,
+                  color: Colors.green,
+                  size: width * 0.055,
                 ),
               ],
             ),
           ),
+        ),
+
+        SizedBox(height: height * 0.02),
+      ],
+    ),
+  );
+}
+
+
+  Widget _buildBrandsList(double height, double width) {
+    final int crossAxisCount = 2;
+    final int itemCount = 8;
+    final int columns = (itemCount / crossAxisCount).ceil();
+
+    return SizedBox(
+      height: height * 0.13,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        // padding: EdgeInsets.symmetric(horizontal: width * 0.02),
+        child: Row(
+          children: List.generate(columns, (columnIndex) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: List.generate(crossAxisCount, (rowIndex) {
+                int actualIndex = columnIndex * crossAxisCount + rowIndex;
+                if (actualIndex >= itemCount) {
+                  return SizedBox(width: width * 0.18, height: height * 0.12);
+                }
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: height * 0.01),
+                  child: SizedBox(
+                    width: width * 0.23,
+                    height: height * 0.045,
+                    child: Image.asset(
+                      'assets/brands/brand${actualIndex + 1}.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                );
+              }),
+            );
+          }),
         ),
       ),
     );
   }
 
-  Widget _buildBrandsList() {
-    return SizedBox(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        itemCount: 5,
-        itemBuilder: (context, index) => Container(
-          width: 80,
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          // child: ClipOval(
-            // child: Image.network(
-            //   'https://picsum.photos/80?random=$index',
-            //   fit: BoxFit.cover,
-            // ),
-            child: Container(),
-          ),
-        ),
-      );
-    
-  }
-
-  Widget _buildProductGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.all(8),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.7,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
-      ),
-      itemCount: 8,
-      itemBuilder: (context, index) => Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Stack(
+  Widget _buildProductGrid(double height, double width) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      // Top Sorting/Filter Row
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical: height * 0.015),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ClipRRect(
-                //   borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                //   child: Image.network(
-                //     'https://picsum.photos/200/250?random=$index',
-                //     height: 150,
-                //     width: double.infinity,
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
-                Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Product ${index + 1}",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 4),
-                      Row(
-                        children: List.generate(5, (i) => Icon(
-                          Icons.star,
-                          color: i < 4 ? Colors.amber : Colors.grey,
-                          size: 16,
-                        )),
-                      ),
-                      SizedBox(height: 4),
-                      Text("₹2189",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: IconButton(
-                icon: Icon(
-                  _favorites[index] ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.red,
-                ),
-                onPressed: () => setState(() => _favorites[index] = !_favorites[index]),
-              ),
-            ),
-            if (index % 3 == 0)
-              Positioned(
-                top: 8,
-                left: 8,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text("SALE",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    )),
-                ),
-              ),
+            _buildDropdown("Department", ["Departments", "All", "Electronics", "Kitchen"]),
+            _buildDropdown("Reviews", ["Reviews", "4★ & above", "3★ & above"]),
+            _buildDropdown("Sort by", ["Sort by", "Popularity", "Price: Low to High", "Price: High to Low"]),
           ],
         ),
       ),
+
+      // Product List (1 per row)
+      ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: 8,
+        itemBuilder: (context, index) => Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: width * 0.03,
+            vertical: height * 0.007,
+          ),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(width * 0.04),
+            ),
+            child: Stack(
+              children: [
+                Row(
+                  children: [
+                    // Image Section
+                    ClipRRect(
+                      borderRadius: BorderRadius.horizontal(
+                        left: Radius.circular(width * 0.04),
+                      ),
+                      child: Image.asset(
+                        'assets/product.png',
+                        height: height * 0.23,
+                        width: width * 0.35,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+
+                    // Product Details
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.all(width * 0.03),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Travel Steamer iron for Clothes, 1200W Portable...",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: width * 0.038,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: height * 0.005),
+                            Text(
+                              "23 centimeters",
+                              style: TextStyle(
+                                fontSize: width * 0.03,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(height: height * 0.005),
+                            Row(
+                              children: [
+                                ...List.generate(
+                                  5,
+                                  (i) => Icon(
+                                    Icons.star,
+                                    color: i < 4 ? Colors.orange : Colors.grey,
+                                    size: width * 0.04,
+                                  ),
+                                ),
+                                SizedBox(width: width * 0.02),
+                                Text(
+                                  "4,784",
+                                  style: TextStyle(
+                                    fontSize: width * 0.03,
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: height * 0.005),
+                            Text(
+                              "50+ bought in past month",
+                              style: TextStyle(
+                                fontSize: width * 0.03,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(height: height * 0.005),
+                            Row(
+                              children: [
+                                Text(
+                                  "₹189",
+                                  style: TextStyle(
+                                    fontSize: width * 0.038,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(width: width * 0.015),
+                                Text(
+                                  "₹199",
+                                  style: TextStyle(
+                                    fontSize: width * 0.03,
+                                    color: Colors.grey,
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: height * 0.005),
+                            Text(
+                              "Free delivery Thu, 10 Apr",
+                              style: TextStyle(
+                                fontSize: width * 0.03,
+                                color: Colors.green,
+                              ),
+                            ),
+                            Text(
+                              "Save extra with No cost EMI",
+                              style: TextStyle(
+                                fontSize: width * 0.03,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+               
+
+                
+              ],
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+// Dropdown Button Builder (Re-usable for filter bars)
+Widget _buildDropdown(String label, List<String> items) {
+  String selected = items.first;
+  return DropdownButton<String>(
+    value: selected,
+    icon: const Icon(Icons.arrow_drop_down_sharp),
+    underline: Container(height: 0),
+    onChanged: (value) {
+      // Add filter logic here
+    },
+    items: items.map((String item) {
+      return DropdownMenuItem<String>(
+        value: item,
+        child: Text(item, style: const TextStyle(fontSize: 12)),
+      );
+    }).toList(),
+  );
+}
+
+
+
+  Widget _buildBottomNavBar(double width) {
+    return BottomNavigationBar(
+      currentIndex: _currentIndex,
+      selectedItemColor: Colors.green,
+      unselectedItemColor: Colors.grey,
+      type: BottomNavigationBarType.fixed,
+      selectedFontSize: width * 0.032,
+      unselectedFontSize: width * 0.032,
+      items: [
+        BottomNavigationBarItem(icon: Icon(Icons.home, size: width * 0.065), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.search, size: width * 0.065), label: 'Order Again'),
+        BottomNavigationBarItem(icon: Icon(Icons.favorite_border, size: width * 0.065), label: 'Categories'),
+        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart, size: width * 0.065), label: 'Cart'),
+      ],
+      onTap: (index) => setState(() => _currentIndex = index),
     );
   }
 }

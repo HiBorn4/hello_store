@@ -19,7 +19,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Your App Name',
+      title: 'Hello Stores',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       home: HomeMenu() // Set your desired starting screen
     );
