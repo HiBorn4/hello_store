@@ -6,6 +6,7 @@ import 'package:hello_store/screens/HomePage/homepage.dart';
 import 'package:hello_store/screens/Payment/payment_screen.dart';
 import 'package:hello_store/screens/category_screen.dart';
 import 'package:hello_store/screens/product_details_screen/product_details_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 
 class HomeMenu extends StatelessWidget {
@@ -63,29 +64,29 @@ class HomeMenu extends StatelessWidget {
                 controller.selectedMenu.value = index,
                 destinations: [
                   buildCustomDestination(
-                    'assets/icons/bottombar/home_icon.png',
-                    'assets/icons/bottombar/selected_home_icon.png',
+                    'assets/icons/bottombar/home.svg',
+                    'assets/icons/bottombar/home_selected.svg',
                     'Home',
                     0,
                     controller,
                   ),
                   buildCustomDestination(
-                    'assets/icons/bottombar/order_again_icon.png',
-                    'assets/icons/bottombar/selected_reorder_icon.png',
+                    'assets/icons/bottombar/order_again.svg',
+                    'assets/icons/bottombar/order_again_selected.svg',
                     'Order Again',
                     1,
                     controller,
                   ),
                   buildCustomDestination(
-                    'assets/icons/bottombar/category_icon.png',
-                    'assets/icons/bottombar/selected_category.png',
+                    'assets/icons/bottombar/category.svg',
+                    'assets/icons/bottombar/category_selected.svg',
                     'Categories',
                     2,
                     controller,
                   ),
                   buildCustomDestination(
-                    'assets/icons/bottombar/cart_icon.png',
-                    'assets/icons/bottombar/selected_cart.png',
+                    'assets/icons/bottombar/cart.svg',
+                    'assets/icons/bottombar/cart_selected.svg',
                     'Cart',
                     3,
                     controller,
@@ -126,7 +127,7 @@ class HomeMenu extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Image.asset(
+           SvgPicture.asset(
             isSelected ? selectedIcon : icon,
             height: 24,
           ),

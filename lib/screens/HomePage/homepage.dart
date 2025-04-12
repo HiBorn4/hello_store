@@ -2504,7 +2504,7 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    // 🔥 THIS LINE RIGHT HERE — WRAP IN SIZEDBOX
+
     return SizedBox(
       height: height,
       child: child,

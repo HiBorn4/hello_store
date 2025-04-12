@@ -575,10 +575,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
           children: [
             Text('Place Order', textAlign: TextAlign.left, style: TextStyle(
                 color: Color.fromRGBO(255, 255, 255, 1),
-                fontFamily: 'semibold',
+               // fontFamily: 'semibold',
                 fontSize: height*0.022,
                 letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                fontWeight: FontWeight.normal,
+                fontWeight: FontWeight.bold,
                 height: 1
             ),),
             SizedBox(width: width*0.015,),
