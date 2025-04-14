@@ -12,7 +12,6 @@ class CustomDropdown extends StatefulWidget {
 
 class _CustomDropdownState extends State<CustomDropdown> {
   late String selected;
-  bool isExpanded = false;
 
   @override
   void initState() {
@@ -20,78 +19,48 @@ class _CustomDropdownState extends State<CustomDropdown> {
     selected = widget.items.first;
   }
 
-  void toggleDropdown() {
-    setState(() {
-      isExpanded = !isExpanded;
-    });
-  }
-
-  void selectItem(String value) {
-    setState(() {
-      selected = value;
-      isExpanded = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: toggleDropdown,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade400),
-              borderRadius: BorderRadius.circular(6),
-              color: Colors.white,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (widget.label == "Reviews") ...[
-                  const Icon(Icons.switch_left_sharp, size: 20, color: Colors.orange),
-                  const SizedBox(width: 6),
-                ],
-                Text(selected, style: const TextStyle(fontSize: 14)),
-                const SizedBox(width: 6),
-                const Icon(Icons.arrow_drop_down),
-              ],
-            ),
+    double screenHeight = MediaQuery.of(context).size.height;
+    double dropdownHeight = screenHeight * 0.06; // ~6% of screen height
+
+    return Container(
+        height: dropdownHeight,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade400),
+          borderRadius: BorderRadius.circular(6),
+          color: Colors.white,
+        ),
+        child: Center(
+          child: DropdownButton<String>(
+            value: selected,
+            onChanged: (value) {
+              if (value != null) {
+                setState(() => selected = value);
+              }
+            },
+            items: widget.items.map((item) {
+              return DropdownMenuItem<String>(
+                value: item,
+                child: Row(
+                  children: [
+                    if (widget.label == "Reviews") ...[
+                      const Icon(Icons.switch_left_sharp, size: 18, color: Colors.orange),
+                      const SizedBox(width: 6),
+                    ],
+                    Text(item),
+                  ],
+                ),
+              );
+            }).toList(),
+            underline: const SizedBox(),
+            borderRadius: BorderRadius.circular(6),
+            style: const TextStyle(fontSize: 14, color: Colors.black),
+            isDense: true,
           ),
         ),
-        if (isExpanded)
-          Container(
-            margin: const EdgeInsets.only(top: 4),
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade400),
-              borderRadius: BorderRadius.circular(6),
-              color: Colors.white,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.items.map((item) {
-                return InkWell(
-                  onTap: () => selectItem(item),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Row(
-                      children: [
-                        if (widget.label == "Reviews") ...[
-                          const Icon(Icons.switch_left_sharp, size: 18, color: Colors.orange),
-                          const SizedBox(width: 6),
-                        ],
-                        Text(item, style: const TextStyle(fontSize: 14)),
-                      ],
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-      ],
-    );
+      );
+    
   }
 }

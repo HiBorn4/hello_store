@@ -22,45 +22,47 @@ class _CategoryScreenState extends State<CategoryScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        toolbarHeight: screenHeight * 0.07,
-        leadingWidth: screenWidth * 0.12,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_outlined,
-            color: Colors.black,
-            size: screenWidth * 0.06,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        titleSpacing: 0,
-        title: _buildSearchBar(screenWidth, screenHeight),
+  backgroundColor: Colors.white, // ✅ Set background to white
+  appBar: AppBar(
+    backgroundColor: Colors.white,
+    elevation: 0,
+    toolbarHeight: screenHeight * 0.07,
+    leadingWidth: screenWidth * 0.12,
+    leading: IconButton(
+      icon: Icon(
+        Icons.arrow_back_outlined,
+        color: Colors.black,
+        size: screenWidth * 0.06,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Divider(color: Colors.grey, height: screenHeight * 0.005, thickness: screenHeight*0.002,),
-            _buildBannerCarousel(screenHeight, screenWidth),
-            _buildCategoryGrid(screenHeight, screenWidth),
-            SizedBox(height: screenHeight * 0.02),
-            Divider(color: Colors.grey, height: screenHeight * 0.005, thickness: screenHeight*0.002,),
-            SizedBox(height: screenHeight * 0.02),
-            _buildSectionTitle("Deals on electronics", screenWidth),
-            _buildDealsCarousel(screenHeight, screenWidth),
-            Divider(color: Colors.grey, height: screenHeight * 0.005, thickness: screenHeight*0.002,),
-            _buildSectionTitle("Our Top Brands", screenWidth),
-            _buildBrandsList(screenHeight, screenWidth),
-            Divider(color: Colors.grey, height: screenHeight * 0.04, thickness: screenHeight*0.002,),
-            _buildSectionTitle("Featured Products", screenWidth),
-            Divider(color: Colors.grey, height: screenHeight * 0.04, thickness: screenHeight*0.002,),
-            _buildProductGrid(screenHeight, screenWidth),
-          ],
-        ),
-      ),
-      bottomNavigationBar: _buildBottomNavBar(screenWidth),
-    );
+      onPressed: () => Navigator.of(context).pop(),
+    ),
+    titleSpacing: 0,
+    title: _buildSearchBar(screenWidth, screenHeight),
+  ),
+  body: SingleChildScrollView(
+    child: Column(
+      children: [
+        Divider(color: Colors.grey, height: screenHeight * 0.005, thickness: screenHeight * 0.002),
+        _buildBannerCarousel(screenHeight, screenWidth),
+        _buildCategoryGrid(screenHeight, screenWidth),
+        SizedBox(height: screenHeight * 0.02),
+        Divider(color: Colors.grey, height: screenHeight * 0.005, thickness: screenHeight * 0.002),
+        SizedBox(height: screenHeight * 0.02),
+        _buildSectionTitle("Deals on electronics", screenWidth),
+        _buildDealsCarousel(screenHeight, screenWidth),
+        Divider(color: Colors.grey, height: screenHeight * 0.005, thickness: screenHeight * 0.002),
+        _buildSectionTitle("Our Top Brands", screenWidth),
+        _buildBrandsList(screenHeight, screenWidth),
+        Divider(color: Colors.grey, height: screenHeight * 0.04, thickness: screenHeight * 0.002),
+        _buildSectionTitle("Featured Products", screenWidth),
+        Divider(color: Colors.grey, height: screenHeight * 0.04, thickness: screenHeight * 0.002),
+        _buildProductGrid(screenHeight, screenWidth),
+      ],
+    ),
+  ),
+  bottomNavigationBar: _buildBottomNavBar(screenWidth),
+);
+
   }
 
   Widget _buildSearchBar(double width, double height) {
@@ -421,6 +423,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   child: SingleChildScrollView(
     scrollDirection: Axis.horizontal,
     child: Row(
+      mainAxisSize: MainAxisSize.min,  // Prevents children from trying to expand
       children: [
         CustomDropdown(
           label: "Department",
@@ -429,17 +432,18 @@ class _CategoryScreenState extends State<CategoryScreen> {
         const SizedBox(width: 8),
         CustomDropdown(
           label: "Reviews",
-          items: ["Reviews", "4★ & above", "3★ & above"],
+          items: ["Reviews", "4★", "3★"],
         ),
         const SizedBox(width: 8),
         CustomDropdown(
           label: "Sort by",
-          items: ["Sort by", "Popularity", "Price: Low to High", "Price: High to Low"],
+          items: ["Sort by", "Popular", "Low", "High"],
         ),
       ],
     ),
   ),
 ),
+
 
 
 
