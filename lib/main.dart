@@ -1,18 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-<<<<<<< HEAD
-import 'package:hello_store/screens/Address/address_screen.dart';
-import 'package:hello_store/screens/Order%20Summary/OrderSummaryScreen.dart';
-import 'package:hello_store/screens/Payment/payment_screen.dart';
 
-import 'package:hello_store/screens/home_menu.dart';
-import 'package:hello_store/screens/product_details_screen/product_details_screen.dart';
-
-=======
 import 'screens/category_screen.dart';
-import 'screens/home_menu.dart';
->>>>>>> aee465d (category screen done)
-
 void main() {
   runApp(const App());
 }
