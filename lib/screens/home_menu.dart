@@ -1,12 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hello_store/screens/cart.dart';
 import 'package:hello_store/screens/homepage.dart';
 import 'package:hello_store/screens/payment_screen.dart';
 import 'package:hello_store/screens/category_screen.dart';
 import 'package:hello_store/screens/product_details_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'cart_screen.dart';
 
 
 class HomeMenu extends StatelessWidget {
