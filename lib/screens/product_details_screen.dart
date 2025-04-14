@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hello_store/screens/product_details_screen/widgets/product_image_display.dart';
-import 'widgets/custom_bottom_nav_bar.dart';
-import 'widgets/product_info.dart';
-import 'widgets/offers_section.dart';
-import 'widgets/buy_together_section.dart';
-import 'widgets/total_price_section.dart';
-import 'widgets/similar_products_section.dart';
-import 'widgets/product_details_section.dart';
-import 'widgets/delivery_services_section.dart';
-import 'widgets/quick_shipping_section.dart';
-import 'widgets/product_overview_section.dart';
-import 'widgets/you_may_also_like_section.dart';
-import 'widgets/explore_brands_section.dart';
-import 'widgets/customer_reviews_section.dart';
+import 'product_details_screen/widgets/custom_bottom_nav_bar.dart';
+import 'product_details_screen/widgets/product_info.dart';
+import 'product_details_screen/widgets/offers_section.dart';
+import 'product_details_screen/widgets/buy_together_section.dart';
+import 'product_details_screen/widgets/total_price_section.dart';
+import 'product_details_screen/widgets/similar_products_section.dart';
+import 'product_details_screen/widgets/product_details_section.dart';
+import 'product_details_screen/widgets/delivery_services_section.dart';
+import 'product_details_screen/widgets/quick_shipping_section.dart';
+import 'product_details_screen/widgets/product_overview_section.dart';
+import 'product_details_screen/widgets/you_may_also_like_section.dart';
+import 'product_details_screen/widgets/explore_brands_section.dart';
+import 'product_details_screen/widgets/customer_reviews_section.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key});

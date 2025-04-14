@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../controllers/category_controller.dart';
+import '../widgets/custom_dropdown.dart';
 
 class CategoryScreen extends StatefulWidget {
   @override
@@ -415,18 +416,33 @@ class _CategoryScreenState extends State<CategoryScreen> {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      // Top Sorting/Filter Row
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical: height * 0.015),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildDropdown("Department", ["Departments", "All", "Electronics", "Kitchen"]),
-            _buildDropdown("Reviews", ["Reviews", "4★ & above", "3★ & above"]),
-            _buildDropdown("Sort by", ["Sort by", "Popularity", "Price: Low to High", "Price: High to Low"]),
-          ],
+  padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical: height * 0.015),
+  child: SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child: Row(
+      children: [
+        CustomDropdown(
+          label: "Department",
+          items: ["Departments", "All", "Electronics", "Kitchen"],
         ),
-      ),
+        const SizedBox(width: 8),
+        CustomDropdown(
+          label: "Reviews",
+          items: ["Reviews", "4★ & above", "3★ & above"],
+        ),
+        const SizedBox(width: 8),
+        CustomDropdown(
+          label: "Sort by",
+          items: ["Sort by", "Popularity", "Price: Low to High", "Price: High to Low"],
+        ),
+      ],
+    ),
+  ),
+),
+
+
+
 
       // Product List (1 per row)
       ListView.builder(
@@ -564,25 +580,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
         ),
       ),
     ],
-  );
-}
-
-// Dropdown Button Builder (Re-usable for filter bars)
-Widget _buildDropdown(String label, List<String> items) {
-  String selected = items.first;
-  return DropdownButton<String>(
-    value: selected,
-    icon: const Icon(Icons.arrow_drop_down_sharp),
-    underline: Container(height: 0),
-    onChanged: (value) {
-      // Add filter logic here
-    },
-    items: items.map((String item) {
-      return DropdownMenuItem<String>(
-        value: item,
-        child: Text(item, style: const TextStyle(fontSize: 12)),
-      );
-    }).toList(),
   );
 }
 
