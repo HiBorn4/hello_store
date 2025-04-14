@@ -1,20 +1,7 @@
 import 'package:flutter/material.dart';
-
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'E-Commerce Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Roboto',
-      ),
-      home: CategoryScreen(),
-    );
-  }
-}
+import '../controllers/category_controller.dart';
+import '../widgets/category_product_widget.dart';
+import '../widgets/custom_dropdown.dart';
 
 class CategoryScreen extends StatefulWidget {
   @override
@@ -22,348 +9,549 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+  final CategoryController _controller = CategoryController();
   int _currentIndex = 0;
   final PageController _bannerController = PageController();
   int _currentBannerPage = 0;
-  final List<bool> _favorites = List.generate(8, (index) => false);
-
-  final List<Map<String, dynamic>> categories = [
-    {'name': 'T.V. &...', 'icon': Icons.tv},
-    {'name': 'Washing...', 'icon': Icons.local_laundry_service},
-    {'name': 'Refrigera...', 'icon': Icons.kitchen},
-    {'name': 'Kitchen...', 'icon': Icons.blender},
-    {'name': 'Small...', 'icon': Icons.blender},
-    {'name': 'Air...', 'icon': Icons.ac_unit},
-    {'name': 'Coolers...', 'icon': Icons.water_damage},
-    {'name': 'Fan...', 'icon': Icons.electric_bolt},
-    {'name': 'Other...', 'icon': Icons.more_horiz},
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
-        ),
-        title: Text("Shopsy", style: TextStyle(color: Colors.black)),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications_none, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
+      backgroundColor: Colors.white,
+      appBar: _buildAppBar(screenSize),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildBannerCarousel(),
-            _buildCategoryGrid(),
-            _buildSectionTitle("Deals on electronics"),
-            _buildDealsCarousel(),
-            _buildSectionTitle("Our Top Brands"),
-            _buildBrandsList(),
-            _buildSectionTitle("Featured Products"),
-            _buildProductGrid(),
+            const DividerLine(),
+            _buildBannerCarousel(screenSize),
+            _buildCategoryGrid(screenSize),
+            const SectionSpacer(),
+            SectionHeader(title: "Deals on electronics", screenSize: screenSize),
+            _buildDealsCarousel(screenSize),
+            const SectionSpacer(),
+            SectionHeader(title: "Our Top Brands", screenSize: screenSize),
+            _buildBrandsList(screenSize),
+            const SectionSpacer(height: 0.01),
+            SectionHeader(title: "Featured Products", screenSize: screenSize),
+            const SectionSpacer(height: 0.01),
+            _buildProductGrid(screenSize),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Wishlist'),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
-        ],
-        onTap: (index) => setState(() => _currentIndex = index),
+      bottomNavigationBar: _buildBottomNavBar(screenSize.width),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(Size screenSize) {
+  return AppBar(
+    backgroundColor: Colors.white,
+    elevation: 0,
+    toolbarHeight: screenSize.height * 0.07,
+    leadingWidth: screenSize.width * 0.12,
+    leading: IconButton(
+      icon: Icon(Icons.arrow_back_outlined, color: Colors.black, size: screenSize.width * 0.06),
+      onPressed: () => Navigator.of(context).pop(),
+    ),
+    titleSpacing: 0,
+    title: AppSearchBar(screenSize: screenSize),
+  );
+}
+
+
+  Widget _buildBannerCarousel(Size screenSize) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: screenSize.height * 0.02, horizontal: screenSize.width * 0.04),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(screenSize.width * 0.04),
+        child: Image.asset(
+          'assets/category_poster.png',
+          fit: BoxFit.cover,
+          height: screenSize.height * 0.22,
+          width: double.infinity,
+        ),
       ),
     );
   }
 
-  Widget _buildBannerCarousel() {
-    return Column(
-      children: [
-        SizedBox(
-          height: 200,
-          child: PageView.builder(
-            controller: _bannerController,
-            itemCount: 3,
-            onPageChanged: (index) => setState(() => _currentBannerPage = index),
-            itemBuilder: (context, index) => Container(
-              margin: EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                // image: DecorationImage(
-                //   image: NetworkImage('https://picsum.photos/800/200?random=$index'),
-                //   fit: BoxFit.cover,
-                // ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text("Restaurant Equipment's\nUPTO 70%",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  ],
-                ),
+  Widget _buildCategoryGrid(Size screenSize) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: screenSize.height * 0.01, horizontal: screenSize.width * 0.04),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: GridRowBuilder(
+          itemCount: _controller.categories.length,
+          crossAxisCount: 2,
+          itemBuilder: (index) => CategoryGridItem(
+            screenSize: screenSize,
+            image: _controller.categories[index]['image'],
+            title: _controller.categories[index]['name'],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDealsCarousel(Size screenSize) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(vertical: screenSize.height * 0.015),
+      child: Column(
+        children: [
+          SizedBox(
+            height: screenSize.height * 0.41,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.02),
+              itemCount: _controller.deals.length,
+              itemBuilder: (context, index) => DealCardWidget(
+                screenSize: screenSize,
+                deal: _controller.deals[index],
               ),
             ),
           ),
+          const ViewAllProductsButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBrandsList(Size screenSize) {
+    return SizedBox(
+      height: screenSize.height * 0.13,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: GridRowBuilder(
+          itemCount: 8,
+          crossAxisCount: 2,
+          itemBuilder: (index) => BrandLogoItem(
+            screenSize: screenSize,
+            imagePath: 'assets/brands/brand${index + 1}.png',
+          ),
         ),
-        SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(3, (index) => Container(
-            width: 8,
-            height: 8,
-            margin: EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _currentBannerPage == index ? Colors.blue : Colors.grey,
-            ),
-          )),
+      ),
+    );
+  }
+
+  Widget _buildProductGrid(Size screenSize) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildFilterRow(screenSize),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: 8,
+          itemBuilder: (context, index) => ProductListItemWidget(screenSize: screenSize),
         ),
-        SizedBox(height: 16),
       ],
     );
   }
 
-  Widget _buildCategoryGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        childAspectRatio: 0.8,
-      ),
-      itemCount: categories.length,
-      itemBuilder: (context, index) => Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(categories[index]['icon'], size: 32),
-            SizedBox(height: 8),
-            Text(categories[index]['name'], 
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12)),
+  Widget _buildFilterRow(Size screenSize) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.03, vertical: screenSize.height * 0.015),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: const [
+            CustomDropdown(label: "Department", items: ["Departments", "All", "Electronics", "Kitchen"]),
+            SizedBox(width: 8),
+            CustomDropdown(label: "Reviews", items: ["Reviews", "4★", "3★"]),
+            SizedBox(width: 8),
+            CustomDropdown(label: "Sort by", items: ["Sort by", "Popular", "Low", "High"]),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  Widget _buildBottomNavBar(double width) {
+    return BottomNavigationBar(
+      currentIndex: _currentIndex,
+      selectedItemColor: Colors.green,
+      unselectedItemColor: Colors.grey,
+      type: BottomNavigationBarType.fixed,
+      selectedFontSize: width * 0.032,
+      unselectedFontSize: width * 0.032,
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Order Again'),
+        BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Categories'),
+        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
+      ],
+      onTap: (index) => setState(() => _currentIndex = index),
+    );
+  }
+}
+
+class AppSearchBar extends StatelessWidget {
+  final Size screenSize;
+
+  const AppSearchBar({required this.screenSize});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: screenSize.height * 0.055,
+      margin: EdgeInsets.only(right: screenSize.width * 0.03),
+      padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.03),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(screenSize.width * 0.035),
+        border: Border.all(color: Colors.grey[500]!, width: 1),
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            )),
-          TextButton(
-            onPressed: () {},
-            child: Text("View All",
-              style: TextStyle(color: Colors.blue)),
+          Icon(Icons.search, color: Colors.grey, size: screenSize.width * 0.055),
+          SizedBox(width: screenSize.width * 0.02),
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search "pooja needs"',
+                border: InputBorder.none,
+                isDense: true,
+                hintStyle: TextStyle(fontSize: screenSize.width * 0.038),
+              ),
+            ),
+          ),
+          Container(
+            height: screenSize.height * 0.025,
+            width: 1,
+            color: Colors.grey[400],
+            margin: EdgeInsets.symmetric(horizontal: screenSize.width * 0.02),
+          ),
+          Icon(Icons.mic, color: Colors.grey, size: screenSize.width * 0.055),
+        ],
+      ),
+    );
+  }
+}
+
+class GridRowBuilder extends StatelessWidget {
+  final int itemCount;
+  final int crossAxisCount;
+  final Widget Function(int) itemBuilder;
+
+  const GridRowBuilder({
+    required this.itemCount,
+    required this.crossAxisCount,
+    required this.itemBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final columns = (itemCount / crossAxisCount).ceil();
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(columns, (columnIndex) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(crossAxisCount, (rowIndex) {
+            final actualIndex = columnIndex * crossAxisCount + rowIndex;
+            return actualIndex >= itemCount ? const SizedBox.shrink() : itemBuilder(actualIndex);
+          }),
+        );
+      }),
+    );
+  }
+}
+
+class CategoryGridItem extends StatelessWidget {
+  final Size screenSize;
+  final String image;
+  final String title;
+
+  const CategoryGridItem({
+    required this.screenSize,
+    required this.image,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: screenSize.height * 0.008),
+      child: SizedBox(
+        width: screenSize.width * 0.22,
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(screenSize.width * 0.03),
+              child: Image.asset(
+                image,
+                width: screenSize.width * 0.16,
+                height: screenSize.width * 0.16,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(height: screenSize.height * 0.005),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: screenSize.width * 0.032,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DealCardWidget extends StatelessWidget {
+  final Size screenSize;
+  final Map<String, dynamic> deal;
+
+  const DealCardWidget({
+    required this.screenSize,
+    required this.deal,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: screenSize.width * 0.45,
+      margin: EdgeInsets.symmetric(horizontal: screenSize.width * 0.02),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(screenSize.width * 0.035),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(screenSize.width * 0.035),
+            ),
+            child: Image.asset(
+              deal['image'],
+              height: screenSize.height * 0.22,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(screenSize.width * 0.03),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  deal['name'],
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: screenSize.width * 0.036,
+                  ),
+                ),
+                SizedBox(height: screenSize.height * 0.005),
+                _buildRatingRow(),
+                SizedBox(height: screenSize.height * 0.005),
+                Text(
+                  deal['bought'],
+                  style: TextStyle(
+                    fontSize: screenSize.width * 0.032,
+                    color: Colors.black54,
+                  ),
+                ),
+                SizedBox(height: screenSize.height * 0.005),
+                _buildPriceRow(),
+                SizedBox(height: screenSize.height * 0.005),
+                _buildDealTag(),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildDealsCarousel() {
-    return SizedBox(
-      height: 240,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        itemCount: 5,
-        itemBuilder: (context, index) => Container(
-          width: 160,
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ClipRRect(
-                //   borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                //   child: Image.network(
-                //     'https://picsum.photos/200/150?random=$index',
-                //     height: 120,
-                //     width: double.infinity,
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
-                Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Product ${index + 1}",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Text("₹2999",
-                            style: TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.grey,
-                            )),
-                          SizedBox(width: 8),
-                          Text("₹2189",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        ],
-                      ),
-                      SizedBox(height: 4),
-                      Row(
-                        children: List.generate(5, (i) => Icon(
-                          Icons.star,
-                          color: i < 4 ? Colors.amber : Colors.grey,
-                          size: 16,
-                        )),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+  Widget _buildRatingRow() {
+    return Row(
+      children: [
+        Text(
+          "${deal['rating']}.0",
+          style: TextStyle(fontSize: screenSize.width * 0.032),
+        ),
+        SizedBox(width: screenSize.width * 0.01),
+        ...List.generate(5, (i) => Icon(
+          Icons.star,
+          color: i < deal['rating'] ? Colors.amber : Colors.grey.shade300,
+          size: screenSize.width * 0.04,
+        )),
+        SizedBox(width: screenSize.width * 0.01),
+        Text(
+          "4764",
+          style: TextStyle(fontSize: screenSize.width * 0.032),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPriceRow() {
+    return Row(
+      children: [
+        Text(
+          "₹${deal['originalPrice']}",
+          style: TextStyle(
+            decoration: TextDecoration.lineThrough,
+            color: Colors.black,
+            fontSize: screenSize.width * 0.05,
           ),
+        ),
+        SizedBox(width: screenSize.width * 0.02),
+        Text(
+          "₹${deal['discountPrice']}",
+          style: TextStyle(
+            color: Colors.grey.shade800,
+            fontWeight: FontWeight.bold,
+            fontSize: screenSize.width * 0.05,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDealTag() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: screenSize.width * 0.02,
+        vertical: screenSize.height * 0.002,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(screenSize.width * 0.01),
+      ),
+      child: Text(
+        "Limited Time Deal",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: screenSize.width * 0.03,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
+}
 
-  Widget _buildBrandsList() {
-    return SizedBox(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        itemCount: 5,
-        itemBuilder: (context, index) => Container(
-          width: 80,
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          // child: ClipOval(
-            // child: Image.network(
-            //   'https://picsum.photos/80?random=$index',
-            //   fit: BoxFit.cover,
-            // ),
-            child: Container(),
-          ),
+class BrandLogoItem extends StatelessWidget {
+  final Size screenSize;
+  final String imagePath;
+
+  const BrandLogoItem({
+    required this.screenSize,
+    required this.imagePath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: screenSize.height * 0.01),
+      child: SizedBox(
+        width: screenSize.width * 0.23,
+        height: screenSize.height * 0.045,
+        child: Image.asset(
+          imagePath,
+          fit: BoxFit.contain,
         ),
-      );
-    
-  }
-
-  Widget _buildProductGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.all(8),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.7,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
       ),
-      itemCount: 8,
-      itemBuilder: (context, index) => Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Stack(
+    );
+  }
+}
+
+class SectionHeader extends StatelessWidget {
+  final String title;
+  final Size screenSize;
+
+  const SectionHeader({
+    required this.title,
+    required this.screenSize,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: screenSize.width * 0.04,
+        vertical: screenSize.width * 0.02,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: screenSize.width * 0.05,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SectionSpacer extends StatelessWidget {
+  final double height;
+
+  const SectionSpacer({this.height = 0.01});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return Column(
+      children: [
+        SizedBox(height: screenHeight * height),
+        const DividerLine(),
+        SizedBox(height: screenHeight * height),
+      ],
+    );
+  }
+}
+
+class DividerLine extends StatelessWidget {
+  const DividerLine();
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return Divider(
+      color: Colors.grey,
+      height: screenHeight * 0.005,
+      thickness: screenHeight * 0.002,
+    );
+  }
+}
+
+class ViewAllProductsButton extends StatelessWidget {
+  const ViewAllProductsButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    return Padding(
+      padding: EdgeInsets.only(left: screenSize.width * 0.04),
+      child: GestureDetector(
+        onTap: () {/* TODO: Handle navigation */},
+        child: Row(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ClipRRect(
-                //   borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                //   child: Image.network(
-                //     'https://picsum.photos/200/250?random=$index',
-                //     height: 150,
-                //     width: double.infinity,
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
-                Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Product ${index + 1}",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 4),
-                      Row(
-                        children: List.generate(5, (i) => Icon(
-                          Icons.star,
-                          color: i < 4 ? Colors.amber : Colors.grey,
-                          size: 16,
-                        )),
-                      ),
-                      SizedBox(height: 4),
-                      Text("₹2189",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: IconButton(
-                icon: Icon(
-                  _favorites[index] ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.red,
-                ),
-                onPressed: () => setState(() => _favorites[index] = !_favorites[index]),
+            Text(
+              "View All Products",
+              style: TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.w500,
+                fontSize: screenSize.width * 0.052,
               ),
             ),
-            if (index % 3 == 0)
-              Positioned(
-                top: 8,
-                left: 8,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text("SALE",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    )),
-                ),
-              ),
+            SizedBox(width: screenSize.width * 0.03),
+            Icon(
+              Icons.arrow_forward_ios_sharp,
+              color: Colors.green,
+              size: screenSize.width * 0.055,
+            ),
           ],
         ),
       ),

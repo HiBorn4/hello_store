@@ -1,11 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hello_store/screens/Cart/cart.dart';
-import 'package:hello_store/screens/HomePage/homepage.dart';
-import 'package:hello_store/screens/Payment/payment_screen.dart';
+import 'package:hello_store/screens/cart.dart';
+import 'package:hello_store/screens/homepage.dart';
+import 'package:hello_store/screens/payment_screen.dart';
 import 'package:hello_store/screens/category_screen.dart';
-import 'package:hello_store/screens/product_details_screen/product_details_screen.dart';
+import 'package:hello_store/screens/product_details_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
