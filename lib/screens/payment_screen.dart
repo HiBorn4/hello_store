@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hello_store/screens/Order%20Summary/OrderSummaryScreen.dart';
+
+import 'OrderSummaryScreen.dart';
+
 
 class PaymentScreen extends StatefulWidget
 {

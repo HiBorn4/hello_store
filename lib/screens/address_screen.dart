@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_store/screens/Payment/payment_screen.dart';
+import 'package:hello_store/screens/payment_screen.dart';
 
 class AddressScreen extends StatefulWidget
 {

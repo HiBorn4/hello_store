@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hello_store/screens/home_menu.dart';
 
 import 'screens/category_screen.dart';
 void main() {
@@ -15,7 +16,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Hello Stores',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: CategoryScreen() // Set your desired starting screen
+      home: HomeMenu() // Set your desired starting screen
     );
   }
 }
