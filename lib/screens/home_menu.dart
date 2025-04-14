@@ -150,7 +150,7 @@ class AppScreenController extends GetxController {
     HomePage(),
     ProductDetailsScreen(),
     CategoryScreen(),
-    PaymentScreen()
+    CartScreen()
   ];
 
 }

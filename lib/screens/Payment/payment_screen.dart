@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hello_store/screens/Order%20Summary/OrderSummaryScreen.dart';
 
 class PaymentScreen extends StatefulWidget
 {
@@ -55,7 +57,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               _buildPreferredPayment(context,height,width),
               SizedBox(height: height*0.02,),
               _buildPlaceOrder(context,height,width),
-              SizedBox(height: height*0.3,)
+              SizedBox(height: height*0.02,)
 
 
 
@@ -89,23 +91,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    height: height*0.06,
-                    width: width*0.12,
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey,  // You can change this to any color you want
-                        width: 0.5,          // Thin border
-                      ),
+                  height: height * 0.06,
+                  width: width * 0.12,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
                     ),
-                    child: Image.asset("assets/images/phonepe-logo-icon 1.png")
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6),
+                    child: SvgPicture.asset("assets/images/phonepay_logo.svg"),
+                  ),
                 ),
                 SizedBox(width: width*0.03,),
                 Text('PhonePe', textAlign: TextAlign.left, style: TextStyle(
                     color: Color.fromRGBO(25, 25, 25, 1),
                     fontFamily: 'regular',
-                    fontSize: height*0.02,
+                    fontSize: height*0.019,
                     letterSpacing: 0 ,
                     fontWeight: FontWeight.normal,
                     height: 1
@@ -131,23 +136,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    height: height*0.06,
-                    width: width*0.12,
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey,  // You can change this to any color you want
-                        width: 0.5,          // Thin border
-                      ),
+                  height: height * 0.06,
+                  width: width * 0.12,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
                     ),
-                    child: Image.asset("assets/images/google-pay-icon 1.png")
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6),
+                    child: SvgPicture.asset("assets/images/googlepay_logo.svg"),
+                  ),
                 ),
                 SizedBox(width: width*0.03,),
                 Text('Google Pay', textAlign: TextAlign.left, style: TextStyle(
                     color: Color.fromRGBO(25, 25, 25, 1),
                     fontFamily: 'regular',
-                    fontSize: height*0.02,
+                    fontSize: height*0.019,
                     letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
                     fontWeight: FontWeight.normal,
                     height: 1
@@ -173,23 +181,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    height: height*0.06,
-                    width: width*0.12,
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey,  // You can change this to any color you want
-                        width: 0.5,          // Thin border
-                      ),
+                  height: height * 0.06,
+                  width: width * 0.12,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
                     ),
-                    child: Image.asset("assets/images/Frame 758535030.png")
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Image.asset("assets/images/Frame 758535030.png"),
+                  ),
                 ),
                 SizedBox(width: width*0.03,),
                 Text('Paytm', textAlign: TextAlign.left, style: TextStyle(
                     color: Color.fromRGBO(25, 25, 25, 1),
                     fontFamily: 'regular',
-                    fontSize: height*0.02,
+                    fontSize: height*0.019,
                     letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
                     fontWeight: FontWeight.normal,
                     height: 1
@@ -197,6 +208,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 Spacer(),
                 Radio<bool>(
                   value: true,
+                  
                   // groupValue: isSelected,
                   onChanged: (value) {
                     setState(() {
@@ -215,23 +227,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    height: height*0.06,
-                    width: width*0.12,
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey,  // You can change this to any color you want
-                        width: 0.5,          // Thin border
-                      ),
+                  height: height * 0.06,
+                  width: width * 0.12,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
                     ),
-                    child: Icon(Icons.add)
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Icon(Icons.add),
+                  ),
                 ),
                 SizedBox(width: width*0.03,),
                 Text('Add New UPI ID', textAlign: TextAlign.left, style: TextStyle(
                     color: Color.fromRGBO(25, 25, 25, 1),
                     fontFamily: 'regular',
-                    fontSize: height*0.02,
+                    fontSize: height*0.019,
                     letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
                     fontWeight: FontWeight.normal,
                     height: 1
@@ -259,7 +274,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         children: [
           Text('Credit and Debit Cards', textAlign: TextAlign.left, style: TextStyle(
               color: Color.fromRGBO(25, 25, 25, 1),
-              fontFamily: 'semibold',
+            //  fontFamily: 'semibold',
               fontSize: height*0.021,
               letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
               fontWeight: FontWeight.bold,
@@ -271,23 +286,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    height: height*0.06,
-                    width: width*0.12,
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey,  // You can change this to any color you want
-                        width: 0.5,          // Thin border
-                      ),
+                  height: height * 0.06,
+                  width: width * 0.12,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
                     ),
-                    child: Icon(Icons.add)
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Icon(Icons.add),
+                  ),
                 ),
                 SizedBox(width: width*0.03,),
                 Text('Add New UPI ID', textAlign: TextAlign.left, style: TextStyle(
                     color: Color.fromRGBO(25, 25, 25, 1),
                     fontFamily: 'regular',
-                    fontSize: height*0.02,
+                    fontSize: height*0.019,
                     letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
                     fontWeight: FontWeight.normal,
                     height: 1
@@ -316,7 +334,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         children: [
           Text('More Payment Options', textAlign: TextAlign.left, style: TextStyle(
               color: Color.fromRGBO(25, 25, 25, 1),
-              fontFamily: 'semibold',
+             // fontFamily: 'semibold',
               fontSize: height*0.021,
               letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
               fontWeight: FontWeight.bold,
@@ -329,17 +347,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    height: height*0.06,
-                    width: width*0.12,
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey,  // You can change this to any color you want
-                        width: 0.5,          // Thin border
-                      ),
+                  height: height * 0.06,
+                  width: width * 0.12,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
                     ),
-                    child: Image.asset("assets/images/Wallet_duotone_line.png")
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Image.asset("assets/images/Wallet_duotone_line.png"),
+                  ),
                 ),
                 SizedBox(width: width*0.03,),
                 Column(
@@ -348,7 +369,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     Text('Add New UPI ID', textAlign: TextAlign.left, style: TextStyle(
                         color: Color.fromRGBO(25, 25, 25, 1),
                         fontFamily: 'regular',
-                        fontSize: height*0.02,
+                        fontSize: height*0.019,
                         letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
                         fontWeight: FontWeight.normal,
                         height: 1
@@ -380,18 +401,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    height: height*0.06,
-                    width: width*0.12,
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey,  // You can change this to any color you want
-                        width: 0.5,          // Thin border
-                      ),
+                  height: height * 0.06,
+                  width: width * 0.12,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
                     ),
-                    child: Image.asset("assets/images/Saving-Bank-1--Streamline-Ultimate.svg.png")
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Image.asset("assets/images/Saving-Bank-1--Streamline-Ultimate.svg.png"),
+                  ),
                 ),
+
                 SizedBox(width: width*0.03,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -399,7 +424,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     Text('Net Banking', textAlign: TextAlign.left, style: TextStyle(
                         color: Color.fromRGBO(25, 25, 25, 1),
                         fontFamily: 'regular',
-                        fontSize: height*0.02,
+                        fontSize: height*0.019,
                         letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
                         fontWeight: FontWeight.normal,
                         height: 1
@@ -431,23 +456,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    height: height*0.06,
-                    width: width*0.12,
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey,  // You can change this to any color you want
-                        width: 0.5,          // Thin border
-                      ),
+                  height: height * 0.06,
+                  width: width * 0.12,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
                     ),
-                    child: Image.asset("assets/images/Union.png")
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Image.asset("assets/images/Union.png"),
+                  ),
                 ),
                 SizedBox(width: width*0.03,),
                 Text('EMI', textAlign: TextAlign.left, style: TextStyle(
                     color: Color.fromRGBO(25, 25, 25, 1),
                     fontFamily: 'regular',
-                    fontSize: height*0.02,
+                    fontSize: height*0.019,
                     letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
                     fontWeight: FontWeight.normal,
                     height: 1
@@ -490,17 +518,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                    height: height*0.06,
-                    width: width*0.12,
-
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey,  // You can change this to any color you want
-                        width: 0.5,          // Thin border
-                      ),
+                  height: height * 0.08,
+                  width: width * 0.12,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
                     ),
-                    child: Image.asset("assets/images/money 2.png")
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Image.asset("assets/images/money 2.png"),
+                  ),
                 ),
                 SizedBox(width: width*0.03,),
                 Column(
@@ -514,7 +545,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         fontWeight: FontWeight.normal,
                         height: 1
                     ),),
-                    SizedBox(height: height*0.013,),
+                    SizedBox(height: height*0.008,),
                     Text('Pay ₹100 online as advance now, and\n the '
                         'rest ₹10000 on delivery. Delivery \ncharge of₹72 applicable ', textAlign: TextAlign.left, style: TextStyle(
                         color: Color.fromRGBO(109, 109, 109, 1),
@@ -562,28 +593,37 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
   Widget _buildPlaceOrder(BuildContext context, var height, var width)
   {
-    return Center(
-      child: Container(
-        width: width*0.9,
-        height: height*0.07,
-        decoration: BoxDecoration(
-            color: Color(0XFF2E7D32),
-            borderRadius: BorderRadius.circular(10)
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Place Order', textAlign: TextAlign.left, style: TextStyle(
-                color: Color.fromRGBO(255, 255, 255, 1),
-               // fontFamily: 'semibold',
-                fontSize: height*0.022,
-                letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                fontWeight: FontWeight.bold,
-                height: 1
-            ),),
-            SizedBox(width: width*0.015,),
-            Icon(Icons.chevron_right,color: Colors.white,)
-          ],
+    return InkWell(
+      onTap: ()
+      {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderSummaryScreen()),
+        );
+      },
+      child: Center(
+        child: Container(
+          width: width*0.9,
+          height: height*0.07,
+          decoration: BoxDecoration(
+              color: Color(0XFF2E7D32),
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Place Order', textAlign: TextAlign.left, style: TextStyle(
+                  color: Color.fromRGBO(255, 255, 255, 1),
+                 // fontFamily: 'semibold',
+                  fontSize: height*0.022,
+                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                  fontWeight: FontWeight.bold,
+                  height: 1
+              ),),
+              SizedBox(width: width*0.015,),
+              Icon(Icons.chevron_right,color: Colors.white,)
+            ],
+          ),
         ),
       ),
     );

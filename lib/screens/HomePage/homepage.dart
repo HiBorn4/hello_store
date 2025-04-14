@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            // Sticky Search Bar
+
             SliverPersistentHeader(
               pinned: true,
               delegate: _StickyHeaderDelegate(
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            // Rest scrollable content
+
             SliverToBoxAdapter(child: _buildmainthings(context, height, width)),
             SliverToBoxAdapter(child: _buildFlashSale(context, height, width)),
             SliverToBoxAdapter(child: _buildBestSelling(context, height, width)),

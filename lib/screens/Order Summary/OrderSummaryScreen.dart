@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hello_store/screens/Track%20Order/TrackOrderScreen.dart';
 
 class OrderSummaryScreen extends StatefulWidget
 {
@@ -229,28 +230,37 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
               height: 1
           ),),
           SizedBox(height: height*0.04,),
-          Center(
-            child: Container(
-              width: width*0.9,
-              height: height*0.07,
-              decoration: BoxDecoration(
-                  color: Color(0XFF2E7D32),
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Track Order', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      // fontFamily: 'semibold',
-                      fontSize: height*0.022,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.bold,
-                      height: 1
-                  ),),
-                  SizedBox(width: width*0.015,),
-                  Icon(Icons.chevron_right,color: Colors.white,)
-                ],
+          InkWell(
+            onTap: ()
+            {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TrackOrderScreen()),
+              );
+            },
+            child: Center(
+              child: Container(
+                width: width*0.9,
+                height: height*0.07,
+                decoration: BoxDecoration(
+                    color: Color(0XFF2E7D32),
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Track Order', textAlign: TextAlign.left, style: TextStyle(
+                        color: Color.fromRGBO(255, 255, 255, 1),
+                        // fontFamily: 'semibold',
+                        fontSize: height*0.022,
+                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.bold,
+                        height: 1
+                    ),),
+                    SizedBox(width: width*0.015,),
+                    Icon(Icons.chevron_right,color: Colors.white,)
+                  ],
+                ),
               ),
             ),
           )
