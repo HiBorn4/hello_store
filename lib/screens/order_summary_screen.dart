@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hello_store/screens/Track%20Order/TrackOrderScreen.dart';
+import 'package:hello_store/screens/track_order_screen.dart';
 
 class OrderSummaryScreen extends StatefulWidget
 {

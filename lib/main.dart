@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hello_store/screens/cart_screen.dart';
 import 'package:hello_store/screens/home_menu.dart';
-import 'package:hello_store/screens/login_screen.dart';
-import 'package:hello_store/screens/signup_screen.dart';
+import 'package:hello_store/screens/product_list.dart';
+import 'package:hello_store/screens/profile_screen.dart';
 
 import 'screens/category_screen.dart';
 void main() {
@@ -18,7 +19,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Hello Stores',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: LoginScreen() // Set your desired starting screen
+      home: ProfileScreen() // Set your desired starting screen
     );
   }
 }
