@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../models/cart_item.dart';
 import '../utils/app_colors.dart';
 import 'address_screen.dart';
+import 'coupon_screen.dart';
 
 // ==================== REUSABLE WIDGETS ====================
 class ProductCard extends StatelessWidget {
@@ -678,14 +679,23 @@ class _CouponSection extends StatelessWidget {
               ],
             ),
             const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('View all coupons', style: AppTextStyles.body(context)),
-                const SizedBox(width: 4),
-                const Icon(Icons.chevron_right, size: 20),
-              ],
-            ),
+            GestureDetector(
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CouponsScreen()),
+    );
+  },
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text('View all coupons', style: AppTextStyles.body(context)),
+      const SizedBox(width: 4),
+      const Icon(Icons.chevron_right, size: 20),
+    ],
+  ),
+),
+
           ],
         ),
       ),

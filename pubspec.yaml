@@ -64,6 +64,7 @@ flutter:
     - assets/
     - assets/brands/
     - assets/icons/bottombar/
+    - assets/icons/cart/
     - assets/images/
     - assets/images/home/
     - assets/icons/recently_viewed/
