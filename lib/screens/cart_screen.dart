@@ -3,9 +3,64 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../models/cart_item.dart';
 import '../utils/app_colors.dart';
 import 'address_screen.dart';
-import 'coupon_screen.dart';
 
-// ==================== REUSABLE WIDGETS ====================
+class CartScreen extends StatefulWidget {
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  final List<CartItem> items = List.generate(
+    5,
+    (index) => CartItem(
+      // id: 'item$index',
+      image: 'assets/images/product.png',
+      title: 'Samsung Refrigerator 255L',
+      size: '255L',
+      rating: 4.5,
+      ratingsCount: '1.2k',
+      price: '₹32,999',
+      originalPrice: '₹45,999',
+      deliveryInfo: 'Delivery by Mon, 25th Sep',
+    ),
+  );
+
+  void _handleRemove(CartItem item) {
+    // Handle remove logic
+  }
+
+  void _handleMoveToCart(CartItem item) {
+    // Handle move to cart logic
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Cart'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ...items.map((item) => ProductCard(
+                  item: item,
+                  isWishlist: false,
+                  onRemove: () => _handleRemove(item),
+                  onMoveToCart: () => _handleMoveToCart(item),
+                )),
+            _CouponSection(),
+            _PriceSummary(),
+            _ProceedToBuySection(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class ProductCard extends StatelessWidget {
   final CartItem item;
   final bool isWishlist;
@@ -31,57 +86,58 @@ class ProductCard extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(item.image, height: 100, width: 100),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.title,
-                        style: AppTextStyles.body(context),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      _SizeChip(size: item.size),
-                      const SizedBox(height: 8),
-                      _RatingStars(
-                        rating: item.rating,
-                        ratingsCount: item.ratingsCount,
-                      ),
-                      const SizedBox(height: 8),
-                      _PriceDisplay(
-                        price: item.price,
-                        originalPrice: item.originalPrice,
-                      ),
-                    ],
+            Flexible(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    item.image,
+                    height: 100,
+                    width: 100,
                   ),
-                ),
-              ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.body(context),
+                        ),
+                        const SizedBox(height: 4),
+                        _SizeChip(size: item.size),
+                        const SizedBox(height: 8),
+                        _RatingStars(
+                          rating: item.rating,
+                          ratingsCount: item.ratingsCount,
+                        ),
+                        const SizedBox(height: 8),
+                        _PriceDisplay(
+                          price: item.price,
+                          originalPrice: item.originalPrice,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 12),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (!isWishlist)
-                  Expanded(
-                    child: _DeliveryInfo(
-                      info: item.deliveryInfo,
-                      originalPrice: item.originalPrice,
-                    ),
-                  ),
-                if (!isWishlist) const SizedBox(width: 12),
-                if (!isWishlist) _QuantitySelector(),
-
-                if (isWishlist)
-                  _WishlistActions(
-                    // already has Expanded inside
-                    onRemove: onRemove,
-                    onMoveToCart: onMoveToCart,
-                  ),
+                _DeliveryInfo(
+                  info: item.deliveryInfo,
+                  originalPrice: item.originalPrice,
+                ),
+                isWishlist
+                    ? _WishlistActions(
+                        onRemove: onRemove,
+                        onMoveToCart: onMoveToCart,
+                      )
+                    : _QuantitySelector(),
               ],
             ),
           ],
@@ -106,7 +162,10 @@ class _SizeChip extends StatelessWidget {
       ),
       child: Text(
         size,
-        style: TextStyle(color: AppColors.mediumText, fontSize: 12),
+        style: TextStyle(
+          color: AppColors.mediumText,
+          fontSize: 12,
+        ),
       ),
     );
   }
@@ -116,7 +175,10 @@ class _RatingStars extends StatelessWidget {
   final double rating;
   final String ratingsCount;
 
-  const _RatingStars({required this.rating, required this.ratingsCount});
+  const _RatingStars({
+    required this.rating,
+    required this.ratingsCount,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +195,10 @@ class _RatingStars extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           ratingsCount,
-          style: TextStyle(color: AppColors.mediumText, fontSize: 12),
+          style: TextStyle(
+            color: AppColors.mediumText,
+            fontSize: 12,
+          ),
         ),
       ],
     );
@@ -144,13 +209,19 @@ class _PriceDisplay extends StatelessWidget {
   final String price;
   final String originalPrice;
 
-  const _PriceDisplay({required this.price, required this.originalPrice});
+  const _PriceDisplay({
+    required this.price,
+    required this.originalPrice,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(price, style: AppTextStyles.price(context)),
+        Text(
+          price,
+          style: AppTextStyles.price(context),
+        ),
         const SizedBox(width: 8),
         Text(
           originalPrice,
@@ -166,43 +237,33 @@ class _PriceDisplay extends StatelessWidget {
 }
 
 class _QuantitySelector extends StatefulWidget {
-  const _QuantitySelector({Key? key}) : super(key: key);
-
   @override
-  State<_QuantitySelector> createState() => _QuantitySelectorState();
+  __QuantitySelectorState createState() => __QuantitySelectorState();
 }
 
-class _QuantitySelectorState extends State<_QuantitySelector> {
+class __QuantitySelectorState extends State<_QuantitySelector> {
   int _quantity = 1;
 
-  void _increment() {
-    setState(() {
-      _quantity++;
-    });
-  }
-
-  void _decrement() {
-    if (_quantity > 1) {
-      setState(() {
-        _quantity--;
-      });
-    }
-  }
+  void _increment() => setState(() => _quantity++);
+  void _decrement() => setState(() => _quantity = _quantity > 1 ? _quantity - 1 : 1);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.primaryGreen),
-        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.borderColor),
+        borderRadius: BorderRadius.circular(4),
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
           GestureDetector(
             onTap: _decrement,
-            child: Icon(Icons.remove, color: AppColors.primaryGreen, size: 20),
+            child: Icon(
+              Icons.remove,
+              color: AppColors.primaryGreen,
+              size: 20,
+            ),
           ),
           const SizedBox(width: 12),
           Text(
@@ -212,7 +273,11 @@ class _QuantitySelectorState extends State<_QuantitySelector> {
           const SizedBox(width: 12),
           GestureDetector(
             onTap: _increment,
-            child: Icon(Icons.add, color: AppColors.primaryGreen, size: 20),
+            child: Icon(
+              Icons.add,
+              color: AppColors.primaryGreen,
+              size: 20,
+            ),
           ),
         ],
       ),
@@ -228,77 +293,80 @@ class _DeliveryInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      // 👈 Add this to prevent layout issues in parent Row
+    final screenWidth = MediaQuery.of(context).size.width;
+    
+    return Expanded(  // Changed from Flexible to Expanded
       child: Row(
         children: [
-          Flexible(
-            // 👈 Allows text to wrap or ellipsize
+          Expanded(  // Changed from Flexible to Expanded
             child: Text(
               info,
               style: AppTextStyles.body(context),
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: screenWidth * 0.02),
           Container(
-            width: 3,
-            height: 3,
+            width: screenWidth * 0.008,
+            height: screenWidth * 0.008,
             decoration: BoxDecoration(
               color: AppColors.darkText,
-              borderRadius: BorderRadius.circular(3),
+              borderRadius: BorderRadius.circular(screenWidth * 0.008),
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: screenWidth * 0.02),
           Text(
             originalPrice,
             style: TextStyle(
               color: AppColors.mediumText,
               decoration: TextDecoration.lineThrough,
-              fontSize: 14,
+              fontSize: screenWidth * 0.035,
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: screenWidth * 0.02),
           Text(
             'Free',
-            style: TextStyle(color: AppColors.primaryGreen, fontSize: 14),
+            style: TextStyle(
+              color: AppColors.primaryGreen, 
+              fontSize: screenWidth * 0.035
+            ),
           ),
         ],
       ),
     );
   }
 }
-
 class _WishlistActions extends StatelessWidget {
   final VoidCallback? onRemove;
   final VoidCallback? onMoveToCart;
 
-  const _WishlistActions({this.onRemove, this.onMoveToCart});
+  const _WishlistActions({
+    this.onRemove,
+    this.onMoveToCart,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      // ✅ Wrap this in Expanded to fit within parent Row
-      child: Row(
-        children: [
-          Expanded(
-            child: _ActionButton(
-              text: 'Remove',
-              color: AppColors.mediumText,
-              onPressed: onRemove,
-            ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          child: _ActionButton(
+            text: 'Remove',
+            color: AppColors.mediumText,
+            onPressed: onRemove,
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _ActionButton(
-              text: 'Move to cart',
-              color: AppColors.primaryGreen,
-              isBorder: true,
-              onPressed: onMoveToCart,
-            ),
+        ),
+        const SizedBox(width: 12),
+        Flexible(
+          child: _ActionButton(
+            text: 'Move to cart',
+            color: AppColors.primaryGreen,
+            isBorder: true,
+            onPressed: onMoveToCart,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -319,7 +387,6 @@ class _ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Flexible(
-      // Replace Expanded with Flexible
       child: InkWell(
         onTap: onPressed,
         child: Container(
@@ -332,386 +399,89 @@ class _ActionButton extends StatelessWidget {
           child: Center(
             child: Text(
               text,
-              style: TextStyle(color: color, fontWeight: FontWeight.w500),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _DashedDivider extends StatelessWidget {
-  const _DashedDivider();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 1,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final dashWidth = 4.0;
-          final dashCount =
-              (constraints.constrainWidth() / (2 * dashWidth)).floor();
-          return Row(
-            children: List.generate(dashCount, (_) {
-              return Container(
-                width: dashWidth,
-                height: 1,
-                margin: const EdgeInsets.symmetric(horizontal: 2),
-                color: AppColors.mediumText,
-              );
-            }),
-          );
-        },
-      ),
-    );
-  }
-}
-
-// ==================== SCREEN SECTIONS ====================
-class _SearchFilterSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search products',
-                    prefixIcon: const Icon(Icons.search),
-                    border: _buildBorder(),
-                    enabledBorder: _buildBorder(),
-                    focusedBorder: _buildBorder(),
-                  ),
-                ),
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.w500,
               ),
-              const SizedBox(width: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.mediumText),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.filter_list, color: AppColors.mediumText),
-                    const SizedBox(width: 8),
-                    Text('Filter', style: AppTextStyles.body(context)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildCategoryButton('All Categories (12)'),
-              Text('Grocery', style: AppTextStyles.body(context)),
-              Text('Minutes (11)', style: AppTextStyles.body(context)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCategoryButton(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColors.borderColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          Text(text, style: const TextStyle(color: AppColors.darkText)),
-          const Icon(Icons.expand_more),
-        ],
-      ),
-    );
-  }
-
-  InputBorder _buildBorder() {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: AppColors.mediumText, width: 0.5),
-    );
-  }
-}
-
-class _DeliveryInfoSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.secondaryGreen,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                SvgPicture.asset("assets/images/vehicle.svg"),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          style: AppTextStyles.body(context),
-                          children: [
-                            const TextSpan(text: 'Expected '),
-                            TextSpan(
-                              text: 'multiple delivery ',
-                              style: TextStyle(color: AppColors.primaryGreen),
-                            ),
-                            const TextSpan(text: 'on this order'),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'your items will be delivered from 5 different stores',
-                        style: TextStyle(
-                          color: AppColors.mediumText,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
             ),
           ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColors.primaryGreen),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Add item worth ₹200, to get free delivery',
-                        style: AppTextStyles.body(context),
-                      ),
-                      const SizedBox(height: 8),
-                      Container(
-                        height: 4,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 150,
-                              decoration: BoxDecoration(
-                                color: AppColors.primaryGreen,
-                                borderRadius: const BorderRadius.horizontal(
-                                  left: Radius.circular(2),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.borderColor,
-                                  borderRadius: const BorderRadius.horizontal(
-                                    right: Radius.circular(2),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.primaryGreen),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    'Add',
-                    style: TextStyle(color: AppColors.primaryGreen),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CartItemsSection extends StatelessWidget {
-  final List<CartItem> items;
-
-  const _CartItemsSection({required this.items});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: items.map((item) => ProductCard(item: item)).toList(),
-    );
-  }
-}
-
-class _WishlistSection extends StatelessWidget {
-  final List<CartItem> items;
-
-  const _WishlistSection({required this.items});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: Text('Wishlist', style: AppTextStyles.title(context)),
         ),
-        Column(
-          children:
-              items
-                  .map(
-                    (item) => ProductCard(
-                      item: item,
-                      isWishlist: true,
-                      onRemove: () => _handleRemove(item),
-                      onMoveToCart: () => _handleMoveToCart(item),
-                    ),
-                  )
-                  .toList(),
-        ),
-      ],
+      ),
     );
-  }
-
-  void _handleRemove(CartItem item) {
-    // Handle remove from wishlist
-  }
-
-  void _handleMoveToCart(CartItem item) {
-    // Handle move to cart
   }
 }
 
 class _CouponSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.all(12),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: AppColors.borderColor.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.borderColor),
-        ),
-        child: Column(
-          children: [
-            Row(
+      decoration: BoxDecoration(
+        color: AppColors.secondaryGreen,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          SvgPicture.asset("assets/images/discount_star.svg"),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SvgPicture.asset("assets/images/discount_star.svg"),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Save ₹ 599 more on this order',
-                      style: AppTextStyles.body(context),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Code : STE123',
-                      style: TextStyle(
-                        color: AppColors.mediumText,
-                        fontSize: 12,
+                RichText(
+                  text: TextSpan(
+                    style: AppTextStyles.body(context),
+                    children: [
+                      const TextSpan(text: 'Apply coupon '),
+                      TextSpan(
+                        text: 'SAVE10',
+                        style: TextStyle(color: AppColors.primaryGreen),
                       ),
-                    ),
-                  ],
+                      const TextSpan(text: ' & save ₹599'),
+                    ],
+                  ),
                 ),
-                const Spacer(),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.primaryGreen),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    'Apply',
-                    style: TextStyle(
-                      color: AppColors.primaryGreen,
-                      fontWeight: FontWeight.bold,
-                    ),
+                const SizedBox(height: 4),
+                Text(
+                  'your items will be delivered from 5 different stores',
+                  style: TextStyle(
+                    color: AppColors.mediumText,
+                    fontSize: 12,
                   ),
                 ),
               ],
             ),
-            const Divider(),
-            GestureDetector(
-  onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CouponsScreen()),
-    );
-  },
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Text('View all coupons', style: AppTextStyles.body(context)),
-      const SizedBox(width: 4),
-      const Icon(Icons.chevron_right, size: 20),
-    ],
-  ),
-),
-
-          ],
-        ),
+          ),
+          const SizedBox(width: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.primaryGreen),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              'Apply',
+              style: TextStyle(color: AppColors.primaryGreen),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _BillSummarySection extends StatelessWidget {
+class _PriceSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
+    return Container(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Price Details', style: AppTextStyles.title(context)),
+          Text(
+            'Price Details',
+            style: AppTextStyles.title(context),
+          ),
           const SizedBox(height: 12),
           _buildPriceRow('Price (32 items)', '₹1599', '₹1299'),
           const SizedBox(height: 8),
@@ -721,7 +491,7 @@ class _BillSummarySection extends StatelessWidget {
           const SizedBox(height: 8),
           _buildPriceRow('Shipping fee', '-40₹', 'Free', isUnderlined: true),
           const SizedBox(height: 12),
-          const _DashedDivider(),
+          _DashedDivider(),
           const SizedBox(height: 12),
           _buildPriceRow('TOTAL AMOUNT', '₹12999', null, isTotal: true),
         ],
@@ -736,94 +506,65 @@ class _BillSummarySection extends StatelessWidget {
     bool isUnderlined = false,
     bool isTotal = false,
   }) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 12),
-      child: Row(
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              decoration: isUnderlined ? TextDecoration.underline : null,
-              fontSize: 14,
-              color: AppColors.darkText,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: isTotal ? FontWeight.bold : null,
+            fontSize: isTotal ? 16 : 14,
           ),
-          const Spacer(),
-          if (value2 != null)
-            Row(
-              children: [
-                Text(
-                  value1,
-                  style: TextStyle(
-                    color: AppColors.mediumText,
-                    decoration: TextDecoration.lineThrough,
-                    fontSize: 14,
-                  ),
+        ),
+        Row(
+          children: [
+            if (value1 != null)
+              Text(
+                value1,
+                style: TextStyle(
+                  decoration: isUnderlined ? TextDecoration.underline : null,
+                  fontWeight: isTotal ? FontWeight.bold : null,
+                  fontSize: isTotal ? 16 : 14,
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  value2,
-                  style: TextStyle(
-                    color:
-                        value2 == 'Free'
-                            ? AppColors.primaryGreen
-                            : AppColors.darkText,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            )
-          else
-            Text(
-              value1,
-              style: TextStyle(
-                color: AppColors.darkText,
-                fontSize: isTotal ? 18 : 14,
-                fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
               ),
-            ),
-        ],
-      ),
+            if (value2 != null) ...[
+              const SizedBox(width: 8),
+              Text(
+                value2,
+                style: TextStyle(
+                  color: AppColors.mediumText,
+                  decoration: TextDecoration.lineThrough,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
     );
   }
 }
 
-class _FooterSection extends StatelessWidget {
+class _DashedDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildFooterItem("assets/images/genuinee.svg", "Genuine products"),
-          _buildDot(),
-          _buildFooterItem("assets/images/refund.svg", "100% Refundable"),
-          _buildDot(),
-          _buildFooterItem("assets/images/secure.svg", "Secure Payment"),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFooterItem(String iconPath, String text) {
-    return Column(
-      children: [
-        SvgPicture.asset(iconPath),
-        const SizedBox(height: 8),
-        Text(text, style: TextStyle(color: AppColors.mediumText, fontSize: 12)),
-      ],
-    );
-  }
-
-  Widget _buildDot() {
-    return Container(
-      width: 4,
-      height: 4,
-      decoration: BoxDecoration(
-        color: AppColors.mediumText,
-        borderRadius: BorderRadius.circular(2),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Flex(
+          direction: Axis.horizontal,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(
+            (constraints.constrainWidth() ~/ 10).toInt(),
+            (index) => SizedBox(
+              width: 5,
+              height: 1,
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: AppColors.borderColor),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -845,7 +586,10 @@ class _ProceedToBuySection extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   'Saved ₹12,000 on this order',
-                  style: TextStyle(color: AppColors.primaryGreen, fontSize: 14),
+                  style: TextStyle(
+                    color: AppColors.primaryGreen,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
@@ -886,7 +630,9 @@ class _ProceedToBuySection extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AddressScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => AddressScreen(),
+                      ),
                     );
                   },
                   child: Container(
@@ -900,144 +646,15 @@ class _ProceedToBuySection extends StatelessWidget {
                     ),
                     child: Text(
                       'Proceed to Buy',
-                      style: TextStyle(color: AppColors.white, fontSize: 16),
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ==================== MAIN SCREEN ====================
-class CartScreen extends StatefulWidget {
-  @override
-  _CartScreenState createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-  final List<CartItem> _cartItems = [
-    CartItem(
-      image: "assets/images/iron_table.png",
-      title: "Travel Steamer Iron for Clothes, 1250W....",
-      size: "23 centimeters",
-      rating: 4.0,
-      ratingsCount: "4,764",
-      price: "₹189",
-      originalPrice: "₹199",
-      deliveryInfo: "Free delivery Thu, 11 Apr",
-    ),
-    CartItem(
-      image: "assets/images/iron_table.png",
-      title: "Travel Steamer Iron for Clothes, 1250W....",
-      size: "23 centimeters",
-      rating: 4.0,
-      ratingsCount: "4,764",
-      price: "₹189",
-      originalPrice: "₹199",
-      deliveryInfo: "Free delivery Thu, 11 Apr",
-    ),
-    CartItem(
-      image: "assets/images/iron_table.png",
-      title: "Travel Steamer Iron for Clothes, 1250W....",
-      size: "23 centimeters",
-      rating: 4.0,
-      ratingsCount: "4,764",
-      price: "₹189",
-      originalPrice: "₹199",
-      deliveryInfo: "Free delivery Thu, 11 Apr",
-    ),
-    CartItem(
-      image: "assets/images/iron_table.png",
-      title: "Travel Steamer Iron for Clothes, 1250W....",
-      size: "23 centimeters",
-      rating: 4.0,
-      ratingsCount: "4,764",
-      price: "₹189",
-      originalPrice: "₹199",
-      deliveryInfo: "Free delivery Thu, 11 Apr",
-    ),
-    CartItem(
-      image: "assets/images/iron_table.png",
-      title: "Travel Steamer Iron for Clothes, 1250W....",
-      size: "23 centimeters",
-      rating: 4.0,
-      ratingsCount: "4,764",
-      price: "₹189",
-      originalPrice: "₹199",
-      deliveryInfo: "Free delivery Thu, 11 Apr",
-    ),
-  ];
-
-  final List<CartItem> _wishlistItems = [
-    CartItem(
-      image: "assets/images/iron_table.png",
-      title: "Travel Steamer Iron for Clothes, 1250W....",
-      size: "23 centimeters",
-      rating: 4.0,
-      ratingsCount: "4,764",
-      price: "₹189",
-      originalPrice: "₹199",
-      deliveryInfo: "Free delivery Thu, 11 Apr",
-    ),
-
-    CartItem(
-      image: "assets/images/iron_table.png",
-      title: "Travel Steamer Iron for Clothes, 1250W....",
-      size: "23 centimeters",
-      rating: 4.0,
-      ratingsCount: "4,764",
-      price: "₹189",
-      originalPrice: "₹199",
-      deliveryInfo: "Free delivery Thu, 11 Apr",
-    ),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('My Cart', style: AppTextStyles.title(context)),
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                _SearchFilterSection(),
-                const Divider(),
-                _DeliveryInfoSection(),
-                const Divider(thickness: 2),
-                _CartItemsSection(items: _cartItems),
-                const Divider(thickness: 2),
-                _WishlistSection(items: _wishlistItems),
-                const Divider(thickness: 2),
-                _CouponSection(),
-                const Divider(thickness: 2),
-                _BillSummarySection(),
-                const Divider(thickness: 2),
-                _FooterSection(),
-                const SizedBox(height: 100),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: _ProceedToBuySection(),
           ),
         ],
       ),
