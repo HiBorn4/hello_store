@@ -21,7 +21,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Hello Stores',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home:  HomeMenu()   // Set your desired starting screen
+      home: CartScreen() // Set your desired starting screen
     );
   }
 }
