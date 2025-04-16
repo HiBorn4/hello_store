@@ -3,23 +3,25 @@ import 'package:flutter/material.dart';
 class CouponsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-  backgroundColor: Colors.white,
-  title: Text(
-    'Coupons',
-    style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.045),
-  ),
-  elevation: 0, // Keep elevation 0 to avoid shadow
-  bottom: PreferredSize(
-    preferredSize: Size.fromHeight(1), // Height of the line
-    child: Container(
-      color: Colors.grey.shade400, // Line color
-      height: 1, // Thickness of the line
-    ),
-  ),
-),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Coupons',
+          style: TextStyle(fontSize: screenWidth * 0.045),
+        ),
+        elevation: 0,
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Container(
+            color: Colors.grey.shade400,
+            height: 1,
+          ),
+        ),
+      ),
       body: CouponList(),
     );
   }
@@ -52,6 +54,7 @@ class CouponInputSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
       decoration: BoxDecoration(
@@ -73,7 +76,10 @@ class CouponInputSection extends StatelessWidget {
                 ),
                 border: InputBorder.none,
                 isDense: true,
-                contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.01,
+                  vertical: screenHeight * 0.01,
+                ),
               ),
             ),
           ),
@@ -87,7 +93,7 @@ class CouponInputSection extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(screenWidth * 0.025),
                 ),
-                padding: EdgeInsets.symmetric(vertical: screenWidth * 0.03),
+                padding: EdgeInsets.symmetric(vertical: screenHeight * 0.015),
               ),
               child: Text(
                 'Apply',
@@ -104,7 +110,72 @@ class CouponInputSection extends StatelessWidget {
   }
 }
 
-class BestCouponCard extends StatelessWidget {
+class BestCouponCard extends StatefulWidget {
+  @override
+  _BestCouponCardState createState() => _BestCouponCardState();
+}
+
+class _BestCouponCardState extends State<BestCouponCard> {
+  bool isApplied = false;
+
+  void _showOverlay(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(screenWidth * 0.04),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(screenWidth * 0.05),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: screenHeight * 0.1),
+                Text(
+                  'HSW0123 Applied',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.04, 
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.01),
+                Text(
+                  'You save ₹50\nwith this promo code',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.035,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    setState(() {
+                      isApplied = true;
+                    });
+                  },
+                  child: Text(
+                    'Got it, thanks',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -151,27 +222,24 @@ class BestCouponCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(screenWidth * 0.025),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.06,
-                        vertical: screenHeight * 0.01,
-                      ),
+                ElevatedButton(
+                  onPressed: isApplied ? null : () => _showOverlay(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: isApplied ? Colors.grey : Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(screenWidth * 0.025),
                     ),
-                    child: Text(
-                      'Apply',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.035,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.06,
+                      vertical: screenHeight * 0.01,
+                    ),
+                  ),
+                  child: Text(
+                    isApplied ? 'Applied' : 'Apply',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.035,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -181,9 +249,13 @@ class BestCouponCard extends StatelessWidget {
             Divider(),
             SizedBox(height: screenHeight * 0.015),
             CouponDetailText('All orders above ₹499'),
-            CouponDetailText('Select grocery categories Fruits, Vegetables, Dairy and Bakery'),
+            CouponDetailText(
+              'Select grocery categories Fruits, Vegetables, Dairy and Bakery',
+            ),
             CouponDetailText('First-time users only'),
-            CouponDetailText('Applicable on prepaid orders (UPI/ Debit/ Credit Card)'),
+            CouponDetailText(
+              'Applicable on prepaid orders (UPI/ Debit/ Credit Card)',
+            ),
             CouponDetailText('Valid from 10th April to 15th April 2025'),
             CouponDetailText('Use code : FRESH20 at checkout'),
           ],
@@ -214,6 +286,8 @@ class BankOffersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    
     return Column(
       children: offers.map((offer) => BankOfferCard(offer: offer)).toList(),
     );
@@ -222,7 +296,6 @@ class BankOffersList extends StatelessWidget {
 
 class BankOfferCard extends StatelessWidget {
   final Map<String, dynamic> offer;
-  final double iconSize = 45;
 
   const BankOfferCard({required this.offer});
 
@@ -293,10 +366,12 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    
     return Text(
       title,
       style: TextStyle(
-        fontSize: MediaQuery.of(context).size.width * 0.045,
+        fontSize: screenWidth * 0.045,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -322,11 +397,11 @@ class CouponDetailText extends StatelessWidget {
           SizedBox(width: screenWidth * 0.02),
           Expanded(
             child: Text(
-              text,
-              style: TextStyle(fontSize: screenWidth * 0.032),
-            ),
+              text, 
+              style: TextStyle(fontSize: screenWidth * 0.032)
           ),
-        ],
+      ),],
+      
       ),
     );
   }
