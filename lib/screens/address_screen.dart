@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_store/screens/AddNewAddress.dart';
 import 'package:hello_store/screens/payment_screen.dart';
 
 class AddressScreen extends StatefulWidget
@@ -11,7 +12,7 @@ class AddressScreen extends StatefulWidget
 class _AddressScreenState extends State<AddressScreen> {
   @override
   Widget build(BuildContext context) {
-    bool isSelected = true;
+    bool isSelected = false;
 
       var height = MediaQuery
           .of(context)
@@ -45,35 +46,44 @@ class _AddressScreenState extends State<AddressScreen> {
           children: [
             Divider(thickness: 0.4,),
             SizedBox(height: height*0.016,),
-            Center(
-              child: Container(
-                width: width*0.9,
-                height: height*0.07,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 0.5,
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: Icon(Icons.add,color: Color.fromRGBO(13, 118, 0, 1),),
+            InkWell(
+              onTap: ()
+              {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddAdressScreen()),
+                );
+              },
+              child: Center(
+                child: Container(
+                  width: width*0.9,
+                  height: height*0.07,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
                     ),
-                    SizedBox(width: width*0.03,),
-                    Text('Add a new address', textAlign: TextAlign.center, style: TextStyle(
-                        color: Color.fromRGBO(13, 118, 0, 1),
-                     //   fontFamily: 'semibold',
-                        fontSize: 16,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),),
-                  ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Icon(Icons.add,color: Color.fromRGBO(13, 118, 0, 1),),
+                      ),
+                      SizedBox(width: width*0.03,),
+                      Text('Add a new address', textAlign: TextAlign.center, style: TextStyle(
+                          color: Color.fromRGBO(13, 118, 0, 1),
+                       //   fontFamily: 'semibold',
+                          fontSize: 16,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1
+                      ),),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -81,7 +91,7 @@ class _AddressScreenState extends State<AddressScreen> {
             Center(
               child: Container(
                 width: width*0.9,
-                height: height*0.146,
+               // height: height*0.146,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
@@ -89,16 +99,16 @@ class _AddressScreenState extends State<AddressScreen> {
                     width: 0.5,
                   ),
                 ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(3, 10,10,0),
-                      child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,10,10,15),
+                  child: Column(
+                    children: [
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
                             width: width*0.1,
-                            height: height*0.03,
+                            height: height*0.027,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.white,
@@ -126,7 +136,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               fontWeight: FontWeight.normal,
                               height: 1
                           ),),
-                          SizedBox(width: width*0.01,),
+                          SizedBox(width: width*0.02,),
                           Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(7),
@@ -144,7 +154,46 @@ class _AddressScreenState extends State<AddressScreen> {
                               ),),
                             ),
                           ),
-                          Spacer(),
+
+
+
+                        ],
+                      ),
+                      SizedBox(height: height*0.014,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(width: width*0.12,),
+                          Text('GR homes, 23/12,  Bengaluru, BENGALURU,\nKARNATAKA 560068 India, ', textAlign: TextAlign.left, style: TextStyle(
+                              color: Color.fromRGBO(76, 76, 76, 1),
+                              fontFamily: 'regular',
+                              fontSize: height*0.015,
+                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.normal,
+                              height: 1
+                          ),)
+                        ],
+                      ),
+                      SizedBox(height: height*0.014,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(width: width*0.12,),
+                          Text('Phone number  : 9012890134 ', textAlign: TextAlign.left, style: TextStyle(
+                              color: Color.fromRGBO(76, 76, 76, 1),
+                              fontFamily: 'regular',
+                              fontSize: height*0.015,
+                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.normal,
+                              height: 1
+                          ),)
+                        ],
+                      ),
+                      SizedBox(height: height*0.014,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(width: width*0.12,),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
@@ -157,7 +206,49 @@ class _AddressScreenState extends State<AddressScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: Text('Edit', textAlign: TextAlign.center, style: TextStyle(
                                   color: Color.fromRGBO(13, 118, 0, 1),
-                                  fontFamily: 'semibold',
+                                  //fontFamily: 'semibold',
+                                  fontSize: height*0.017,
+                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                  fontWeight: FontWeight.normal,
+                                  height: 1
+                              ),),
+                            ),
+                          ),
+                          SizedBox(width: width*0.05,),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 0.5,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Remove', textAlign: TextAlign.center, style: TextStyle(
+                                  color: Colors.black54,
+                                  //fontFamily: 'semibold',
+                                  fontSize: height*0.017,
+                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                  fontWeight: FontWeight.normal,
+                                  height: 1
+                              ),),
+                            ),
+                          ),
+                          SizedBox(width: width*0.05,),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 0.5,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Set as Default', textAlign: TextAlign.center, style: TextStyle(
+                                  color: Colors.black54,
+                                  //fontFamily: 'semibold',
                                   fontSize: height*0.017,
                                   letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
                                   fontWeight: FontWeight.normal,
@@ -165,42 +256,11 @@ class _AddressScreenState extends State<AddressScreen> {
                               ),),
                             ),
                           )
-
                         ],
-                      ),
+                      )
 
-                    ),
-                    SizedBox(height: height*0.014,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(width: width*0.12,),
-                        Text('GR homes, 23/12,  Bengaluru, BENGALURU,\nKARNATAKA 560068 India, ', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(76, 76, 76, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.015,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),)
-                      ],
-                    ),
-                    SizedBox(height: height*0.014,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(width: width*0.12,),
-                        Text('Phone number:9012890134 ', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(76, 76, 76, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.015,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),)
-                      ],
-                    )
-                  ],
+                    ],
+                  ),
                 ),
 
               ),

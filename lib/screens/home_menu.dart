@@ -115,24 +115,60 @@ class HomeMenu extends StatelessWidget {
 
     return NavigationDestination(
       label: label,
-      icon: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-
-          Container(
-            height: 2,
-            width: 46,
-            decoration: BoxDecoration(
-              color: isSelected ? Colors.black : Colors.transparent,
-              borderRadius: BorderRadius.circular(2),
+      icon: Stack(
+        children:
+        [
+          Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 2,
+              width: 46,
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.black : Colors.transparent,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-           SvgPicture.asset(
-            isSelected ? selectedIcon : icon,
-            height: 24,
-          ),
-        ],
+            const SizedBox(height: 4),
+             Stack(
+               children: [
+                 SvgPicture.asset(
+                isSelected ? selectedIcon : icon,
+                height: 25 ,
+                 ),
+                Positioned(
+                  right: 0,
+                     top: 0,
+                     child: (label=="Cart") ?Container(
+                       width: 12,
+                       height: 12,
+                       decoration: BoxDecoration(
+                         color : Color.fromRGBO(13, 118, 0, 1),
+                       
+                         shape: BoxShape.circle,
+                       ),
+                       alignment: Alignment.center,
+                       child: const Text(
+                         '1',
+                         style: TextStyle(
+                           color: Colors.white,
+                           fontSize: 8,
+                           fontWeight: FontWeight.bold,
+                         ),
+                       ),
+                     )
+                         :
+                     Container(
+                       height: 0,
+                       width: 0,
+                     )
+                 )
+                ]
+             ),
+          ],
+        ),
+
+      ]
       ),
     );
   }
