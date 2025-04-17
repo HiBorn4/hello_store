@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_store/screens/AddNewAddress.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hello_store/screens/add_new_address.dart';
 import 'package:hello_store/screens/payment_screen.dart';
 
 class AddressScreen extends StatefulWidget
@@ -215,24 +216,30 @@ class _AddressScreenState extends State<AddressScreen> {
                             ),
                           ),
                           SizedBox(width: width*0.05,),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 0.5,
+                          InkWell(
+                            onTap: ()
+                            {
+                              _showCustomPopup(context,height,width);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 0.5,
+                                ),
                               ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('Remove', textAlign: TextAlign.center, style: TextStyle(
-                                  color: Colors.black54,
-                                  //fontFamily: 'semibold',
-                                  fontSize: height*0.017,
-                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                  fontWeight: FontWeight.normal,
-                                  height: 1
-                              ),),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text('Remove', textAlign: TextAlign.center, style: TextStyle(
+                                    color: Colors.black54,
+                                    //fontFamily: 'semibold',
+                                    fontSize: height*0.017,
+                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                    fontWeight: FontWeight.normal,
+                                    height: 1
+                                ),),
+                              ),
                             ),
                           ),
                           SizedBox(width: width*0.05,),
@@ -301,10 +308,130 @@ class _AddressScreenState extends State<AddressScreen> {
               ),
             ),
             SizedBox(height: height*0.03,),
-
-
           ],
         ),
       );
   }
+  void _showCustomPopup(BuildContext context, double height, double width) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              //height: height * 0.25,
+              width: width * 0.9,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10,10,10,10 ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Confirm delete?',
+                          style: TextStyle(
+                            color: Color.fromRGBO(237, 0, 0, 1),
+                            fontFamily: 'Inter',
+                            fontSize: height*0.02,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        Spacer(),
+                        SvgPicture.asset("assets/images/cross.svg")
+                      ],
+                    ),
+                    SizedBox(height: height*0.015,),
+                    Text('Are you sure you want to delete this address?', textAlign: TextAlign.left, style: TextStyle(
+                        color: Color.fromRGBO(76, 76, 76, 1),
+                        fontFamily: 'Inter',
+                        fontSize: height*0.016,
+                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.normal,
+                        height: 1
+                    ),),
+                    SizedBox(height: height*0.017,),
+                    Flexible(
+                      child: RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: Color.fromRGBO(76, 76, 76, 1),
+                            fontFamily: 'Inter',
+                            fontSize: height * 0.016,
+                            height: 1.5,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: 'Please note : ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text:
+                              'Deleting this address will not delete any pending orders being shipped to this address. To ensure uninterrupted fulfilment of future orders, please update any Wishlist using the updated address.',
+                              style: TextStyle(fontWeight: FontWeight.normal),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: height*0.017,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Color(0XFF2E7D32),
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            'No',
+                            style: TextStyle(
+                              color: Color(0XFF2E7D32),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: width*0.06,),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Color(0XFF2E7D32),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            'Yes',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    )
+
+
+
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 }

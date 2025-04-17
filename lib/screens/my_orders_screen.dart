@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -51,6 +53,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
   }
   Widget _buildSearchAndFilter(height,width,context)
   {
+    GlobalKey _buttonKey = GlobalKey();
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0,10,15),
       child: Row(
@@ -87,9 +90,9 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
           ),
           Spacer(),
           GestureDetector(
-            onTapDown: (TapDownDetails details) {
-              // Get tap position and show the popup
-              //_showPopup(details.globalPosition,context);
+            key: _buttonKey,
+            onTap: () {
+              _showPopupAboveButton(context, _buttonKey);
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -119,7 +122,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
   }
   Widget _buildplus20(height,width,context)
   {
-    var size=50.0;
+    var size=height*0.07;
     return  Padding(
       padding: const EdgeInsets.fromLTRB(8,0,8,8),
       child: Column(
@@ -413,6 +416,422 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
       ),
     );
   }
+  void _showPopupAboveButton(BuildContext context, GlobalKey key) {
+    final RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
+    final Size size = renderBox.size;
+    final Offset offset = renderBox.localToGlobal(Offset.zero);
+
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    final double popupWidth = screenWidth*0.9;
+
+
+    double popupLeft = offset.dx + size.width - popupWidth;
+
+
+    if (popupLeft + popupWidth > screenWidth) {
+      popupLeft = screenWidth - popupWidth - 10;
+    }
+    OverlayEntry? overlayEntry;
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: offset.dy + size.height + 5,
+        left: popupLeft,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+           // height: 200,
+            width: popupWidth,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(12),
+
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 16,14,16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('Filter', textAlign: TextAlign.left, style: TextStyle(
+                          color: Color.fromRGBO(45, 45, 45, 1),
+                          fontFamily: 'Inter',
+                          fontSize: height*0.018,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1
+                      ),),
+                      Spacer(),
+                      Text('Clear Filter', textAlign: TextAlign.left, style: TextStyle(
+                          color: Color.fromRGBO(13, 118, 0, 1),
+                          fontFamily: 'Inter',
+                          fontSize: height*0.02,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1
+                      ),)
+                    ],
+                  ),
+                  SizedBox(height: height*0.02,),
+                  Text('Order status', textAlign: TextAlign.left, style: TextStyle(
+                      color: Color.fromRGBO(0, 0, 0, 1),
+                      fontFamily: 'Inter',
+                      fontSize: height*0.016,
+                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                      fontWeight: FontWeight.normal,
+                      height: 1
+                  ),),
+                  SizedBox(height: height*0.02,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2.5),
+                            border: Border.all(
+                                color: Colors.grey
+                            )
+
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(6,6,6,6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("On the way", textAlign: TextAlign.left, style: TextStyle(
+                                  color: Color.fromRGBO(76, 76, 76, 1),
+                                  fontFamily: 'Inter',
+                                  fontSize: height*0.014,
+                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                  fontWeight: FontWeight.normal,
+                                  height: 1
+                              ),),
+                              SizedBox(width: screenWidth*0.02,),
+                              Icon(Icons.add,size: height*0.02,)
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: screenWidth*0.02,),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2.5),
+                            border: Border.all(
+                                color: Colors.grey
+                            )
+
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(6,6,6,6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Delivered", textAlign: TextAlign.left, style: TextStyle(
+                                  color: Color.fromRGBO(76, 76, 76, 1),
+                                  fontFamily: 'Inter',
+                                  fontSize: height*0.014,
+                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                  fontWeight: FontWeight.normal,
+                                  height: 1
+                              ),),
+                              SizedBox(width: screenWidth*0.02,),
+                              Icon(Icons.add,size: height*0.02,)
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: screenWidth*0.02,),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2.5),
+                            border: Border.all(
+                                color: Colors.grey
+                            )
+
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(6,6,6,6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Cancelled", textAlign: TextAlign.left, style: TextStyle(
+                                  color: Color.fromRGBO(76, 76, 76, 1),
+                                  fontFamily: 'Inter',
+                                  fontSize: height*0.014,
+                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                  fontWeight: FontWeight.normal,
+                                  height: 1
+                              ),),
+                              SizedBox(width: screenWidth*0.02,),
+                              Icon(Icons.add,size: height*0.02,)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: height*0.01,),
+                  Container(
+                    width: screenWidth*0.28,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2.5),
+                        border: Border.all(
+                            color: Colors.grey
+                        )
+
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(6,6,6,6),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Cancelled", textAlign: TextAlign.left, style: TextStyle(
+                              color: Color.fromRGBO(76, 76, 76, 1),
+                              fontFamily: 'Inter',
+                              fontSize: height*0.014,
+                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.normal,
+                              height: 1
+                          ),),
+                          SizedBox(width: screenWidth*0.02,),
+                          Icon(Icons.add,size: height*0.02,)
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height*0.02,),
+                  Text('Older time', textAlign: TextAlign.left, style: TextStyle(
+                      color: Color.fromRGBO(0, 0, 0, 1),
+                      fontFamily: 'Inter',
+                      fontSize: height*0.016,
+                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                      fontWeight: FontWeight.normal,
+                      height: 1
+                  ),),
+                  SizedBox(height: height*0.02,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2.5),
+                            border: Border.all(
+                                color: Colors.grey
+                            )
+
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(6,6,6,6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Last 30 days", textAlign: TextAlign.left, style: TextStyle(
+                                  color: Color.fromRGBO(76, 76, 76, 1),
+                                  fontFamily: 'Inter',
+                                  fontSize: height*0.014,
+                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                  fontWeight: FontWeight.normal,
+                                  height: 1
+                              ),),
+                              SizedBox(width: screenWidth*0.02,),
+                              Icon(Icons.add,size: height*0.02,)
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: screenWidth*0.02,),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2.5),
+                            border: Border.all(
+                                color: Colors.grey
+                            )
+
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(6,6,6,6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("2024", textAlign: TextAlign.left, style: TextStyle(
+                                  color: Color.fromRGBO(76, 76, 76, 1),
+                                  fontFamily: 'Inter',
+                                  fontSize: height*0.014,
+                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                  fontWeight: FontWeight.normal,
+                                  height: 1
+                              ),),
+                              SizedBox(width: screenWidth*0.02,),
+                              Icon(Icons.add,size: height*0.02,)
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: screenWidth*0.02,),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2.5),
+                            border: Border.all(
+                                color: Colors.grey
+                            )
+
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(6,6,6,6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("2023", textAlign: TextAlign.left, style: TextStyle(
+                                  color: Color.fromRGBO(76, 76, 76, 1),
+                                  fontFamily: 'Inter',
+                                  fontSize: height*0.014,
+                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                  fontWeight: FontWeight.normal,
+                                  height: 1
+                              ),),
+                              SizedBox(width: screenWidth*0.02,),
+                              Icon(Icons.add,size: height*0.02,)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: height*0.01,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2.5),
+                            border: Border.all(
+                                color: Colors.grey
+                            )
+
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(6,6,6,6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("2022", textAlign: TextAlign.left, style: TextStyle(
+                                  color: Color.fromRGBO(76, 76, 76, 1),
+                                  fontFamily: 'Inter',
+                                  fontSize: height*0.014,
+                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                  fontWeight: FontWeight.normal,
+                                  height: 1
+                              ),),
+                              SizedBox(width: screenWidth*0.02,),
+                              Icon(Icons.add,size: height*0.02,)
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: screenWidth*0.02,),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2.5),
+                            border: Border.all(
+                                color: Colors.grey
+                            )
+
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(6,6,6,6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("2021", textAlign: TextAlign.left, style: TextStyle(
+                                  color: Color.fromRGBO(76, 76, 76, 1),
+                                  fontFamily: 'Inter',
+                                  fontSize: height*0.014,
+                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                  fontWeight: FontWeight.normal,
+                                  height: 1
+                              ),),
+                              SizedBox(width: screenWidth*0.02,),
+                              Icon(Icons.add,size: height*0.02,)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: height*0.02,),
+                  Divider(thickness: 0.8,),
+
+                  Row(
+                   // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: ()
+                        {
+                          overlayEntry?.remove();
+                        },
+                        child: Container(
+                          width: (popupWidth/2.4),
+                          child: Center(
+                            child:  Text('Cancel', textAlign: TextAlign.center, style: TextStyle(
+                                color: Color.fromRGBO(69, 69, 69, 1),
+                                fontFamily: 'Inter',
+                                fontSize: height*0.018,
+                                letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                fontWeight: FontWeight.normal,
+                                height: 1
+                            ),),
+                          ),
+
+                        ),
+                      ),
+                      Container(
+                        width: 1,
+                        height: height * 0.04,
+                        color: Colors.grey.withOpacity(0.6),
+                      ),
+                      Container(
+                        width: (popupWidth/2.3),
+                        child: Center(
+                          child:
+                          Text('Apply', textAlign: TextAlign.center, style: TextStyle(
+                              color: Color.fromRGBO(13, 118, 0, 1),
+                              fontFamily: 'Inter',
+                              fontSize: height*0.018,
+                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.normal,
+                              height: 1
+                          ),)
+                        ),
+
+                      )
+                    ],
+                  ),
+
+
+
+
+
+
+
+
+
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(overlayEntry);
+  }
+
+
+
+
 }
 
 

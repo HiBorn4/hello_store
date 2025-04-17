@@ -492,28 +492,26 @@ class _AddAdressScreenState extends State<AddAdressScreen> {
                 {
 
                 },
-                child: Center(
-                  child: Container(
-                    width: width*0.9,
-                    height: height*0.07,
-                    decoration: BoxDecoration(
-                        color: Color(0XFF2E7D32),
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Add  Address', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(255, 255, 255, 1),
-                            fontFamily: 'semibold',
-                            fontSize: height*0.022,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),),
+                child: Container(
+                  width: width*0.9,
+                  height: height*0.07,
+                  decoration: BoxDecoration(
+                      color: Color(0XFF2E7D32),
+                      borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Add  Address', textAlign: TextAlign.left, style: TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                          fontFamily: 'semibold',
+                          fontSize: height*0.022,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1
+                      ),),
 
-                      ],
-                    ),
+                    ],
                   ),
                 ),
               ),

@@ -133,64 +133,110 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
   }
   Widget  _buildProducts(height,width,context)
   {
+    var size=height*0.07;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          padding: const EdgeInsets.fromLTRB(8,0,8,8),
+          child: Column(
             children: [
-              Container(
-                  height: height*0.08,
-                  width: width*0.25,
-                  child: Image.asset("assets/images/plus20.png")
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 8,8,8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Fresh Products', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(102, 102, 102, 1),
-                        fontFamily: 'Inter',
-                        fontSize: height*0.016,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),),
-                    SizedBox(height: height*0.005,),
-                    Text('Arriving on April 20, 2025', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(13, 118, 0, 1),
-                        fontFamily: 'Inter',
-                        fontSize: height*0.015,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),),
-                    SizedBox(height: height*0.005,),
-                    Text('₹ 3,389', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'Inter',
-                        fontSize: height*0.018,
-                        letterSpacing: 0,
-                        fontWeight: FontWeight.normal,
-                        height: 1 /*PERCENT not supported*/
-                    ),)
-                  ],
-                ),
-              ),
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(right: 15),
-                child: Icon(Icons.keyboard_arrow_up,size: height*0.035,color: Colors.black38,),
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: size + 40, // Adjust depending on overlap
+                    height: size,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: 0,
+                          child: CircleAvatar(
+                            radius: size / 2,
+                            backgroundImage: AssetImage('assets/images/iron_table.png'),
+                          ),
+                        ),
+                        Positioned(
+                          left: size * 0.3,
+                          child: CircleAvatar(
+                            radius: size / 2,
+                            backgroundImage: AssetImage('assets/images/iron_table.png'),
+                          ),
+                        ),
+                        Positioned(
+                          left: size * 0.6,
+                          child: Container(
+                            width: size,
+                            height: size,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey[200],
+                              border: Border.all( color: Color.fromRGBO(13, 118, 0, 1), width: 2),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '+20',
+                                style: TextStyle(
+                                  color: Color.fromRGBO(13, 118, 0, 1),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: size * 0.3,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8,8,8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Fresh Products', textAlign: TextAlign.left, style: TextStyle(
+                            color: Color.fromRGBO(102, 102, 102, 1),
+                            fontFamily: 'Inter',
+                            fontSize: height*0.016,
+                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                            fontWeight: FontWeight.normal,
+                            height: 1
+                        ),),
+                        SizedBox(height: height*0.005,),
+                        Text('Arriving on April 20, 2025', textAlign: TextAlign.left, style: TextStyle(
+                            color: Color.fromRGBO(13, 118, 0, 1),
+                            fontFamily: 'Inter',
+                            fontSize: height*0.015,
+                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                            fontWeight: FontWeight.normal,
+                            height: 1
+                        ),),
+                        SizedBox(height: height*0.005,),
+                        Text('₹ 3,389', textAlign: TextAlign.left, style: TextStyle(
+                            color: Color.fromRGBO(25, 25, 25, 1),
+                            fontFamily: 'Inter',
+                            fontSize: height*0.018,
+                            letterSpacing: 0,
+                            fontWeight: FontWeight.normal,
+                            height: 1 /*PERCENT not supported*/
+                        ),)
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: Icon(Icons.keyboard_arrow_up,size: height*0.035,color: Colors.black38,),
+                  ),
 
+
+                ],
+              ),
 
             ],
           ),
         ),
-        SizedBox(height: height*0.01,),
+
+        SizedBox(height: height*0.008,),
         Center(
           child: Container(
             width: width*0.93,
