@@ -1,1933 +1,663 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import '../models/cart_item.dart';
+import '../utils/app_colors.dart';
 import 'address_screen.dart';
 
-
-class CartScreen extends StatefulWidget
-{
+class CartScreen extends StatefulWidget {
   @override
-  State<CartScreen> createState() => _CartScreenState();
+  _CartScreenState createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final List<CartItem> items = List.generate(
+    5,
+    (index) => CartItem(
+      // id: 'item$index',
+      image: 'assets/images/product.png',
+      title: 'Samsung Refrigerator 255L',
+      size: '255L',
+      rating: 4.5,
+      ratingsCount: '1.2k',
+      price: '₹32,999',
+      originalPrice: '₹45,999',
+      deliveryInfo: 'Delivery by Mon, 25th Sep',
+    ),
+  );
+
+  void _handleRemove(CartItem item) {
+    // Handle remove logic
+  }
+
+  void _handleMoveToCart(CartItem item) {
+    // Handle move to cart logic
+  }
+
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: const Text(
-            'My Cart',
-            style: TextStyle(color: Colors.black,
-            fontSize: kToolbarHeight*0.4),
-          ),
-        ),
-
-        backgroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search, color: Colors.black),
-            onPressed: () {
-              // Handle search action
-            },
-          ),
-        ],
+        title: Text('Cart'),
       ),
-      body: Stack(
-        children: [ SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0,10,0,10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-               _buildSearchAndCategories(height,width,context),
-                Divider(),
-                _buildExpectedMultipleDelivery(height,width,context),
-                Divider(thickness: 2,),
-                _buildCartItems(height,width,context),
-                Divider(thickness: 2,),
-                _buildWishlist(height,width,context),
-                Divider(thickness: 2,),
-                _buildCoupon(height,width,),
-                Divider(thickness: 2,),
-                _buildBillSummary(height, width, context),
-                Divider(thickness: 2,),
-                _buildEnder(height,width,context),
-                Divider(thickness: 2,),
-                SizedBox(height: height*0.2,)
-              ],
-            ),
-          ),
-        ),
-          Positioned(
-            bottom: height*0.08,
-            left: 0,
-            right: 0,
-            child:   _buildProceedToBuy(height,width,context),
-          )
-    ]
-      ),
-    );
-  }
-  Widget  _buildSearchAndCategories(height,width,context)
-  {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Column(
-       crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                width: width*0.63,
-                child: TextField(
-                  style: TextStyle(
-                      fontSize: height*0.016,
-                  ),
-                  decoration: InputDecoration(
-
-                    hintText: 'Search products',
-                    prefixIcon: const Icon(Icons.search),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: Colors.black, // Thin black border
-                        width: 0.5,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: Colors.black,
-                        width: 1,
-                      ),
-                    ),
-
-                  ),
-                ),
-              ),
-              Spacer(),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 11),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.filter_list, color: Colors.grey),
-                    SizedBox(width: 8),
-                    Text(
-                      'Filter',
-                      style: TextStyle(
-                        //color: Colors.grey,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          SizedBox(height: height*0.014,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color : Color.fromRGBO(237, 237, 237, 1),
-                ),
-                child:  Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('All Categories (12)', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(51, 51, 51, 1),
-                          fontFamily: 'Inter',
-                          fontSize: height*0.016,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(4,0,4,0),
-                        child: Icon(Icons.expand_more),
-                      )
-                    ],
-                  ),
-                )
-              ),
-
-              Text('Grocery', textAlign: TextAlign.center, style: TextStyle(
-                  color: Color.fromRGBO(76, 76, 76, 1),
-                  fontFamily: 'Inter',
-                  fontSize: height*0.016,
-                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                  fontWeight: FontWeight.normal,
-                  height: 1
-              ),),
-              Text('Minutes (11)', textAlign: TextAlign.center, style: TextStyle(
-                  color: Color.fromRGBO(76, 76, 76, 1),
-                  fontFamily: 'Inter',
-                  fontSize: height*0.016,
-                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                  fontWeight: FontWeight.normal,
-                  height: 1
-              ),),
-
-            ],
-          ),
-
-
-
-
-        ],
-      ),
-    );
-  }
- Widget _buildExpectedMultipleDelivery(height,width,context)
- {
-   return  Padding(
-     padding: const EdgeInsets.fromLTRB(12, 10,12,10),
-     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-       children: [
-         Container(
-           decoration: BoxDecoration(
-             borderRadius : BorderRadius.only(
-               topLeft: Radius.circular(8),
-               topRight: Radius.circular(8),
-               bottomLeft: Radius.circular(8),
-               bottomRight: Radius.circular(8),
-
-             ),
-             color : Color.fromRGBO(231, 249, 237, 1),
-           ),
-
-           child: Padding(
-             padding: const EdgeInsets.all(12.0),
-             child: Row(
-               mainAxisAlignment: MainAxisAlignment.start,
-               children: [
-                 SvgPicture.asset("assets/images/vehicle.svg"),
-                 SizedBox(width: width*0.03,),
-                 Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
-                       Row(
-                         mainAxisAlignment: MainAxisAlignment.start,
-                         children: [
-                           Text('Expected', textAlign: TextAlign.left, style: TextStyle(
-                               color: Color.fromRGBO(76, 76, 76, 1),
-                               // fontFamily: 'regular',
-                               fontSize: height*0.016,
-                               letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                               fontWeight: FontWeight.normal,
-                               height: 1
-                           ),),
-                           Text('  multiple delivery ', textAlign: TextAlign.left, style: TextStyle(
-                               color: Color(0XFF2E7D32),
-
-                               fontSize: height*0.016,
-                               letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                               fontWeight: FontWeight.normal,
-                               height: 1
-                           ),),
-                           Text(' on this order', textAlign: TextAlign.left, style: TextStyle(
-                               color: Color.fromRGBO(76, 76, 76, 1),
-                               fontSize: 16,
-                               letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                               fontWeight: FontWeight.normal,
-                               height: 1
-                           ),),
-                         ],
-                       ),
-                     SizedBox(height: height*0.005,),
-                     Text('your items will be delivered from 5differnt stores', textAlign: TextAlign.center, style: TextStyle(
-                         color: Color.fromRGBO(76, 76, 76, 1),
-                         fontFamily: 'Inter',
-                         fontSize: height*0.013,
-                         letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                         fontWeight: FontWeight.normal,
-                         height: 1
-                     ),)
-
-                   ],
-                 )
-               ],
-             ),
-           ),
-         ),
-         SizedBox(height: height*0.024,),
-         Container(
-           width: double.infinity,
-           height: MediaQuery.of(context).size.height * 0.08,
-           decoration: BoxDecoration(
-             border: Border.all(color: Colors.green),
-             borderRadius: BorderRadius.circular(10),
-           ),
-           child: Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: Row(
-               mainAxisAlignment: MainAxisAlignment.start,
-               crossAxisAlignment: CrossAxisAlignment.center,
-               children: [
-                 Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                     Text('Add item worth ₹200, to get free delivery ', textAlign: TextAlign.left, style: TextStyle(
-                         color: Color.fromRGBO(76, 76, 76, 1),
-                         fontFamily: 'Inter',
-                         fontSize: height*0.0155,
-                         letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                         fontWeight: FontWeight.normal,
-                         height: 1
-                     ),),
-                    SizedBox(height: height*0.01,),
-                    Container(
-                      height: height*0.005,
-                      width: width*0.7,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                        Container(
-                        height: height*0.005,
-                        width: width*0.4,
-
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                            ),
-                          ),
-                        ),
-                          Container(
-                            height: height*0.005,
-                            width: width*0.3,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.7),
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                              ),
-                            ),
-
-                          )
-
-                        ]
-                      ),
-                    )
-
-
-
-                   ],
-                 ),
-                 Spacer(),
-                 Container(
-                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                   decoration: BoxDecoration(
-                     border: Border.all(color: Colors.green),
-                     borderRadius: BorderRadius.circular(8),
-                   ),
-                   child: Text(
-                     'Add',
-                     style: TextStyle(color: Colors.green, ),
-                   ),
-                 )
-
-               ],
-             ),
-           )
-         )
-       ],
-     ),
-   );
- }
-  Widget _buildCartItems(height,width,context)
-  {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(9,12,9,12),
-          child: Container(
-
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: Colors.grey.withOpacity(0.5)
-              )
-            ),
-           child: Padding(
-             padding: const EdgeInsets.fromLTRB(9,9,12,9),
-             child: Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.start,
-                   children: [
-                      Container(
-                         height: height*0.11,
-                          width: width*0.22,
-                          child: Image.asset("assets/images/iron_table.png")
-                      ),
-                     SizedBox(width: width*0.02,),
-                     Container(
-                       height: height*0.11,
-                       //width: width*0.22,
-                       child: Column(
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                         children: [
-                           Column(
-                             crossAxisAlignment: CrossAxisAlignment.start,
-                             children: [
-                               Text('Travel Steamer Iron for Clothes, 1250W....', textAlign: TextAlign.left, style: TextStyle(
-                                   color: Color.fromRGBO(25, 25, 25, 1),
-                                   fontFamily: 'Inter',
-                                   fontSize: 12,
-                                   letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                   fontWeight: FontWeight.normal,
-                                   height: 1.5
-                               ),),
-                               Container(
-                                 decoration: BoxDecoration(
-                                   borderRadius : BorderRadius.only(
-                                     topLeft: Radius.circular(4),
-                                     topRight: Radius.circular(4),
-                                     bottomLeft: Radius.circular(4),
-                                     bottomRight: Radius.circular(4),
-                                   ),
-                                   color : Color.fromRGBO(230, 230, 230, 1),
-                                 ),
-                                 padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                                 child: Text('23 cenimeters', textAlign: TextAlign.left, style: TextStyle(
-                                     color: Color.fromRGBO(102, 102, 102, 1),
-                                     fontFamily: 'Inter',
-                                     fontSize: height*0.012,
-                                     letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                     fontWeight: FontWeight.normal,
-                                     height: 1
-                                 ),),
-                               ),
-                             ],
-                           ),
-
-                           Row(
-                             mainAxisAlignment: MainAxisAlignment.start,
-                             children: [
-                               Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                               Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                               Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                               Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                               Icon(Icons.star_border,color: Colors.orange,size: height*0.016,),
-                               SizedBox(width: width*0.013,),
-                               Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                   color: Color.fromRGBO(102, 102, 102, 1),
-                                   //    fontFamily: 'regular',
-                                   fontSize: height*0.011,
-                                   letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                   fontWeight: FontWeight.normal,
-                                   height: 1
-                               ),)
-                             ],
-                           ),
-                           Row(
-                             mainAxisAlignment: MainAxisAlignment.start,
-                             children: [
-                               Text('₹189',
-                                 style: TextStyle(
-                                   fontSize: height*0.016,
-                                   fontWeight: FontWeight.bold
-                                   //    fontFamily: 'regular'
-                                 ),
-                               ),
-                               SizedBox(width: width*0.02,),
-                               Text('₹199',
-                                 style: TextStyle(
-                                   color: Colors.black.withOpacity(0.5),
-                                   fontSize: height*0.016,
-                                   //fontFamily: 'regular',
-                                   decoration: TextDecoration.lineThrough,
-                                 ),
-                               ),
-
-                             ],
-                           ),
-                         ],
-                       ),
-                     )
-                   ],
-                 ),
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.start,
-                   children: [
-                     Row(
-                       mainAxisAlignment: MainAxisAlignment.start,
-                       children: [
-                         Text('Free delivery Thu, 11 Apr', textAlign: TextAlign.left, style: TextStyle(
-                             fontFamily: 'Inter',
-                             fontSize: height*0.014,
-                             letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                             fontWeight: FontWeight.normal,
-                             height: 1
-                         ),),
-                         SizedBox(width: width*0.02,),
-
-                         Container(
-                             width: 3,
-                             height: 3,
-                             decoration: BoxDecoration(
-                               color : Color.fromRGBO(0, 0, 0, 1),
-                               borderRadius : BorderRadius.all(Radius.elliptical(3, 3)),
-                             )
-                         ),
-                         SizedBox(width: width*0.02,),
-                         Text('₹199',
-                           style: TextStyle(
-                             color: Colors.black.withOpacity(0.5),
-                             fontSize: height*0.014,
-                             //fontFamily: 'regular',
-                             decoration: TextDecoration.lineThrough,
-                           ),
-                         ),
-                         SizedBox(width: width*0.02,),
-                         Text('Free', textAlign: TextAlign.left, style: TextStyle(
-                             color: Color.fromRGBO(13, 118, 0, 1),
-                             fontFamily: 'Inter',
-                             fontSize: height*0.014,
-                             letterSpacing: 0,
-                             fontWeight: FontWeight.normal,
-                             height: 1.5 /*PERCENT not supported*/
-                         ),)
-
-                       ],
-                     ),
-                     Spacer(),
-                     Container(
-                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                       decoration: BoxDecoration(
-                         border: Border.all(color: Colors.green),
-                         borderRadius: BorderRadius.circular(8),
-                       ),
-                       child: Row(
-                         mainAxisSize: MainAxisSize.min,
-                         children: [
-                           Icon(Icons.remove, color: Colors.green,size: height*0.025,),
-                           SizedBox(width: width*0.03),
-                           Text(
-                             '1',
-                             style: TextStyle(fontSize: height*0.018, fontWeight: FontWeight.bold,
-                             color:Color(0xFF006400))
-                           ),
-                           SizedBox(width: width*0.03),
-                           Icon(Icons.add, color: Colors.green,size: height*0.025,),
-                         ],
-                       ),
-                     )
-
-                   ],
-                 )
-               ],
-             ),
-           ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(9,0,9,12),
-          child: Container(
-
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                    color: Colors.grey.withOpacity(0.5)
-                )
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(9,9,12,9),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                          height: height*0.11,
-                          width: width*0.22,
-                          child: Image.asset("assets/images/iron_table.png")
-                      ),
-                      SizedBox(width: width*0.02,),
-                      Container(
-                        height: height*0.11,
-                        //width: width*0.22,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Travel Steamer Iron for Clothes, 1250W....', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(25, 25, 25, 1),
-                                    fontFamily: 'Inter',
-                                    fontSize: 12,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1.5
-                                ),),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius : BorderRadius.only(
-                                      topLeft: Radius.circular(4),
-                                      topRight: Radius.circular(4),
-                                      bottomLeft: Radius.circular(4),
-                                      bottomRight: Radius.circular(4),
-                                    ),
-                                    color : Color.fromRGBO(230, 230, 230, 1),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                                  child: Text('23 cenimeters', textAlign: TextAlign.left, style: TextStyle(
-                                      color: Color.fromRGBO(102, 102, 102, 1),
-                                      fontFamily: 'Inter',
-                                      fontSize: height*0.012,
-                                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1
-                                  ),),
-                                ),
-                              ],
-                            ),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star_border,color: Colors.orange,size: height*0.016,),
-                                SizedBox(width: width*0.013,),
-                                Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(102, 102, 102, 1),
-                                    //    fontFamily: 'regular',
-                                    fontSize: height*0.011,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1
-                                ),)
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('₹189',
-                                  style: TextStyle(
-                                      fontSize: height*0.016,
-                                      fontWeight: FontWeight.bold
-                                    //    fontFamily: 'regular'
-                                  ),
-                                ),
-                                SizedBox(width: width*0.02,),
-                                Text('₹199',
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontSize: height*0.016,
-                                    //fontFamily: 'regular',
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text('Free delivery Thu, 11 Apr', textAlign: TextAlign.left, style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: height*0.014,
-                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                              fontWeight: FontWeight.normal,
-                              height: 1
-                          ),),
-                          SizedBox(width: width*0.02,),
-
-                          Container(
-                              width: 3,
-                              height: 3,
-                              decoration: BoxDecoration(
-                                color : Color.fromRGBO(0, 0, 0, 1),
-                                borderRadius : BorderRadius.all(Radius.elliptical(3, 3)),
-                              )
-                          ),
-                          SizedBox(width: width*0.02,),
-                          Text('₹199',
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.5),
-                              fontSize: height*0.014,
-                              //fontFamily: 'regular',
-                              decoration: TextDecoration.lineThrough,
-                            ),
-                          ),
-                          SizedBox(width: width*0.02,),
-                          Text('Free', textAlign: TextAlign.left, style: TextStyle(
-                              color: Color.fromRGBO(13, 118, 0, 1),
-                              fontFamily: 'Inter',
-                              fontSize: height*0.014,
-                              letterSpacing: 0,
-                              fontWeight: FontWeight.normal,
-                              height: 1.5 /*PERCENT not supported*/
-                          ),)
-
-                        ],
-                      ),
-                      Spacer(),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.remove, color: Colors.green,size: height*0.025,),
-                            SizedBox(width: width*0.03),
-                            Text(
-                                '1',
-                                style: TextStyle(fontSize: height*0.018, fontWeight: FontWeight.bold,
-                                    color:Color(0xFF006400))
-                            ),
-                            SizedBox(width: width*0.03),
-                            Icon(Icons.add, color: Colors.green,size: height*0.025,),
-                          ],
-                        ),
-                      )
-
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(9,0,9,12),
-          child: Container(
-
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                    color: Colors.grey.withOpacity(0.5)
-                )
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(9,9,12,9),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                          height: height*0.11,
-                          width: width*0.22,
-                          child: Image.asset("assets/images/iron_table.png")
-                      ),
-                      SizedBox(width: width*0.02,),
-                      Container(
-                        height: height*0.11,
-                        //width: width*0.22,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Travel Steamer Iron for Clothes, 1250W....', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(25, 25, 25, 1),
-                                    fontFamily: 'Inter',
-                                    fontSize: 12,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1.5
-                                ),),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius : BorderRadius.only(
-                                      topLeft: Radius.circular(4),
-                                      topRight: Radius.circular(4),
-                                      bottomLeft: Radius.circular(4),
-                                      bottomRight: Radius.circular(4),
-                                    ),
-                                    color : Color.fromRGBO(230, 230, 230, 1),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                                  child: Text('23 cenimeters', textAlign: TextAlign.left, style: TextStyle(
-                                      color: Color.fromRGBO(102, 102, 102, 1),
-                                      fontFamily: 'Inter',
-                                      fontSize: height*0.012,
-                                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1
-                                  ),),
-                                ),
-                              ],
-                            ),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star_border,color: Colors.orange,size: height*0.016,),
-                                SizedBox(width: width*0.013,),
-                                Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(102, 102, 102, 1),
-                                    //    fontFamily: 'regular',
-                                    fontSize: height*0.011,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1
-                                ),)
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('₹189',
-                                  style: TextStyle(
-                                      fontSize: height*0.016,
-                                      fontWeight: FontWeight.bold
-                                    //    fontFamily: 'regular'
-                                  ),
-                                ),
-                                SizedBox(width: width*0.02,),
-                                Text('₹199',
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontSize: height*0.016,
-                                    //fontFamily: 'regular',
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text('Free delivery Thu, 11 Apr', textAlign: TextAlign.left, style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: height*0.014,
-                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                              fontWeight: FontWeight.normal,
-                              height: 1
-                          ),),
-                          SizedBox(width: width*0.02,),
-
-                          Container(
-                              width: 3,
-                              height: 3,
-                              decoration: BoxDecoration(
-                                color : Color.fromRGBO(0, 0, 0, 1),
-                                borderRadius : BorderRadius.all(Radius.elliptical(3, 3)),
-                              )
-                          ),
-                          SizedBox(width: width*0.02,),
-                          Text('₹199',
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.5),
-                              fontSize: height*0.014,
-                              //fontFamily: 'regular',
-                              decoration: TextDecoration.lineThrough,
-                            ),
-                          ),
-                          SizedBox(width: width*0.02,),
-                          Text('Free', textAlign: TextAlign.left, style: TextStyle(
-                              color: Color.fromRGBO(13, 118, 0, 1),
-                              fontFamily: 'Inter',
-                              fontSize: height*0.014,
-                              letterSpacing: 0,
-                              fontWeight: FontWeight.normal,
-                              height: 1.5 /*PERCENT not supported*/
-                          ),)
-
-                        ],
-                      ),
-                      Spacer(),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.remove, color: Colors.green,size: height*0.025,),
-                            SizedBox(width: width*0.03),
-                            Text(
-                                '1',
-                                style: TextStyle(fontSize: height*0.018, fontWeight: FontWeight.bold,
-                                    color:Color(0xFF006400))
-                            ),
-                            SizedBox(width: width*0.03),
-                            Icon(Icons.add, color: Colors.green,size: height*0.025,),
-                          ],
-                        ),
-                      )
-
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(9,0,9,12),
-          child: Container(
-
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                    color: Colors.grey.withOpacity(0.5)
-                )
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(9,9,12,9),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                          height: height*0.11,
-                          width: width*0.22,
-                          child: Image.asset("assets/images/iron_table.png")
-                      ),
-                      SizedBox(width: width*0.02,),
-                      Container(
-                        height: height*0.11,
-                        //width: width*0.22,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Travel Steamer Iron for Clothes, 1250W....', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(25, 25, 25, 1),
-                                    fontFamily: 'Inter',
-                                    fontSize: 12,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1.5
-                                ),),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius : BorderRadius.only(
-                                      topLeft: Radius.circular(4),
-                                      topRight: Radius.circular(4),
-                                      bottomLeft: Radius.circular(4),
-                                      bottomRight: Radius.circular(4),
-                                    ),
-                                    color : Color.fromRGBO(230, 230, 230, 1),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                                  child: Text('23 cenimeters', textAlign: TextAlign.left, style: TextStyle(
-                                      color: Color.fromRGBO(102, 102, 102, 1),
-                                      fontFamily: 'Inter',
-                                      fontSize: height*0.012,
-                                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1
-                                  ),),
-                                ),
-                              ],
-                            ),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star_border,color: Colors.orange,size: height*0.016,),
-                                SizedBox(width: width*0.013,),
-                                Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(102, 102, 102, 1),
-                                    //    fontFamily: 'regular',
-                                    fontSize: height*0.011,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1
-                                ),)
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('₹189',
-                                  style: TextStyle(
-                                      fontSize: height*0.016,
-                                      fontWeight: FontWeight.bold
-                                    //    fontFamily: 'regular'
-                                  ),
-                                ),
-                                SizedBox(width: width*0.02,),
-                                Text('₹199',
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontSize: height*0.016,
-                                    //fontFamily: 'regular',
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text('Free delivery Thu, 11 Apr', textAlign: TextAlign.left, style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: height*0.014,
-                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                              fontWeight: FontWeight.normal,
-                              height: 1
-                          ),),
-                          SizedBox(width: width*0.02,),
-
-                          Container(
-                              width: 3,
-                              height: 3,
-                              decoration: BoxDecoration(
-                                color : Color.fromRGBO(0, 0, 0, 1),
-                                borderRadius : BorderRadius.all(Radius.elliptical(3, 3)),
-                              )
-                          ),
-                          SizedBox(width: width*0.02,),
-                          Text('₹199',
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.5),
-                              fontSize: height*0.014,
-                              //fontFamily: 'regular',
-                              decoration: TextDecoration.lineThrough,
-                            ),
-                          ),
-                          SizedBox(width: width*0.02,),
-                          Text('Free', textAlign: TextAlign.left, style: TextStyle(
-                              color: Color.fromRGBO(13, 118, 0, 1),
-                              fontFamily: 'Inter',
-                              fontSize: height*0.014,
-                              letterSpacing: 0,
-                              fontWeight: FontWeight.normal,
-                              height: 1.5 /*PERCENT not supported*/
-                          ),)
-
-                        ],
-                      ),
-                      Spacer(),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.remove, color: Colors.green,size: height*0.025,),
-                            SizedBox(width: width*0.03),
-                            Text(
-                                '1',
-                                style: TextStyle(fontSize: height*0.018, fontWeight: FontWeight.bold,
-                                    color:Color(0xFF006400))
-                            ),
-                            SizedBox(width: width*0.03),
-                            Icon(Icons.add, color: Colors.green,size: height*0.025,),
-                          ],
-                        ),
-                      )
-
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-
-      ],
-    );
-  }
-  Widget _buildWishlist(height,width,context)
-  {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8,12,8,12),
-          child: Text('Wishlist', textAlign: TextAlign.left, style: TextStyle(
-              color: Color.fromRGBO(0, 0, 0, 1),
-              fontFamily: 'Inter',
-              fontSize: height*0.02,
-              letterSpacing: 0,
-              fontWeight: FontWeight.bold,
-              height: 1
-          ),),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(9,0,9,12),
-          child: Container(
-
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                    color: Colors.grey.withOpacity(0.5)
-                )
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(9,9,12,9),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                          height: height*0.11,
-                          width: width*0.22,
-                          child: Image.asset("assets/images/iron_table.png")
-                      ),
-                      SizedBox(width: width*0.02,),
-                      Container(
-                        height: height*0.11,
-                        //width: width*0.22,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Travel Steamer Iron for Clothes, 1250W....', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(25, 25, 25, 1),
-                                    fontFamily: 'Inter',
-                                    fontSize: 12,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1.5
-                                ),),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius : BorderRadius.only(
-                                      topLeft: Radius.circular(4),
-                                      topRight: Radius.circular(4),
-                                      bottomLeft: Radius.circular(4),
-                                      bottomRight: Radius.circular(4),
-                                    ),
-                                    color : Color.fromRGBO(230, 230, 230, 1),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                                  child: Text('23 cenimeters', textAlign: TextAlign.left, style: TextStyle(
-                                      color: Color.fromRGBO(102, 102, 102, 1),
-                                      fontFamily: 'Inter',
-                                      fontSize: height*0.012,
-                                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1
-                                  ),),
-                                ),
-                              ],
-                            ),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star_border,color: Colors.orange,size: height*0.016,),
-                                SizedBox(width: width*0.013,),
-                                Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(102, 102, 102, 1),
-                                    //    fontFamily: 'regular',
-                                    fontSize: height*0.011,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1
-                                ),)
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('₹189',
-                                  style: TextStyle(
-                                      fontSize: height*0.016,
-                                      fontWeight: FontWeight.bold
-                                    //    fontFamily: 'regular'
-                                  ),
-                                ),
-                                SizedBox(width: width*0.02,),
-                                Text('₹199',
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontSize: height*0.016,
-                                    //fontFamily: 'regular',
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: height*0.014,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color : Colors.grey.withOpacity(0.15),
-                        ),
-                        width: width*0.43,
-                        child:  Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 12,0,12),
-                          child: Center(
-                            child: Text('Remove', textAlign: TextAlign.left, style: TextStyle(
-                                color: Color.fromRGBO(25, 25, 25, 1),
-                                fontFamily: 'Inter',
-                                fontSize: height*0.016,
-                                letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                fontWeight: FontWeight.normal,
-                                height: 1
-                            ),),
-                          ),
-                        ),
-                      ),
-                      Spacer(),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: Color.fromRGBO(13, 118, 0, 1),
-                          )
-                        ),
-                        width: width*0.43,
-                        child:  Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 12,0,12),
-                          child: Center(
-                            child: Text('Move to cart', textAlign: TextAlign.left, style: TextStyle(
-                                color: Color.fromRGBO(13, 118, 0, 1),
-                                fontFamily: 'Inter',
-                                fontSize: height*0.016,
-                                letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                fontWeight: FontWeight.normal,
-                                height: 1
-                            ),),
-                          ),
-                        ),
-                      ),
-
-                    ],
-                  )
-
-                ],
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(9,0,9,12),
-          child: Container(
-
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                    color: Colors.grey.withOpacity(0.5)
-                )
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(9,9,12,9),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                          height: height*0.11,
-                          width: width*0.22,
-                          child: Image.asset("assets/images/iron_table.png")
-                      ),
-                      SizedBox(width: width*0.02,),
-                      Container(
-                        height: height*0.11,
-                        //width: width*0.22,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Travel Steamer Iron for Clothes, 1250W....', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(25, 25, 25, 1),
-                                    fontFamily: 'Inter',
-                                    fontSize: 12,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1.5
-                                ),),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius : BorderRadius.only(
-                                      topLeft: Radius.circular(4),
-                                      topRight: Radius.circular(4),
-                                      bottomLeft: Radius.circular(4),
-                                      bottomRight: Radius.circular(4),
-                                    ),
-                                    color : Color.fromRGBO(230, 230, 230, 1),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                                  child: Text('23 cenimeters', textAlign: TextAlign.left, style: TextStyle(
-                                      color: Color.fromRGBO(102, 102, 102, 1),
-                                      fontFamily: 'Inter',
-                                      fontSize: height*0.012,
-                                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1
-                                  ),),
-                                ),
-                              ],
-                            ),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star,color: Colors.orange,size: height*0.016,),
-                                Icon(Icons.star_border,color: Colors.orange,size: height*0.016,),
-                                SizedBox(width: width*0.013,),
-                                Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(102, 102, 102, 1),
-                                    //    fontFamily: 'regular',
-                                    fontSize: height*0.011,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1
-                                ),)
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('₹189',
-                                  style: TextStyle(
-                                      fontSize: height*0.016,
-                                      fontWeight: FontWeight.bold
-                                    //    fontFamily: 'regular'
-                                  ),
-                                ),
-                                SizedBox(width: width*0.02,),
-                                Text('₹199',
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontSize: height*0.016,
-                                    //fontFamily: 'regular',
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: height*0.014,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color : Colors.grey.withOpacity(0.15),
-                        ),
-                        width: width*0.43,
-                        child:  Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 12,0,12),
-                          child: Center(
-                            child: Text('Remove', textAlign: TextAlign.left, style: TextStyle(
-                                color: Color.fromRGBO(25, 25, 25, 1),
-                                fontFamily: 'Inter',
-                                fontSize: height*0.016,
-                                letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                fontWeight: FontWeight.normal,
-                                height: 1
-                            ),),
-                          ),
-                        ),
-                      ),
-                      Spacer(),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: Color.fromRGBO(13, 118, 0, 1),
-                            )
-                        ),
-                        width: width*0.43,
-                        child:  Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 12,0,12),
-                          child: Center(
-                            child: Text('Move to cart', textAlign: TextAlign.left, style: TextStyle(
-                                color: Color.fromRGBO(13, 118, 0, 1),
-                                fontFamily: 'Inter',
-                                fontSize: height*0.016,
-                                letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                fontWeight: FontWeight.normal,
-                                height: 1
-                            ),),
-                          ),
-                        ),
-                      ),
-
-                    ],
-                  )
-
-                ],
-              ),
-            ),
-          ),
-        ),
-
-
-      ]
-
-    );
-  }
-  Widget  _buildCoupon(height,width,)
-  {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 12,12,12),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius : BorderRadius.only(
-            topLeft: Radius.circular(8),
-            topRight: Radius.circular(8),
-            bottomLeft: Radius.circular(8),
-            bottomRight: Radius.circular(8),
-          ),
-          color : Colors.grey.withOpacity(0.07),
-          border : Border.all(
-            color: Color.fromRGBO(232, 232, 232, 1),
-            width: 1,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10,10,10,10),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SvgPicture.asset("assets/images/discount_star.svg"),
-                  SizedBox(width: width*0.02,),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Save ₹ 599 more on this order  ', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(13, 13, 13, 1),
-                          fontFamily: 'Inter',
-                          fontSize: height*0.016,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),),
-                      SizedBox(height: height*0.005,),
-                      Text('Code : STE123', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(109, 109, 109, 1),
-                          fontFamily: 'Inter',
-                          fontSize: height*0.014,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-                    ],
-                  ),
-                  Spacer(),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: Color.fromRGBO(13, 118, 0, 1),
-                        )
-                    ),
-                    child:  Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 12,15,12),
-                      child: Center(
-                        child: Text('Apply', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(13, 118, 0, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.016,
-                            letterSpacing: 0.4,
-                            fontWeight: FontWeight.bold,
-                            height: 1
-                        ),),
-                      ),
-                    ),
-                  ),
-
-                ],
-              ),
-              Divider(thickness: 0.6,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('View all coupons', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 1),
-                      fontFamily: 'Poppins',
-                      fontSize: height*0.015,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),),
-                  SizedBox(width: width*0.02,),
-                  Icon(Icons.chevron_right)
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-  Widget _buildBillSummary(height,width,context)
-  {
-    var dashWidth=7.0;
-    var dashHeight=1.0;
-    var gap=4;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12,16,8,8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Price Details', textAlign: TextAlign.left, style: TextStyle(
-              color: Color.fromRGBO(22, 22, 22, 1),
-              fontFamily: 'Inter',
-              fontSize: height*0.019,
-              letterSpacing: 0 ,
-              height: 1
-          ),),
-          SizedBox(height: height*0.015,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text('Price (32 items )', textAlign: TextAlign.left, style: TextStyle(
-                  color: Color.fromRGBO(25, 25, 25, 1),
-                  fontFamily: 'Inter',
-                  fontSize: height*0.016,
-                  letterSpacing: 0 ,
-                  fontWeight: FontWeight.normal,
-                  height: 1
-              ),),
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(right: 13),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('₹1599',
-                      style: TextStyle(
-                        color: Colors.black.withOpacity(0.5),
-                        fontSize: height*0.016,
-
-                        decoration: TextDecoration.lineThrough,
-                      ),
-                    ),
-                    SizedBox(width: width*0.02,),
-                    Text('₹1299',
-                      style: TextStyle(
-                          fontSize: height*0.016,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-
-
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: height*0.01,),
-          Padding(
-            padding: const EdgeInsets.only(right: 13),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('Discount', textAlign: TextAlign.left, style: TextStyle(
-                    color: Color.fromRGBO(25, 25, 25, 1),
-                    fontFamily: 'Inter',
-                    fontSize: height*0.016,
-                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                    fontWeight: FontWeight.normal,
-                    height: 1
-                ),),
-                Spacer(),
-                Text('-₹300', textAlign: TextAlign.left, style: TextStyle(
-                    color: Color.fromRGBO(25, 25, 25, 1),
-                    fontFamily: 'Inter',
-                    fontSize: height*0.016,
-                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                    fontWeight: FontWeight.bold,
-                    height: 1
-                ),),
-
-              ],
-            ),
-          ),
-          SizedBox(height: height*0.01,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                'Platform fee',
-                style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: height*0.016,
-                    height: 1
-                ),
-              ),
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(right: 13),
-                child: Text('₹02', textAlign: TextAlign.left, style: TextStyle(
-                    color: Color.fromRGBO(25, 25, 25, 1),
-                    fontFamily: 'Inter',
-                    fontSize: height*0.016,
-                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                    fontWeight: FontWeight.bold,
-                    height: 1
-                ),),
-              ),
-            ],
-          ),
-          SizedBox(height: height*0.01,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                'Shipping fee',
-                style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: height*0.016,
-                    height: 1.6
-                ),
-              ),
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(right: 13),
-                child: Row(
-                  children: [
-                    Text('-40₹', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'Inter',
-                        fontSize: height*0.016,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        height: 1
-                    ),),
-                    SizedBox(width: width*0.02,),
-                    Text('Free', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(3, 153, 5, 1),
-                        fontFamily: 'Inter',
-                        fontSize: 14,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),)
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: height*0.02,),
-          Container(
-            width: width*0.91,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final boxCount = (constraints.maxWidth / (dashWidth + gap)).floor();
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(boxCount, (_) {
-                    return Container(
-                      width: dashWidth,
-                      height: dashHeight,
-                      color: Colors.grey,
-                    );
-                  }),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0,12,13,12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('TOTAL AMOUNT', textAlign: TextAlign.left, style: TextStyle(
-                    color: Color.fromRGBO(13, 13, 13, 1),
-                    fontFamily: 'Inter',
-                    fontSize: height*0.02,
-                    letterSpacing: 0 ,
-                    fontWeight: FontWeight.normal,
-                    height: 1
-                ),),
-                Spacer(),
-
-                SizedBox(width: width*0.02,),
-                Text('₹12999',
-                  style: TextStyle(
-                      fontSize: height*0.023,
-                      fontWeight: FontWeight.bold
-                  ),
-                ),
-
-
-              ],
-            ),
-          ),
-
-        ],
-      ),
-    );
-  }
-  Widget _buildEnder(height,width,context)
-  {
-   return Padding(
-     padding: const EdgeInsets.fromLTRB(0,12,0,12),
-     child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
-            children: [
-              SvgPicture.asset("assets/images/genuinee.svg"),
-              SizedBox(height: height*0.01,),
-              Text('Genuine products', textAlign: TextAlign.center, style: TextStyle(
-                  color: Color.fromRGBO(109, 109, 109, 1),
-                  fontFamily: 'Inter',
-                  fontSize: height*0.015,
-                  letterSpacing: 0 ,
-                  fontWeight: FontWeight.normal,
-                  height: 1
-              ),)
-              ]
-          ),
-          Container(
-              width: 4,
-              height: 4,
-              decoration: BoxDecoration(
-                color : Color.fromRGBO(109, 109, 109, 1),
-                borderRadius : BorderRadius.all(Radius.elliptical(4, 4)),
-              )
-          ),
-          Column(
-              children: [
-                SvgPicture.asset("assets/images/refund.svg"),
-                SizedBox(height: height*0.01,),
-                Text('100% Refundable', textAlign: TextAlign.center, style: TextStyle(
-                    color: Color.fromRGBO(109, 109, 109, 1),
-                    fontFamily: 'Inter',
-                    fontSize: height*0.015,
-                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                    fontWeight: FontWeight.normal,
-                    height: 1
-                ),)
-              ]
-          ),
-          Container(
-              width: 4,
-              height: 4,
-              decoration: BoxDecoration(
-                color : Color.fromRGBO(109, 109, 109, 1),
-                borderRadius : BorderRadius.all(Radius.elliptical(4, 4)),
-              )
-          ),
-          Column(
-              children: [
-                SvgPicture.asset("assets/images/secure.svg"),
-                SizedBox(height: height*0.01,),
-                Text('Secure Payment', textAlign: TextAlign.center, style: TextStyle(
-                    color: Color.fromRGBO(109, 109, 109, 1),
-                    fontFamily: 'Inter',
-                    fontSize: height*0.015,
-                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                    fontWeight: FontWeight.normal,
-                    height: 1
-                ),)
-              ]
-          ),
-
-        ],
-      ),
-   );
-  }
-  Widget _buildProceedToBuy(height,width,context)
-  {
-    return Container(
-      color: Colors.white,
-      child: Column(
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            Container(
-                color : Color.fromRGBO(228, 237, 226, 1),
-                child: Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset("assets/images/discount_star.svg"),
-                      Text('Saved ₹12,000 on this order', textAlign: TextAlign.center, style: TextStyle(
-                          color: Color.fromRGBO(76, 175, 80, 1),
-                          fontFamily: 'Inter',
-                          fontSize: height*0.015 ,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-                    ],
+            ...items.map((item) => ProductCard(
+                  item: item,
+                  isWishlist: false,
+                  onRemove: () => _handleRemove(item),
+                  onMoveToCart: () => _handleMoveToCart(item),
+                )),
+            _CouponSection(),
+            _PriceSummary(),
+            _ProceedToBuySection(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProductCard extends StatelessWidget {
+  final CartItem item;
+  final bool isWishlist;
+  final VoidCallback? onRemove;
+  final VoidCallback? onMoveToCart;
+
+  const ProductCard({
+    required this.item,
+    this.isWishlist = false,
+    this.onRemove,
+    this.onMoveToCart,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.borderColor),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            Flexible(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    item.image,
+                    height: 100,
+                    width: 100,
                   ),
-                )
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16,12,16,12),
-              child: Container(
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Column(
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('₹20000',
-                          style: TextStyle(
-                            color: Colors.black.withOpacity(0.5),
-                            fontSize: height*0.016,
-
-                            decoration: TextDecoration.lineThrough,
-                          ),
+                        Text(
+                          item.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.body(context),
                         ),
-                        SizedBox(width: width*0.02,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text('₹14990',
-                              style: TextStyle(
-                                  fontSize: height*0.022,
-                                  fontWeight: FontWeight.bold
-                              ),
-                            ),
-                            SizedBox(width: width*0.02,),
-                            SvgPicture.asset("assets/images/instruct.svg")
-                          ],
+                        const SizedBox(height: 4),
+                        _SizeChip(size: item.size),
+                        const SizedBox(height: 8),
+                        _RatingStars(
+                          rating: item.rating,
+                          ratingsCount: item.ratingsCount,
+                        ),
+                        const SizedBox(height: 8),
+                        _PriceDisplay(
+                          price: item.price,
+                          originalPrice: item.originalPrice,
                         ),
                       ],
                     ),
-                    Spacer(),
-                    InkWell(
-                      onTap: ()
-                      {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddressScreen()),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xFF007E33),
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 10,15,10),
-                          child: Text('Proceed to Buy', textAlign: TextAlign.left, style: TextStyle(
-                              color: Color.fromRGBO(255, 255, 255, 1),
-                              fontFamily: 'Inter',
-                              fontSize: height*0.02,
-                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                              fontWeight: FontWeight.normal,
-                              height: 1
-                          ),),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                ],
               ),
-            )
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _DeliveryInfo(
+                  info: item.deliveryInfo,
+                  originalPrice: item.originalPrice,
+                ),
+                isWishlist
+                    ? _WishlistActions(
+                        onRemove: onRemove,
+                        onMoveToCart: onMoveToCart,
+                      )
+                    : _QuantitySelector(),
+              ],
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SizeChip extends StatelessWidget {
+  final String size;
+
+  const _SizeChip({required this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: AppColors.borderColor,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        size,
+        style: TextStyle(
+          color: AppColors.mediumText,
+          fontSize: 12,
+        ),
+      ),
+    );
+  }
+}
+
+class _RatingStars extends StatelessWidget {
+  final double rating;
+  final String ratingsCount;
+
+  const _RatingStars({
+    required this.rating,
+    required this.ratingsCount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        ...List.generate(
+          5,
+          (index) => Icon(
+            index < rating.floor() ? Icons.star : Icons.star_border,
+            color: AppColors.ratingStar,
+            size: 16,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          ratingsCount,
+          style: TextStyle(
+            color: AppColors.mediumText,
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PriceDisplay extends StatelessWidget {
+  final String price;
+  final String originalPrice;
+
+  const _PriceDisplay({
+    required this.price,
+    required this.originalPrice,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          price,
+          style: AppTextStyles.price(context),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          originalPrice,
+          style: TextStyle(
+            color: AppColors.mediumText,
+            decoration: TextDecoration.lineThrough,
+            fontSize: 14,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _QuantitySelector extends StatefulWidget {
+  @override
+  __QuantitySelectorState createState() => __QuantitySelectorState();
+}
+
+class __QuantitySelectorState extends State<_QuantitySelector> {
+  int _quantity = 1;
+
+  void _increment() => setState(() => _quantity++);
+  void _decrement() => setState(() => _quantity = _quantity > 1 ? _quantity - 1 : 1);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.borderColor),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: _decrement,
+            child: Icon(
+              Icons.remove,
+              color: AppColors.primaryGreen,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            '$_quantity',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: _increment,
+            child: Icon(
+              Icons.add,
+              color: AppColors.primaryGreen,
+              size: 20,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DeliveryInfo extends StatelessWidget {
+  final String info;
+  final String originalPrice;
+
+  const _DeliveryInfo({required this.info, required this.originalPrice});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    
+    return Expanded(  // Changed from Flexible to Expanded
+      child: Row(
+        children: [
+          Expanded(  // Changed from Flexible to Expanded
+            child: Text(
+              info,
+              style: AppTextStyles.body(context),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          SizedBox(width: screenWidth * 0.02),
+          Container(
+            width: screenWidth * 0.008,
+            height: screenWidth * 0.008,
+            decoration: BoxDecoration(
+              color: AppColors.darkText,
+              borderRadius: BorderRadius.circular(screenWidth * 0.008),
+            ),
+          ),
+          SizedBox(width: screenWidth * 0.02),
+          Text(
+            originalPrice,
+            style: TextStyle(
+              color: AppColors.mediumText,
+              decoration: TextDecoration.lineThrough,
+              fontSize: screenWidth * 0.035,
+            ),
+          ),
+          SizedBox(width: screenWidth * 0.02),
+          Text(
+            'Free',
+            style: TextStyle(
+              color: AppColors.primaryGreen, 
+              fontSize: screenWidth * 0.035
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+class _WishlistActions extends StatelessWidget {
+  final VoidCallback? onRemove;
+  final VoidCallback? onMoveToCart;
+
+  const _WishlistActions({
+    this.onRemove,
+    this.onMoveToCart,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          child: _ActionButton(
+            text: 'Remove',
+            color: AppColors.mediumText,
+            onPressed: onRemove,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Flexible(
+          child: _ActionButton(
+            text: 'Move to cart',
+            color: AppColors.primaryGreen,
+            isBorder: true,
+            onPressed: onMoveToCart,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  final String text;
+  final Color color;
+  final bool isBorder;
+  final VoidCallback? onPressed;
+
+  const _ActionButton({
+    required this.text,
+    required this.color,
+    this.isBorder = false,
+    this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: InkWell(
+        onTap: onPressed,
+        child: Container(
+          height: 40,
+          decoration: BoxDecoration(
+            color: isBorder ? Colors.transparent : color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(6),
+            border: isBorder ? Border.all(color: color) : null,
+          ),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CouponSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.secondaryGreen,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          SvgPicture.asset("assets/images/discount_star.svg"),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    style: AppTextStyles.body(context),
+                    children: [
+                      const TextSpan(text: 'Apply coupon '),
+                      TextSpan(
+                        text: 'SAVE10',
+                        style: TextStyle(color: AppColors.primaryGreen),
+                      ),
+                      const TextSpan(text: ' & save ₹599'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'your items will be delivered from 5 different stores',
+                  style: TextStyle(
+                    color: AppColors.mediumText,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.primaryGreen),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              'Apply',
+              style: TextStyle(color: AppColors.primaryGreen),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PriceSummary extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Price Details',
+            style: AppTextStyles.title(context),
+          ),
+          const SizedBox(height: 12),
+          _buildPriceRow('Price (32 items)', '₹1599', '₹1299'),
+          const SizedBox(height: 8),
+          _buildPriceRow('Discount', '-₹300', null),
+          const SizedBox(height: 8),
+          _buildPriceRow('Platform fee', '₹02', null, isUnderlined: true),
+          const SizedBox(height: 8),
+          _buildPriceRow('Shipping fee', '-40₹', 'Free', isUnderlined: true),
+          const SizedBox(height: 12),
+          _DashedDivider(),
+          const SizedBox(height: 12),
+          _buildPriceRow('TOTAL AMOUNT', '₹12999', null, isTotal: true),
+        ],
       ),
     );
   }
 
+  Widget _buildPriceRow(
+    String label,
+    String value1,
+    String? value2, {
+    bool isUnderlined = false,
+    bool isTotal = false,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: isTotal ? FontWeight.bold : null,
+            fontSize: isTotal ? 16 : 14,
+          ),
+        ),
+        Row(
+          children: [
+            if (value1 != null)
+              Text(
+                value1,
+                style: TextStyle(
+                  decoration: isUnderlined ? TextDecoration.underline : null,
+                  fontWeight: isTotal ? FontWeight.bold : null,
+                  fontSize: isTotal ? 16 : 14,
+                ),
+              ),
+            if (value2 != null) ...[
+              const SizedBox(width: 8),
+              Text(
+                value2,
+                style: TextStyle(
+                  color: AppColors.mediumText,
+                  decoration: TextDecoration.lineThrough,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+}
 
+class _DashedDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Flex(
+          direction: Axis.horizontal,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(
+            (constraints.constrainWidth() ~/ 10).toInt(),
+            (index) => SizedBox(
+              width: 5,
+              height: 1,
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: AppColors.borderColor),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ProceedToBuySection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.white,
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            color: const Color(0xFFE4EDE2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset("assets/images/discount_star.svg"),
+                const SizedBox(width: 8),
+                Text(
+                  'Saved ₹12,000 on this order',
+                  style: TextStyle(
+                    color: AppColors.primaryGreen,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '₹20000',
+                      style: TextStyle(
+                        color: AppColors.mediumText,
+                        decoration: TextDecoration.lineThrough,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Text(
+                          '₹14990',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        SvgPicture.asset("assets/images/instruct.svg"),
+                      ],
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddressScreen(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryGreen,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      'Proceed to Buy',
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
