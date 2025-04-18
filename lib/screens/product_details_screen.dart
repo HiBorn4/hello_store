@@ -83,7 +83,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             const ProductImageDisplay(),
 
             // Product Info
-            const ProductInfo(),
+            ProductInfo(),
 
             const SizedBox(height: 8),
 

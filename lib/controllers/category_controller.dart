@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 class CategoryController extends GetxController {
+
   // Categories data
   final List<Map<String, dynamic>> categories = [
     {'name': 'T.V. &...', 'image': 'assets/commercial_sinks.png'},

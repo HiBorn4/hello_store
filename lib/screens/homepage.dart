@@ -5,7 +5,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math;
 
+
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+var cartitems=0.obs;
+
 
 class HomePage extends StatefulWidget
 {
@@ -14,6 +18,7 @@ class HomePage extends StatefulWidget
 }
 
 class _HomePageState extends State<HomePage> {
+
 
   var data = [
     {"img": "assets/images/home/item.png", "text": "Trending"},
@@ -132,6 +137,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildHeader(BuildContext context,var height,var width)
   {
+    GlobalKey _buttonKey = GlobalKey();
    return Padding(
      padding: const EdgeInsets.fromLTRB(12, 8, 12,8),
      child: Container(
@@ -167,6 +173,7 @@ class _HomePageState extends State<HomePage> {
                ),
                Spacer(),
               Icon(Icons.person,color: Colors.black,size: height*0.04,)
+
              ],
            ),
      ),
@@ -2542,6 +2549,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
 }
 class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;

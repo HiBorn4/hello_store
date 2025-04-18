@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hello_store/screens/homepage.dart';
 
-class ProductInfo extends StatelessWidget {
+class ProductInfo extends StatefulWidget {
   const ProductInfo({super.key});
 
+  @override
+  State<ProductInfo> createState() => _ProductInfoState();
+}
+
+class _ProductInfoState extends State<ProductInfo> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -155,7 +161,11 @@ class ProductInfo extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              print("ss");
+              cartitems.value=cartitems.value+1;
+              print(cartitems.value);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xff0D7600),
               minimumSize: const Size(double.infinity, 48),

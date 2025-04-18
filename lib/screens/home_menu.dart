@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hello_store/controllers/category_controller.dart';
 import 'package:hello_store/screens/homepage.dart';
 import 'package:hello_store/screens/payment_screen.dart';
 import 'package:hello_store/screens/category_screen.dart';
@@ -113,6 +114,7 @@ class HomeMenu extends StatelessWidget {
       ) {
     final isSelected = controller.selectedMenu.value == index;
 
+
     return NavigationDestination(
       label: label,
       icon: Stack(
@@ -148,12 +150,14 @@ class HomeMenu extends StatelessWidget {
                          shape: BoxShape.circle,
                        ),
                        alignment: Alignment.center,
-                       child: const Text(
-                         '1',
-                         style: TextStyle(
-                           color: Colors.white,
-                           fontSize: 8,
-                           fontWeight: FontWeight.bold,
+                       child: Obx(
+                         ()=> Text(
+                           "$cartitems",
+                           style: const TextStyle(
+                             color: Colors.white,
+                             fontSize: 8,
+                             fontWeight: FontWeight.bold,
+                           ),
                          ),
                        ),
                      )
