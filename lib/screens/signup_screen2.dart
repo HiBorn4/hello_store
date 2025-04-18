@@ -49,7 +49,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                             padding: EdgeInsets.only(left: 20, bottom: 30),
                             alignment: Alignment.bottomLeft,
                             child: Text(
-                              "Sales Team Only\nTell us your login\ndetails.",
+                              "HelloStores SignUp\nTell us your details.",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: screenWidth * 0.06,
@@ -101,24 +101,6 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                                     ),
                                   ),
 
-                                  SizedBox(height: screenHeight * 0.02),
-
-                                  // Checkbox for Call & Activity Logs
-                                  Row(
-                                    children: [
-                                      Checkbox(
-                                        value: _isChecked,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _isChecked = value!;
-                                          });
-                                        },
-                                      ),
-                                      Expanded(
-                                        child: Text("Allow to capture call and other activity logs"),
-                                      ),
-                                    ],
-                                  ),
 
                                   SizedBox(height: screenHeight * 0.03),
 

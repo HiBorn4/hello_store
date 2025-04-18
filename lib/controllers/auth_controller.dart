@@ -4,11 +4,23 @@ import 'package:get/get.dart';
 import 'package:hello_store/screens/home_menu.dart';
 import 'package:hello_store/screens/login_screen2.dart';
 import 'package:hello_store/utils/snackbar.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AuthController extends GetxController
 {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   var isLoading = false.obs;
+
+  Future<void> askLocationPermission() async {
+    var status = await Permission.location.request();
+    if (status.isGranted) {
+      print("Location permission granted.");
+
+    } else {
+
+      print("Location permission denied.");
+    }
+  }
 
   Future<void> login(String email, String password) async {
     if (!isValidEmail(email)) {
@@ -46,10 +58,11 @@ class AuthController extends GetxController
     try {
       isLoading.value = true;
       await _auth.createUserWithEmailAndPassword(email: email, password: password);
+     await  askLocationPermission();
     //  Get.snackbar("Success", "Signup Successful");
       Get.offAll(()=>HomeMenu());
     } catch (e) {
-     // snackBarMsg("User not found");
+      snackBarMsg(e.toString());
     } finally {
       isLoading.value = false;
     }

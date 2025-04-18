@@ -9,7 +9,11 @@ import 'dart:math' as math;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hello_store/controllers/auth_controller.dart';
+import 'package:hello_store/controllers/homepage_controller.dart';
+import 'package:hello_store/screens/category_screen.dart';
 import 'package:hello_store/screens/login_screen2.dart';
+import 'package:hello_store/screens/product_details_screen.dart';
+import 'package:hello_store/screens/product_details_screen/widgets/product_details_section.dart';
 var cartitems=0.obs;
 
 
@@ -21,6 +25,7 @@ class HomePage extends StatefulWidget
 
 class _HomePageState extends State<HomePage> {
   final authcontroller=Get.find<AuthController>();
+  final homecontroller=Get.put(HomePageController());
 
 
   var data = [
@@ -76,6 +81,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    homecontroller.getCurrentLocation();
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
@@ -242,22 +248,28 @@ class _HomePageState extends State<HomePage> {
           itemCount: data.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Container(
-                 child: Column(
-                   children: [
-                     Container(
-                         height: height*0.08,
-                         child: Image.asset("${data[index]['img']}")
-                     ),
-                     SizedBox(height: height*0.007,),
-                     Text("${data[index]['text']}",style: TextStyle(
-                       fontFamily: 'regular',
-                       fontSize: height*0.015
-                     ),)
-                   ],
-                 ),
+            return InkWell(
+              onTap: ()
+              {
+                Get.to(()=>CategoryScreen());
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Container(
+                   child: Column(
+                     children: [
+                       Container(
+                           height: height*0.08,
+                           child: Image.asset("${data[index]['img']}")
+                       ),
+                       SizedBox(height: height*0.007,),
+                       Text("${data[index]['text']}",style: TextStyle(
+                         fontFamily: 'regular',
+                         fontSize: height*0.015
+                       ),)
+                     ],
+                   ),
+                ),
               ),
             );
           },
@@ -433,181 +445,205 @@ class _HomePageState extends State<HomePage> {
         children: [
           Row(
             children: [
-              Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: height*0.2,
-                        width: width*0.42,
-                        child: Image.asset("assets/images/home/redbull.png"),
+              InkWell(
+                onTap: ()
+                {
+                  Get.to(()=>ProductDetailsScreen());
+                },
+                child: Container(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: height*0.2,
+                          width: width*0.42,
+                          child: Image.asset("assets/images/home/redbull.png"),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: height*0.005,),
-                    Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 1),
-                        fontFamily: 'bold',
-                        fontSize: height*0.016,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1.3333333333333333
-                    ),),
-                    SizedBox(height: height*0.005,),
-                    Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
-                        color: Color.fromRGBO(102, 102, 102, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.013,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),)
-                  ],
-                ),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
+                      SizedBox(height: height*0.005,),
+                      Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
+                          color: Color.fromRGBO(0, 0, 0, 1),
+                          fontFamily: 'bold',
+                          fontSize: height*0.016,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1.3333333333333333
+                      ),),
+                      SizedBox(height: height*0.005,),
+                      Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
+                          color: Color.fromRGBO(102, 102, 102, 1),
+                          fontFamily: 'regular',
+                          fontSize: height*0.013,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1
+                      ),)
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: height*0.2,
-                        width: width*0.42,
-                        child: Image.asset("assets/images/home/redbull.png"),
+              InkWell(
+                onTap: ()
+                {
+                  Get.to(()=>ProductDetailsScreen());
+                },
+                child: Container(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: height*0.2,
+                          width: width*0.42,
+                          child: Image.asset("assets/images/home/redbull.png"),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: height*0.005,),
-                    Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 1),
-                        fontFamily: 'bold',
-                        fontSize: height*0.016,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1.3333333333333333
-                    ),),
-                    SizedBox(height: height*0.005,),
-                    Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
-                        color: Color.fromRGBO(102, 102, 102, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.013,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),)
-                  ],
+                      SizedBox(height: height*0.005,),
+                      Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
+                          color: Color.fromRGBO(0, 0, 0, 1),
+                          fontFamily: 'bold',
+                          fontSize: height*0.016,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1.3333333333333333
+                      ),),
+                      SizedBox(height: height*0.005,),
+                      Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
+                          color: Color.fromRGBO(102, 102, 102, 1),
+                          fontFamily: 'regular',
+                          fontSize: height*0.013,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1
+                      ),)
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
                 ),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-              )
+              ),
             ],
           ),
           SizedBox(height: height*0.01,),
           Row(
             children: [
-              Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: height*0.2,
-                        width: width*0.42,
-                        child: Image.asset("assets/images/home/redbull.png"),
+              InkWell(
+                onTap: ()
+                {
+                  Get.to(()=>ProductDetailsScreen());
+                },
+                child: Container(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: height*0.2,
+                          width: width*0.42,
+                          child: Image.asset("assets/images/home/redbull.png"),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: height*0.005,),
-                    Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 1),
-                        fontFamily: 'bold',
-                        fontSize: height*0.016,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1.3333333333333333
-                    ),),
-                    SizedBox(height: height*0.005,),
-                    Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
-                        color: Color.fromRGBO(102, 102, 102, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.013,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),)
-                  ],
-                ),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
+                      SizedBox(height: height*0.005,),
+                      Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
+                          color: Color.fromRGBO(0, 0, 0, 1),
+                          fontFamily: 'bold',
+                          fontSize: height*0.016,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1.3333333333333333
+                      ),),
+                      SizedBox(height: height*0.005,),
+                      Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
+                          color: Color.fromRGBO(102, 102, 102, 1),
+                          fontFamily: 'regular',
+                          fontSize: height*0.013,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1
+                      ),)
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: height*0.2,
-                        width: width*0.42,
-                        child: Image.asset("assets/images/home/redbull.png"),
+              InkWell(
+                onTap: ()
+                {
+                  Get.to(()=>ProductDetailsScreen());
+                },
+                child: Container(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: height*0.2,
+                          width: width*0.42,
+                          child: Image.asset("assets/images/home/redbull.png"),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: height*0.005,),
-                    Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 1),
-                        fontFamily: 'bold',
-                        fontSize: height*0.016,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1.3333333333333333
-                    ),),
-                    SizedBox(height: height*0.005,),
-                    Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
-                        color: Color.fromRGBO(102, 102, 102, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.013,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),)
-                  ],
+                      SizedBox(height: height*0.005,),
+                      Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
+                          color: Color.fromRGBO(0, 0, 0, 1),
+                          fontFamily: 'bold',
+                          fontSize: height*0.016,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1.3333333333333333
+                      ),),
+                      SizedBox(height: height*0.005,),
+                      Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
+                          color: Color.fromRGBO(102, 102, 102, 1),
+                          fontFamily: 'regular',
+                          fontSize: height*0.013,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1
+                      ),)
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
                 ),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-              )
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -686,162 +722,11 @@ class _HomePageState extends State<HomePage> {
                 itemCount: 5,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                    child: Container(
-                      height: height*0.4,
-                      width: width*0.36,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Stack(
-                              children: [
-                                Container(
-                                  height: height*0.23,
-                                  width: width*0.35,
-                                  child: Image.asset("assets/images/home/carrot2.png"),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.grey.withOpacity(0.1)
-                                  ),
-                                ),
-                                Positioned(
-                                    child:    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius : BorderRadius.only(
-                                          topLeft: Radius.circular(8),
-                                          topRight: Radius.circular(0),
-                                          bottomLeft: Radius.circular(0),
-                                          bottomRight: Radius.circular(8),
-                                        ),
-                                        color : Color.fromRGBO(200, 3, 51, 1),
-                                      ),
-                                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-
-                                        children: <Widget>[
-                                          Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                              color: Color.fromRGBO(255, 255, 255, 1),
-                                              fontFamily: 'Segoe UI',
-                                              fontSize: height*0.015,
-                                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                              fontWeight: FontWeight.normal,
-                                              height: 1
-                                          ),),
-
-                                        ],
-                                      ),
-                                    )
-                                ),
-                                Positioned(
-                                    bottom: 10,
-                                    right: 10,
-                                    child:  Container(
-                                      width: width*0.15,
-                                      height: height*0.04,
-
-                                      decoration: BoxDecoration(
-                                          color: Colors.yellow,
-                                          borderRadius: BorderRadius.circular(8)
-                                      ),
-                                      child:
-                                      Center(
-                                          child: Text('Add', textAlign: TextAlign.left, style: TextStyle(
-                                              color: Color.fromRGBO(0, 0, 0, 1),
-                                              fontFamily: 'Poppins',
-                                              fontSize: 10,
-                                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                              fontWeight: FontWeight.normal,
-                                              height: 1
-                                          ),)
-                                      ),
-
-                                    )
-                                )
-                              ]
-                          ),
-                          SizedBox(height: height*0.01,),
-                          Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                              color: Color.fromRGBO(25, 25, 25, 1),
-                              fontFamily: 'regular',
-                              fontSize: height*0.013,
-                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                              fontWeight: FontWeight.normal,
-                              height: 1
-                          ),),
-                          SizedBox(height: height*0.01,),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text('1kg', textAlign: TextAlign.left, style: TextStyle(
-                                  color: Color.fromRGBO(102, 102, 102, 1),
-                                  fontFamily: 'regular',
-                                  fontSize: height*0.013,
-                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                  fontWeight: FontWeight.normal,
-                                  height: 1
-                              ),),
-                              Spacer(),
-                              Text('Option', textAlign: TextAlign.left, style: TextStyle(
-                                  color: Color.fromRGBO(31, 121, 211, 1),
-                                  fontFamily: 'regular',
-                                  fontSize: height*0.013,
-                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                  fontWeight: FontWeight.normal,
-                                  height: 1
-                              ),)
-                            ],
-                          ),
-                          SizedBox(height: height*0.01,),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text('₹189',
-                                style: TextStyle(
-                                    fontSize: height*0.020,
-                                    fontFamily: 'regular'
-                                ),
-                              ),
-                              SizedBox(width: width*0.02,),
-                              Text('₹199',
-                                style: TextStyle(
-                                  color: Colors.black.withOpacity(0.5),
-                                  fontSize: height*0.020,
-                                  fontFamily: 'regular',
-                                  decoration: TextDecoration.lineThrough,
-                                ),
-                              ),
-
-                            ],
-                          ),
-                          SizedBox(width: width*0.02,),
-                          Text('Tomarrow 7AM-11AM',
-                            style: TextStyle(
-                                fontSize: height*0.012,
-                                fontFamily: 'regular'
-                            ),
-                          ),
-
-
-
-
-
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Container(
-              height: height*0.38,
-              child: ListView.builder(
-                itemCount: 5,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                  return InkWell(
+                    onTap: ()
+                    {
+                      Get.to(()=>ProductDetailsScreen());
+                    },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                       child: Container(
@@ -991,6 +876,169 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+            Container(
+              height: height*0.38,
+              child: ListView.builder(
+                itemCount: 5,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: ()
+                    {
+                      Get.to(()=>ProductDetailsScreen());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: Container(
+                          height: height*0.4,
+                          width: width*0.36,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Stack(
+                                  children: [
+                                    Container(
+                                      height: height*0.23,
+                                      width: width*0.35,
+                                      child: Image.asset("assets/images/home/carrot2.png"),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          color: Colors.grey.withOpacity(0.1)
+                                      ),
+                                    ),
+                                    Positioned(
+                                        child:    Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius : BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(0),
+                                              bottomLeft: Radius.circular(0),
+                                              bottomRight: Radius.circular(8),
+                                            ),
+                                            color : Color.fromRGBO(200, 3, 51, 1),
+                                          ),
+                                          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+
+                                            children: <Widget>[
+                                              Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
+                                                  color: Color.fromRGBO(255, 255, 255, 1),
+                                                  fontFamily: 'Segoe UI',
+                                                  fontSize: height*0.015,
+                                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                                  fontWeight: FontWeight.normal,
+                                                  height: 1
+                                              ),),
+
+                                            ],
+                                          ),
+                                        )
+                                    ),
+                                    Positioned(
+                                        bottom: 10,
+                                        right: 10,
+                                        child:  Container(
+                                          width: width*0.15,
+                                          height: height*0.04,
+
+                                          decoration: BoxDecoration(
+                                              color: Colors.yellow,
+                                              borderRadius: BorderRadius.circular(8)
+                                          ),
+                                          child:
+                                          Center(
+                                              child: Text('Add', textAlign: TextAlign.left, style: TextStyle(
+                                                  color: Color.fromRGBO(0, 0, 0, 1),
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 10,
+                                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                                  fontWeight: FontWeight.normal,
+                                                  height: 1
+                                              ),)
+                                          ),
+
+                                        )
+                                    )
+                                  ]
+                              ),
+                              SizedBox(height: height*0.01,),
+                              Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
+                                  color: Color.fromRGBO(25, 25, 25, 1),
+                                  fontFamily: 'regular',
+                                  fontSize: height*0.013,
+                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                  fontWeight: FontWeight.normal,
+                                  height: 1
+                              ),),
+                              SizedBox(height: height*0.01,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('1kg', textAlign: TextAlign.left, style: TextStyle(
+                                      color: Color.fromRGBO(102, 102, 102, 1),
+                                      fontFamily: 'regular',
+                                      fontSize: height*0.013,
+                                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                      fontWeight: FontWeight.normal,
+                                      height: 1
+                                  ),),
+                                  Spacer(),
+                                  Text('Option', textAlign: TextAlign.left, style: TextStyle(
+                                      color: Color.fromRGBO(31, 121, 211, 1),
+                                      fontFamily: 'regular',
+                                      fontSize: height*0.013,
+                                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                      fontWeight: FontWeight.normal,
+                                      height: 1
+                                  ),)
+                                ],
+                              ),
+                              SizedBox(height: height*0.01,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('₹189',
+                                    style: TextStyle(
+                                        fontSize: height*0.020,
+                                        fontFamily: 'regular'
+                                    ),
+                                  ),
+                                  SizedBox(width: width*0.02,),
+                                  Text('₹199',
+                                    style: TextStyle(
+                                      color: Colors.black.withOpacity(0.5),
+                                      fontSize: height*0.020,
+                                      fontFamily: 'regular',
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                              SizedBox(width: width*0.02,),
+                              Text('Tomarrow 7AM-11AM',
+                                style: TextStyle(
+                                    fontSize: height*0.012,
+                                    fontFamily: 'regular'
+                                ),
+                              ),
+
+
+
+
+
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
     );
@@ -1122,215 +1170,227 @@ class _HomePageState extends State<HomePage> {
           children: [
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 0,0),
-                  child: Container(
-                    width: width*0.45,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-        
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: height*0.2,
-                                  child: Image.asset("assets/images/home/refrig.png")
-                              ),
-                              SizedBox(height: height*0.015,),
-                              Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                                  color: Color.fromRGBO(25, 25, 25, 1),
-                                  fontFamily: 'regular',
-                                  fontSize: height*0.016,
-                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                  fontWeight: FontWeight.normal,
-                                  height: 1
-                              ),),
-                              SizedBox(height: height*0.01,),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Row(
+                InkWell(
+                  onTap: ()
+                  {
+                    Get.to(()=>ProductDetailsScreen());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 0,0),
+                    child: Container(
+                      width: width*0.45,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: height*0.2,
+                                    child: Image.asset("assets/images/home/refrig.png")
+                                ),
+                                SizedBox(height: height*0.015,),
+                                Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
+                                    color: Color.fromRGBO(25, 25, 25, 1),
+                                    fontFamily: 'regular',
+                                    fontSize: height*0.016,
+                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                    fontWeight: FontWeight.normal,
+                                    height: 1
+                                ),),
+                                SizedBox(height: height*0.01,),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text('₹189',
+                                        style: TextStyle(
+                                            fontSize: height*0.022,
+                                            fontFamily: 'regular'
+                                        ),
+                                      ),
+                                      SizedBox(width: width*0.02,),
+                                      Text('₹199',
+                                        style: TextStyle(
+                                          color: Colors.black.withOpacity(0.5),
+                                          fontSize: height*0.022,
+                                          fontFamily: 'regular',
+                                          decoration: TextDecoration.lineThrough,
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: height*0.01,),
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text('₹189',
-                                      style: TextStyle(
-                                          fontSize: height*0.022,
-                                          fontFamily: 'regular'
-                                      ),
-                                    ),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
                                     SizedBox(width: width*0.02,),
-                                    Text('₹199',
-                                      style: TextStyle(
-                                        color: Colors.black.withOpacity(0.5),
-                                        fontSize: height*0.022,
+                                    Text('4,764', textAlign: TextAlign.left, style: TextStyle(
+                                        color: Color.fromRGBO(102, 102, 102, 1),
                                         fontFamily: 'regular',
-                                        decoration: TextDecoration.lineThrough,
-                                      ),
-                                    ),
-        
+                                        fontSize: height*0.012,
+                                        letterSpacing: 0 ,
+                                        fontWeight: FontWeight.normal,
+
+                                    ),)
                                   ],
                                 ),
-                              ),
-                              SizedBox(height: height*0.01,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
-                                  SizedBox(width: width*0.02,),
-                                  Text('4,764', textAlign: TextAlign.left, style: TextStyle(
+                                SizedBox(height: height*0.01,),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 25),
+                                  child: Row(
+                                    children: [
+                                      Spacer(),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color : Color.fromRGBO(200, 3, 51, 1),
+                                          borderRadius: BorderRadius.circular(4)
+                                        ),
+                                        child:  Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
+                                              color: Color.fromRGBO(249, 249, 249, 1),
+                                              fontFamily: 'regular',
+                                              fontSize: height*0.012,
+                                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                              fontWeight: FontWeight.normal,
+                                              height: 1
+                                          ),
+                                                            ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: ()
+                  {
+                    Get.to(()=>ProductDetailsScreen());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 0,0),
+                    child: Container(
+                      width: width*0.45,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    height: height*0.2,
+                                    child: Image.asset("assets/images/home/refrig.png")
+                                ),
+                                SizedBox(height: height*0.015,),
+                                Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
+                                    color: Color.fromRGBO(25, 25, 25, 1),
+                                    fontFamily: 'regular',
+                                    fontSize: height*0.016,
+                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                    fontWeight: FontWeight.normal,
+                                    height: 1
+                                ),),
+                                SizedBox(height: height*0.01,),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text('₹189',
+                                        style: TextStyle(
+                                            fontSize: height*0.022,
+                                            fontFamily: 'regular'
+                                        ),
+                                      ),
+                                      SizedBox(width: width*0.02,),
+                                      Text('₹199',
+                                        style: TextStyle(
+                                          color: Colors.black.withOpacity(0.5),
+                                          fontSize: height*0.022,
+                                          fontFamily: 'regular',
+                                          decoration: TextDecoration.lineThrough,
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: height*0.01,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
+                                    SizedBox(width: width*0.02,),
+                                    Text('4,764', textAlign: TextAlign.left, style: TextStyle(
                                       color: Color.fromRGBO(102, 102, 102, 1),
                                       fontFamily: 'regular',
                                       fontSize: height*0.012,
                                       letterSpacing: 0 ,
                                       fontWeight: FontWeight.normal,
-        
-                                  ),)
-                                ],
-                              ),
-                              SizedBox(height: height*0.01,),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 25),
-                                child: Row(
-                                  children: [
-                                    Spacer(),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color : Color.fromRGBO(200, 3, 51, 1),
-                                        borderRadius: BorderRadius.circular(4)
-                                      ),
-                                      child:  Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
-                                            color: Color.fromRGBO(249, 249, 249, 1),
-                                            fontFamily: 'regular',
-                                            fontSize: height*0.012,
-                                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                            fontWeight: FontWeight.normal,
-                                            height: 1
-                                        ),
-                                                          ),
-                                      ),
-                                    ),
+
+                                    ),)
                                   ],
                                 ),
-                              )
-        
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 0,0),
-                  child: Container(
-                    width: width*0.45,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  height: height*0.2,
-                                  child: Image.asset("assets/images/home/refrig.png")
-                              ),
-                              SizedBox(height: height*0.015,),
-                              Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                                  color: Color.fromRGBO(25, 25, 25, 1),
-                                  fontFamily: 'regular',
-                                  fontSize: height*0.016,
-                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                  fontWeight: FontWeight.normal,
-                                  height: 1
-                              ),),
-                              SizedBox(height: height*0.01,),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text('₹189',
-                                      style: TextStyle(
-                                          fontSize: height*0.022,
-                                          fontFamily: 'regular'
-                                      ),
-                                    ),
-                                    SizedBox(width: width*0.02,),
-                                    Text('₹199',
-                                      style: TextStyle(
-                                        color: Colors.black.withOpacity(0.5),
-                                        fontSize: height*0.022,
-                                        fontFamily: 'regular',
-                                        decoration: TextDecoration.lineThrough,
-                                      ),
-                                    ),
-
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: height*0.01,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
-                                  SizedBox(width: width*0.02,),
-                                  Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(102, 102, 102, 1),
-                                    fontFamily: 'regular',
-                                    fontSize: height*0.012,
-                                    letterSpacing: 0 ,
-                                    fontWeight: FontWeight.normal,
-
-                                  ),)
-                                ],
-                              ),
-                              SizedBox(height: height*0.01,),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 25),
-                                child: Row(
-                                  children: [
-                                    Spacer(),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color : Color.fromRGBO(200, 3, 51, 1),
-                                          borderRadius: BorderRadius.circular(4)
-                                      ),
-                                      child:  Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
-                                            color: Color.fromRGBO(249, 249, 249, 1),
-                                            fontFamily: 'regular',
-                                            fontSize: height*0.012,
-                                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                            fontWeight: FontWeight.normal,
-                                            height: 1
+                                SizedBox(height: height*0.01,),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 25),
+                                  child: Row(
+                                    children: [
+                                      Spacer(),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color : Color.fromRGBO(200, 3, 51, 1),
+                                            borderRadius: BorderRadius.circular(4)
                                         ),
+                                        child:  Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
+                                              color: Color.fromRGBO(249, 249, 249, 1),
+                                              fontFamily: 'regular',
+                                              fontSize: height*0.012,
+                                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                              fontWeight: FontWeight.normal,
+                                              height: 1
+                                          ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
+                                    ],
+                                  ),
+                                )
 
-                            ],
-                          ),
-                        )
-                      ],
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -1338,215 +1398,227 @@ class _HomePageState extends State<HomePage> {
             ),
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 0,10),
-                  child: Container(
-                    width: width*0.45,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                InkWell(
+                  onTap: ()
+                  {
+                    Get.to(()=>ProductDetailsScreen());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 0,0),
+                    child: Container(
+                      width: width*0.45,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
 
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  height: height*0.2,
-                                  child: Image.asset("assets/images/home/refrig.png")
-                              ),
-                              SizedBox(height: height*0.015,),
-                              Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                                  color: Color.fromRGBO(25, 25, 25, 1),
-                                  fontFamily: 'regular',
-                                  fontSize: height*0.016,
-                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                  fontWeight: FontWeight.normal,
-                                  height: 1
-                              ),),
-                              SizedBox(height: height*0.01,),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Row(
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    height: height*0.2,
+                                    child: Image.asset("assets/images/home/refrig.png")
+                                ),
+                                SizedBox(height: height*0.015,),
+                                Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
+                                    color: Color.fromRGBO(25, 25, 25, 1),
+                                    fontFamily: 'regular',
+                                    fontSize: height*0.016,
+                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                    fontWeight: FontWeight.normal,
+                                    height: 1
+                                ),),
+                                SizedBox(height: height*0.01,),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text('₹189',
+                                        style: TextStyle(
+                                            fontSize: height*0.022,
+                                            fontFamily: 'regular'
+                                        ),
+                                      ),
+                                      SizedBox(width: width*0.02,),
+                                      Text('₹199',
+                                        style: TextStyle(
+                                          color: Colors.black.withOpacity(0.5),
+                                          fontSize: height*0.022,
+                                          fontFamily: 'regular',
+                                          decoration: TextDecoration.lineThrough,
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: height*0.01,),
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text('₹189',
-                                      style: TextStyle(
-                                          fontSize: height*0.022,
-                                          fontFamily: 'regular'
-                                      ),
-                                    ),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
                                     SizedBox(width: width*0.02,),
-                                    Text('₹199',
-                                      style: TextStyle(
-                                        color: Colors.black.withOpacity(0.5),
-                                        fontSize: height*0.022,
-                                        fontFamily: 'regular',
-                                        decoration: TextDecoration.lineThrough,
-                                      ),
-                                    ),
+                                    Text('4,764', textAlign: TextAlign.left, style: TextStyle(
+                                      color: Color.fromRGBO(102, 102, 102, 1),
+                                      fontFamily: 'regular',
+                                      fontSize: height*0.012,
+                                      letterSpacing: 0 ,
+                                      fontWeight: FontWeight.normal,
 
+                                    ),)
                                   ],
                                 ),
-                              ),
-                              SizedBox(height: height*0.01,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
-                                  SizedBox(width: width*0.02,),
-                                  Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(102, 102, 102, 1),
-                                    fontFamily: 'regular',
-                                    fontSize: height*0.012,
-                                    letterSpacing: 0 ,
-                                    fontWeight: FontWeight.normal,
-
-                                  ),)
-                                ],
-                              ),
-                              SizedBox(height: height*0.01,),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 25),
-                                child: Row(
-                                  children: [
-                                    Spacer(),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color : Color.fromRGBO(200, 3, 51, 1),
-                                          borderRadius: BorderRadius.circular(4)
-                                      ),
-                                      child:  Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
-                                            color: Color.fromRGBO(249, 249, 249, 1),
-                                            fontFamily: 'regular',
-                                            fontSize: height*0.012,
-                                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                            fontWeight: FontWeight.normal,
-                                            height: 1
+                                SizedBox(height: height*0.01,),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 25),
+                                  child: Row(
+                                    children: [
+                                      Spacer(),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color : Color.fromRGBO(200, 3, 51, 1),
+                                            borderRadius: BorderRadius.circular(4)
                                         ),
+                                        child:  Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
+                                              color: Color.fromRGBO(249, 249, 249, 1),
+                                              fontFamily: 'regular',
+                                              fontSize: height*0.012,
+                                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                              fontWeight: FontWeight.normal,
+                                              height: 1
+                                          ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
+                                    ],
+                                  ),
+                                )
 
-                            ],
-                          ),
-                        )
-                      ],
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 0,10),
-                  child: Container(
-                    width: width*0.45,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                InkWell(
+                  onTap: ()
+                  {
+                    Get.to(()=>ProductDetailsScreen());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 0,0),
+                    child: Container(
+                      width: width*0.45,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
 
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  height: height*0.2,
-                                  child: Image.asset("assets/images/home/refrig.png")
-                              ),
-                              SizedBox(height: height*0.015,),
-                              Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                                  color: Color.fromRGBO(25, 25, 25, 1),
-                                  fontFamily: 'regular',
-                                  fontSize: height*0.016,
-                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                  fontWeight: FontWeight.normal,
-                                  height: 1
-                              ),),
-                              SizedBox(height: height*0.01,),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Row(
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    height: height*0.2,
+                                    child: Image.asset("assets/images/home/refrig.png")
+                                ),
+                                SizedBox(height: height*0.015,),
+                                Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
+                                    color: Color.fromRGBO(25, 25, 25, 1),
+                                    fontFamily: 'regular',
+                                    fontSize: height*0.016,
+                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                    fontWeight: FontWeight.normal,
+                                    height: 1
+                                ),),
+                                SizedBox(height: height*0.01,),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text('₹189',
+                                        style: TextStyle(
+                                            fontSize: height*0.022,
+                                            fontFamily: 'regular'
+                                        ),
+                                      ),
+                                      SizedBox(width: width*0.02,),
+                                      Text('₹199',
+                                        style: TextStyle(
+                                          color: Colors.black.withOpacity(0.5),
+                                          fontSize: height*0.022,
+                                          fontFamily: 'regular',
+                                          decoration: TextDecoration.lineThrough,
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: height*0.01,),
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text('₹189',
-                                      style: TextStyle(
-                                          fontSize: height*0.022,
-                                          fontFamily: 'regular'
-                                      ),
-                                    ),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
+                                    Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
                                     SizedBox(width: width*0.02,),
-                                    Text('₹199',
-                                      style: TextStyle(
-                                        color: Colors.black.withOpacity(0.5),
-                                        fontSize: height*0.022,
-                                        fontFamily: 'regular',
-                                        decoration: TextDecoration.lineThrough,
-                                      ),
-                                    ),
+                                    Text('4,764', textAlign: TextAlign.left, style: TextStyle(
+                                      color: Color.fromRGBO(102, 102, 102, 1),
+                                      fontFamily: 'regular',
+                                      fontSize: height*0.012,
+                                      letterSpacing: 0 ,
+                                      fontWeight: FontWeight.normal,
 
+                                    ),)
                                   ],
                                 ),
-                              ),
-                              SizedBox(height: height*0.01,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                  Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
-                                  SizedBox(width: width*0.02,),
-                                  Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(102, 102, 102, 1),
-                                    fontFamily: 'regular',
-                                    fontSize: height*0.012,
-                                    letterSpacing: 0 ,
-                                    fontWeight: FontWeight.normal,
-
-                                  ),)
-                                ],
-                              ),
-                              SizedBox(height: height*0.01,),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 25),
-                                child: Row(
-                                  children: [
-                                    Spacer(),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color : Color.fromRGBO(200, 3, 51, 1),
-                                          borderRadius: BorderRadius.circular(4)
-                                      ),
-                                      child:  Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
-                                            color: Color.fromRGBO(249, 249, 249, 1),
-                                            fontFamily: 'regular',
-                                            fontSize: height*0.012,
-                                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                            fontWeight: FontWeight.normal,
-                                            height: 1
+                                SizedBox(height: height*0.01,),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 25),
+                                  child: Row(
+                                    children: [
+                                      Spacer(),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color : Color.fromRGBO(200, 3, 51, 1),
+                                            borderRadius: BorderRadius.circular(4)
                                         ),
+                                        child:  Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
+                                              color: Color.fromRGBO(249, 249, 249, 1),
+                                              fontFamily: 'regular',
+                                              fontSize: height*0.012,
+                                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                              fontWeight: FontWeight.normal,
+                                              height: 1
+                                          ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
+                                    ],
+                                  ),
+                                )
 
-                            ],
-                          ),
-                        )
-                      ],
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -1641,10 +1713,159 @@ class _HomePageState extends State<HomePage> {
       children: [
         Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            InkWell(
+              onTap: ()
+             {
+               Get.to(()=>ProductDetailsScreen());
+             },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                          children: [
+                            Container(
+                              height: height*0.23,
+                              width: width*0.44,
+                              child: Image.asset("assets/images/home/carrot2.png"),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.grey.withOpacity(0.1)
+                              ),
+                            ),
+                            Positioned(
+                                child:    Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius : BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      topRight: Radius.circular(0),
+                                      bottomLeft: Radius.circular(0),
+                                      bottomRight: Radius.circular(8),
+                                    ),
+                                    color : Color.fromRGBO(200, 3, 51, 1),
+                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
+                                            color: Color.fromRGBO(255, 255, 255, 1),
+                                            fontFamily: 'Segoe UI',
+                                            fontSize: height*0.015,
+                                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                            fontWeight: FontWeight.normal,
+                                            height: 1
+                                        ),),
+                                      ),
+
+                                    ],
+                                  ),
+                                )
+                            ),
+                            Positioned(
+                                bottom: 10,
+                                right: 10,
+                                child:  Container(
+                                  width: width*0.15,
+                                  height: height*0.04,
+
+                                  decoration: BoxDecoration(
+                                      color: Colors.yellow,
+                                      borderRadius: BorderRadius.circular(8)
+                                  ),
+                                  child:
+                                  Center(
+                                      child: Icon(Icons.add,size: height*0.025,)
+                                  ),
+
+                                )
+                            )
+                          ]
+                      ),
+                      SizedBox(height: height*0.01,),
+                      Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
+                          color: Color.fromRGBO(25, 25, 25, 1),
+                          fontFamily: 'regular',
+                          fontSize: height*0.017,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1
+                      ),),
+                      SizedBox(height: height*0.01,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text('4.4', textAlign: TextAlign.left, style: TextStyle(
+                              color: Color.fromRGBO(25, 25, 25, 1),
+                              fontFamily: 'regular',
+                              fontSize: height*0.014,
+                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.normal,
+                              height: 1
+                          ),),
+                          SizedBox(width: width*0.02,),
+                          Icon(Icons.star,color: Colors.orange,size: height*0.02,),
+                          SizedBox(width: width*0.02,),
+                          Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
+                              color: Color.fromRGBO(102, 102, 102, 1),
+                              fontFamily: 'regular',
+                              fontSize: height*0.014,
+                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                              fontWeight: FontWeight.normal,
+                              height: 1
+                          ),)
+                        ],
+                      ),
+                      SizedBox(height: height*0.01,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text('₹189',
+                            style: TextStyle(
+                                fontSize: height*0.020,
+                                fontFamily: 'regular'
+                            ),
+                          ),
+                          SizedBox(width: width*0.02,),
+                          Text('₹199',
+                            style: TextStyle(
+                              color: Colors.black.withOpacity(0.5),
+                              fontSize: height*0.020,
+                              fontFamily: 'regular',
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+
+                        ],
+                      ),
+                      SizedBox(height: height*0.01,),
+
+                      Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
+                          color: Color.fromRGBO(25, 25, 25, 1),
+                          fontFamily: 'regular',
+                          fontSize: height*0.012,
+                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                          fontWeight: FontWeight.normal,
+                          height: 1
+                      ),)
+
+                    ],
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: ()
+              {
+                Get.to(()=>ProductDetailsScreen());
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Stack(
                         children: [
@@ -1777,144 +1998,7 @@ class _HomePageState extends State<HomePage> {
                     ),)
 
                   ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                      children: [
-                        Container(
-                          height: height*0.23,
-                          width: width*0.44,
-                          child: Image.asset("assets/images/home/carrot2.png"),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey.withOpacity(0.1)
-                          ),
-                        ),
-                        Positioned(
-                            child:    Container(
-                              decoration: BoxDecoration(
-                                borderRadius : BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(0),
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(8),
-                                ),
-                                color : Color.fromRGBO(200, 3, 51, 1),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                        color: Color.fromRGBO(255, 255, 255, 1),
-                                        fontFamily: 'Segoe UI',
-                                        fontSize: height*0.015,
-                                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                        fontWeight: FontWeight.normal,
-                                        height: 1
-                                    ),),
-                                  ),
-
-                                ],
-                              ),
-                            )
-                        ),
-                        Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child:  Container(
-                              width: width*0.15,
-                              height: height*0.04,
-
-                              decoration: BoxDecoration(
-                                  color: Colors.yellow,
-                                  borderRadius: BorderRadius.circular(8)
-                              ),
-                              child:
-                              Center(
-                                  child: Icon(Icons.add,size: height*0.025,)
-                              ),
-
-                            )
-                        )
-                      ]
-                  ),
-                  SizedBox(height: height*0.01,),
-                  Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(25, 25, 25, 1),
-                      fontFamily: 'regular',
-                      fontSize: height*0.017,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),),
-                  SizedBox(height: height*0.01,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('4.4', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(25, 25, 25, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.014,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),),
-                      SizedBox(width: width*0.02,),
-                      Icon(Icons.star,color: Colors.orange,size: height*0.02,),
-                      SizedBox(width: width*0.02,),
-                      Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(102, 102, 102, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.014,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-                    ],
-                  ),
-                  SizedBox(height: height*0.01,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('₹189',
-                        style: TextStyle(
-                            fontSize: height*0.020,
-                            fontFamily: 'regular'
-                        ),
-                      ),
-                      SizedBox(width: width*0.02,),
-                      Text('₹199',
-                        style: TextStyle(
-                          color: Colors.black.withOpacity(0.5),
-                          fontSize: height*0.020,
-                          fontFamily: 'regular',
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
-
-                    ],
-                  ),
-                  SizedBox(height: height*0.01,),
-
-                  Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(25, 25, 25, 1),
-                      fontFamily: 'regular',
-                      fontSize: height*0.012,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),)
-
-                ],
+                ),
               ),
             ),
           ],
@@ -1922,280 +2006,292 @@ class _HomePageState extends State<HomePage> {
         SizedBox(height: height*0.01,),
         Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
+            InkWell(
+              onTap: ()
+              {
+                Get.to(()=>ProductDetailsScreen());
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                        children: [
+                          Container(
+                            height: height*0.23,
+                            width: width*0.44,
+                            child: Image.asset("assets/images/home/carrot2.png"),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey.withOpacity(0.1)
+                            ),
+                          ),
+                          Positioned(
+                              child:    Container(
+                                decoration: BoxDecoration(
+                                  borderRadius : BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(0),
+                                    bottomLeft: Radius.circular(0),
+                                    bottomRight: Radius.circular(8),
+                                  ),
+                                  color : Color.fromRGBO(200, 3, 51, 1),
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
+                                          color: Color.fromRGBO(255, 255, 255, 1),
+                                          fontFamily: 'Segoe UI',
+                                          fontSize: height*0.015,
+                                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                          fontWeight: FontWeight.normal,
+                                          height: 1
+                                      ),),
+                                    ),
+
+                                  ],
+                                ),
+                              )
+                          ),
+                          Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child:  Container(
+                                width: width*0.15,
+                                height: height*0.04,
+
+                                decoration: BoxDecoration(
+                                    color: Colors.yellow,
+                                    borderRadius: BorderRadius.circular(8)
+                                ),
+                                child:
+                                Center(
+                                    child: Icon(Icons.add,size: height*0.025,)
+                                ),
+
+                              )
+                          )
+                        ]
+                    ),
+                    SizedBox(height: height*0.01,),
+                    Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
+                        color: Color.fromRGBO(25, 25, 25, 1),
+                        fontFamily: 'regular',
+                        fontSize: height*0.017,
+                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.normal,
+                        height: 1
+                    ),),
+                    SizedBox(height: height*0.01,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
-                          height: height*0.23,
-                          width: width*0.44,
-                          child: Image.asset("assets/images/home/carrot2.png"),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey.withOpacity(0.1)
+                        Text('4.4', textAlign: TextAlign.left, style: TextStyle(
+                            color: Color.fromRGBO(25, 25, 25, 1),
+                            fontFamily: 'regular',
+                            fontSize: height*0.014,
+                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                            fontWeight: FontWeight.normal,
+                            height: 1
+                        ),),
+                        SizedBox(width: width*0.02,),
+                        Icon(Icons.star,color: Colors.orange,size: height*0.02,),
+                        SizedBox(width: width*0.02,),
+                        Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
+                            color: Color.fromRGBO(102, 102, 102, 1),
+                            fontFamily: 'regular',
+                            fontSize: height*0.014,
+                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                            fontWeight: FontWeight.normal,
+                            height: 1
+                        ),)
+                      ],
+                    ),
+                    SizedBox(height: height*0.01,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('₹189',
+                          style: TextStyle(
+                              fontSize: height*0.020,
+                              fontFamily: 'regular'
                           ),
                         ),
-                        Positioned(
-                            child:    Container(
-                              decoration: BoxDecoration(
-                                borderRadius : BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(0),
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(8),
-                                ),
-                                color : Color.fromRGBO(200, 3, 51, 1),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                        color: Color.fromRGBO(255, 255, 255, 1),
-                                        fontFamily: 'Segoe UI',
-                                        fontSize: height*0.015,
-                                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                        fontWeight: FontWeight.normal,
-                                        height: 1
-                                    ),),
-                                  ),
-
-                                ],
-                              ),
-                            )
-                        ),
-                        Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child:  Container(
-                              width: width*0.15,
-                              height: height*0.04,
-
-                              decoration: BoxDecoration(
-                                  color: Colors.yellow,
-                                  borderRadius: BorderRadius.circular(8)
-                              ),
-                              child:
-                              Center(
-                                  child: Icon(Icons.add,size: height*0.025,)
-                              ),
-
-                            )
-                        )
-                      ]
-                  ),
-                  SizedBox(height: height*0.01,),
-                  Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(25, 25, 25, 1),
-                      fontFamily: 'regular',
-                      fontSize: height*0.017,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),),
-                  SizedBox(height: height*0.01,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('4.4', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(25, 25, 25, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.014,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),),
-                      SizedBox(width: width*0.02,),
-                      Icon(Icons.star,color: Colors.orange,size: height*0.02,),
-                      SizedBox(width: width*0.02,),
-                      Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(102, 102, 102, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.014,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-                    ],
-                  ),
-                  SizedBox(height: height*0.01,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('₹189',
-                        style: TextStyle(
+                        SizedBox(width: width*0.02,),
+                        Text('₹199',
+                          style: TextStyle(
+                            color: Colors.black.withOpacity(0.5),
                             fontSize: height*0.020,
-                            fontFamily: 'regular'
+                            fontFamily: 'regular',
+                            decoration: TextDecoration.lineThrough,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: width*0.02,),
-                      Text('₹199',
-                        style: TextStyle(
-                          color: Colors.black.withOpacity(0.5),
-                          fontSize: height*0.020,
-                          fontFamily: 'regular',
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
 
-                    ],
-                  ),
-                  SizedBox(height: height*0.01,),
+                      ],
+                    ),
+                    SizedBox(height: height*0.01,),
 
-                  Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(25, 25, 25, 1),
-                      fontFamily: 'regular',
-                      fontSize: height*0.012,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),)
+                    Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
+                        color: Color.fromRGBO(25, 25, 25, 1),
+                        fontFamily: 'regular',
+                        fontSize: height*0.012,
+                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.normal,
+                        height: 1
+                    ),)
 
-                ],
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
+            InkWell(
+              onTap: ()
+              {
+                Get.to(()=>ProductDetailsScreen());
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                        children: [
+                          Container(
+                            height: height*0.23,
+                            width: width*0.44,
+                            child: Image.asset("assets/images/home/carrot2.png"),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey.withOpacity(0.1)
+                            ),
+                          ),
+                          Positioned(
+                              child:    Container(
+                                decoration: BoxDecoration(
+                                  borderRadius : BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(0),
+                                    bottomLeft: Radius.circular(0),
+                                    bottomRight: Radius.circular(8),
+                                  ),
+                                  color : Color.fromRGBO(200, 3, 51, 1),
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
+                                          color: Color.fromRGBO(255, 255, 255, 1),
+                                          fontFamily: 'Segoe UI',
+                                          fontSize: height*0.015,
+                                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                          fontWeight: FontWeight.normal,
+                                          height: 1
+                                      ),),
+                                    ),
+
+                                  ],
+                                ),
+                              )
+                          ),
+                          Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child:  Container(
+                                width: width*0.15,
+                                height: height*0.04,
+
+                                decoration: BoxDecoration(
+                                    color: Colors.yellow,
+                                    borderRadius: BorderRadius.circular(8)
+                                ),
+                                child:
+                                Center(
+                                    child: Icon(Icons.add,size: height*0.025,)
+                                ),
+
+                              )
+                          )
+                        ]
+                    ),
+                    SizedBox(height: height*0.01,),
+                    Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
+                        color: Color.fromRGBO(25, 25, 25, 1),
+                        fontFamily: 'regular',
+                        fontSize: height*0.017,
+                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.normal,
+                        height: 1
+                    ),),
+                    SizedBox(height: height*0.01,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
-                          height: height*0.23,
-                          width: width*0.44,
-                          child: Image.asset("assets/images/home/carrot2.png"),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey.withOpacity(0.1)
+                        Text('4.4', textAlign: TextAlign.left, style: TextStyle(
+                            color: Color.fromRGBO(25, 25, 25, 1),
+                            fontFamily: 'regular',
+                            fontSize: height*0.014,
+                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                            fontWeight: FontWeight.normal,
+                            height: 1
+                        ),),
+                        SizedBox(width: width*0.02,),
+                        Icon(Icons.star,color: Colors.orange,size: height*0.02,),
+                        SizedBox(width: width*0.02,),
+                        Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
+                            color: Color.fromRGBO(102, 102, 102, 1),
+                            fontFamily: 'regular',
+                            fontSize: height*0.014,
+                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                            fontWeight: FontWeight.normal,
+                            height: 1
+                        ),)
+                      ],
+                    ),
+                    SizedBox(height: height*0.01,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('₹189',
+                          style: TextStyle(
+                              fontSize: height*0.020,
+                              fontFamily: 'regular'
                           ),
                         ),
-                        Positioned(
-                            child:    Container(
-                              decoration: BoxDecoration(
-                                borderRadius : BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(0),
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(8),
-                                ),
-                                color : Color.fromRGBO(200, 3, 51, 1),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                        color: Color.fromRGBO(255, 255, 255, 1),
-                                        fontFamily: 'Segoe UI',
-                                        fontSize: height*0.015,
-                                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                        fontWeight: FontWeight.normal,
-                                        height: 1
-                                    ),),
-                                  ),
-
-                                ],
-                              ),
-                            )
-                        ),
-                        Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child:  Container(
-                              width: width*0.15,
-                              height: height*0.04,
-
-                              decoration: BoxDecoration(
-                                  color: Colors.yellow,
-                                  borderRadius: BorderRadius.circular(8)
-                              ),
-                              child:
-                              Center(
-                                  child: Icon(Icons.add,size: height*0.025,)
-                              ),
-
-                            )
-                        )
-                      ]
-                  ),
-                  SizedBox(height: height*0.01,),
-                  Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(25, 25, 25, 1),
-                      fontFamily: 'regular',
-                      fontSize: height*0.017,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),),
-                  SizedBox(height: height*0.01,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('4.4', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(25, 25, 25, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.014,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),),
-                      SizedBox(width: width*0.02,),
-                      Icon(Icons.star,color: Colors.orange,size: height*0.02,),
-                      SizedBox(width: width*0.02,),
-                      Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(102, 102, 102, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.014,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-                    ],
-                  ),
-                  SizedBox(height: height*0.01,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('₹189',
-                        style: TextStyle(
+                        SizedBox(width: width*0.02,),
+                        Text('₹199',
+                          style: TextStyle(
+                            color: Colors.black.withOpacity(0.5),
                             fontSize: height*0.020,
-                            fontFamily: 'regular'
+                            fontFamily: 'regular',
+                            decoration: TextDecoration.lineThrough,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: width*0.02,),
-                      Text('₹199',
-                        style: TextStyle(
-                          color: Colors.black.withOpacity(0.5),
-                          fontSize: height*0.020,
-                          fontFamily: 'regular',
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
 
-                    ],
-                  ),
-                  SizedBox(height: height*0.01,),
+                      ],
+                    ),
+                    SizedBox(height: height*0.01,),
 
-                  Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(25, 25, 25, 1),
-                      fontFamily: 'regular',
-                      fontSize: height*0.012,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),)
+                    Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
+                        color: Color.fromRGBO(25, 25, 25, 1),
+                        fontFamily: 'regular',
+                        fontSize: height*0.012,
+                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.normal,
+                        height: 1
+                    ),)
 
-                ],
+                  ],
+                ),
               ),
             ),
           ],
@@ -2204,280 +2300,292 @@ class _HomePageState extends State<HomePage> {
         SizedBox(height: height*0.01,),
         Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
+            InkWell(
+              onTap: ()
+              {
+                Get.to(()=>ProductDetailsScreen());
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                        children: [
+                          Container(
+                            height: height*0.23,
+                            width: width*0.44,
+                            child: Image.asset("assets/images/home/carrot2.png"),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey.withOpacity(0.1)
+                            ),
+                          ),
+                          Positioned(
+                              child:    Container(
+                                decoration: BoxDecoration(
+                                  borderRadius : BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(0),
+                                    bottomLeft: Radius.circular(0),
+                                    bottomRight: Radius.circular(8),
+                                  ),
+                                  color : Color.fromRGBO(200, 3, 51, 1),
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
+                                          color: Color.fromRGBO(255, 255, 255, 1),
+                                          fontFamily: 'Segoe UI',
+                                          fontSize: height*0.015,
+                                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                          fontWeight: FontWeight.normal,
+                                          height: 1
+                                      ),),
+                                    ),
+
+                                  ],
+                                ),
+                              )
+                          ),
+                          Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child:  Container(
+                                width: width*0.15,
+                                height: height*0.04,
+
+                                decoration: BoxDecoration(
+                                    color: Colors.yellow,
+                                    borderRadius: BorderRadius.circular(8)
+                                ),
+                                child:
+                                Center(
+                                    child: Icon(Icons.add,size: height*0.025,)
+                                ),
+
+                              )
+                          )
+                        ]
+                    ),
+                    SizedBox(height: height*0.01,),
+                    Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
+                        color: Color.fromRGBO(25, 25, 25, 1),
+                        fontFamily: 'regular',
+                        fontSize: height*0.017,
+                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.normal,
+                        height: 1
+                    ),),
+                    SizedBox(height: height*0.01,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
-                          height: height*0.23,
-                          width: width*0.44,
-                          child: Image.asset("assets/images/home/carrot2.png"),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey.withOpacity(0.1)
+                        Text('4.4', textAlign: TextAlign.left, style: TextStyle(
+                            color: Color.fromRGBO(25, 25, 25, 1),
+                            fontFamily: 'regular',
+                            fontSize: height*0.014,
+                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                            fontWeight: FontWeight.normal,
+                            height: 1
+                        ),),
+                        SizedBox(width: width*0.02,),
+                        Icon(Icons.star,color: Colors.orange,size: height*0.02,),
+                        SizedBox(width: width*0.02,),
+                        Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
+                            color: Color.fromRGBO(102, 102, 102, 1),
+                            fontFamily: 'regular',
+                            fontSize: height*0.014,
+                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                            fontWeight: FontWeight.normal,
+                            height: 1
+                        ),)
+                      ],
+                    ),
+                    SizedBox(height: height*0.01,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('₹189',
+                          style: TextStyle(
+                              fontSize: height*0.020,
+                              fontFamily: 'regular'
                           ),
                         ),
-                        Positioned(
-                            child:    Container(
-                              decoration: BoxDecoration(
-                                borderRadius : BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(0),
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(8),
-                                ),
-                                color : Color.fromRGBO(200, 3, 51, 1),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                        color: Color.fromRGBO(255, 255, 255, 1),
-                                        fontFamily: 'Segoe UI',
-                                        fontSize: height*0.015,
-                                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                        fontWeight: FontWeight.normal,
-                                        height: 1
-                                    ),),
-                                  ),
-
-                                ],
-                              ),
-                            )
-                        ),
-                        Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child:  Container(
-                              width: width*0.15,
-                              height: height*0.04,
-
-                              decoration: BoxDecoration(
-                                  color: Colors.yellow,
-                                  borderRadius: BorderRadius.circular(8)
-                              ),
-                              child:
-                              Center(
-                                  child: Icon(Icons.add,size: height*0.025,)
-                              ),
-
-                            )
-                        )
-                      ]
-                  ),
-                  SizedBox(height: height*0.01,),
-                  Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(25, 25, 25, 1),
-                      fontFamily: 'regular',
-                      fontSize: height*0.017,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),),
-                  SizedBox(height: height*0.01,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('4.4', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(25, 25, 25, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.014,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),),
-                      SizedBox(width: width*0.02,),
-                      Icon(Icons.star,color: Colors.orange,size: height*0.02,),
-                      SizedBox(width: width*0.02,),
-                      Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(102, 102, 102, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.014,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-                    ],
-                  ),
-                  SizedBox(height: height*0.01,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('₹189',
-                        style: TextStyle(
+                        SizedBox(width: width*0.02,),
+                        Text('₹199',
+                          style: TextStyle(
+                            color: Colors.black.withOpacity(0.5),
                             fontSize: height*0.020,
-                            fontFamily: 'regular'
+                            fontFamily: 'regular',
+                            decoration: TextDecoration.lineThrough,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: width*0.02,),
-                      Text('₹199',
-                        style: TextStyle(
-                          color: Colors.black.withOpacity(0.5),
-                          fontSize: height*0.020,
-                          fontFamily: 'regular',
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
 
-                    ],
-                  ),
-                  SizedBox(height: height*0.01,),
+                      ],
+                    ),
+                    SizedBox(height: height*0.01,),
 
-                  Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(25, 25, 25, 1),
-                      fontFamily: 'regular',
-                      fontSize: height*0.012,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),)
+                    Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
+                        color: Color.fromRGBO(25, 25, 25, 1),
+                        fontFamily: 'regular',
+                        fontSize: height*0.012,
+                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.normal,
+                        height: 1
+                    ),)
 
-                ],
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
+            InkWell(
+              onTap: ()
+              {
+                Get.to(()=>ProductDetailsScreen());
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                        children: [
+                          Container(
+                            height: height*0.23,
+                            width: width*0.44,
+                            child: Image.asset("assets/images/home/carrot2.png"),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey.withOpacity(0.1)
+                            ),
+                          ),
+                          Positioned(
+                              child:    Container(
+                                decoration: BoxDecoration(
+                                  borderRadius : BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(0),
+                                    bottomLeft: Radius.circular(0),
+                                    bottomRight: Radius.circular(8),
+                                  ),
+                                  color : Color.fromRGBO(200, 3, 51, 1),
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
+                                          color: Color.fromRGBO(255, 255, 255, 1),
+                                          fontFamily: 'Segoe UI',
+                                          fontSize: height*0.015,
+                                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                          fontWeight: FontWeight.normal,
+                                          height: 1
+                                      ),),
+                                    ),
+
+                                  ],
+                                ),
+                              )
+                          ),
+                          Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child:  Container(
+                                width: width*0.15,
+                                height: height*0.04,
+
+                                decoration: BoxDecoration(
+                                    color: Colors.yellow,
+                                    borderRadius: BorderRadius.circular(8)
+                                ),
+                                child:
+                                Center(
+                                    child: Icon(Icons.add,size: height*0.025,)
+                                ),
+
+                              )
+                          )
+                        ]
+                    ),
+                    SizedBox(height: height*0.01,),
+                    Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
+                        color: Color.fromRGBO(25, 25, 25, 1),
+                        fontFamily: 'regular',
+                        fontSize: height*0.017,
+                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.normal,
+                        height: 1
+                    ),),
+                    SizedBox(height: height*0.01,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
-                          height: height*0.23,
-                          width: width*0.44,
-                          child: Image.asset("assets/images/home/carrot2.png"),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey.withOpacity(0.1)
+                        Text('4.4', textAlign: TextAlign.left, style: TextStyle(
+                            color: Color.fromRGBO(25, 25, 25, 1),
+                            fontFamily: 'regular',
+                            fontSize: height*0.014,
+                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                            fontWeight: FontWeight.normal,
+                            height: 1
+                        ),),
+                        SizedBox(width: width*0.02,),
+                        Icon(Icons.star,color: Colors.orange,size: height*0.02,),
+                        SizedBox(width: width*0.02,),
+                        Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
+                            color: Color.fromRGBO(102, 102, 102, 1),
+                            fontFamily: 'regular',
+                            fontSize: height*0.014,
+                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                            fontWeight: FontWeight.normal,
+                            height: 1
+                        ),)
+                      ],
+                    ),
+                    SizedBox(height: height*0.01,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('₹189',
+                          style: TextStyle(
+                              fontSize: height*0.020,
+                              fontFamily: 'regular'
                           ),
                         ),
-                        Positioned(
-                            child:    Container(
-                              decoration: BoxDecoration(
-                                borderRadius : BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(0),
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(8),
-                                ),
-                                color : Color.fromRGBO(200, 3, 51, 1),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                        color: Color.fromRGBO(255, 255, 255, 1),
-                                        fontFamily: 'Segoe UI',
-                                        fontSize: height*0.015,
-                                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                        fontWeight: FontWeight.normal,
-                                        height: 1
-                                    ),),
-                                  ),
-
-                                ],
-                              ),
-                            )
-                        ),
-                        Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child:  Container(
-                              width: width*0.15,
-                              height: height*0.04,
-
-                              decoration: BoxDecoration(
-                                  color: Colors.yellow,
-                                  borderRadius: BorderRadius.circular(8)
-                              ),
-                              child:
-                              Center(
-                                  child: Icon(Icons.add,size: height*0.025,)
-                              ),
-
-                            )
-                        )
-                      ]
-                  ),
-                  SizedBox(height: height*0.01,),
-                  Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(25, 25, 25, 1),
-                      fontFamily: 'regular',
-                      fontSize: height*0.017,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),),
-                  SizedBox(height: height*0.01,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('4.4', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(25, 25, 25, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.014,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),),
-                      SizedBox(width: width*0.02,),
-                      Icon(Icons.star,color: Colors.orange,size: height*0.02,),
-                      SizedBox(width: width*0.02,),
-                      Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(102, 102, 102, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.014,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-                    ],
-                  ),
-                  SizedBox(height: height*0.01,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('₹189',
-                        style: TextStyle(
+                        SizedBox(width: width*0.02,),
+                        Text('₹199',
+                          style: TextStyle(
+                            color: Colors.black.withOpacity(0.5),
                             fontSize: height*0.020,
-                            fontFamily: 'regular'
+                            fontFamily: 'regular',
+                            decoration: TextDecoration.lineThrough,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: width*0.02,),
-                      Text('₹199',
-                        style: TextStyle(
-                          color: Colors.black.withOpacity(0.5),
-                          fontSize: height*0.020,
-                          fontFamily: 'regular',
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
 
-                    ],
-                  ),
-                  SizedBox(height: height*0.01,),
+                      ],
+                    ),
+                    SizedBox(height: height*0.01,),
 
-                  Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(25, 25, 25, 1),
-                      fontFamily: 'regular',
-                      fontSize: height*0.012,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),)
+                    Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
+                        color: Color.fromRGBO(25, 25, 25, 1),
+                        fontFamily: 'regular',
+                        fontSize: height*0.012,
+                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                        fontWeight: FontWeight.normal,
+                        height: 1
+                    ),)
 
-                ],
+                  ],
+                ),
               ),
             ),
           ],
@@ -2514,40 +2622,64 @@ class _HomePageState extends State<HomePage> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                    child: Container(
-                        height: height * 0.22,
-                        width: width * 0.4,
-                        child: Image.asset(
-                            "assets/images/home/secondrefrig.png")
+                  InkWell(
+                    onTap: ()
+                    {
+                      Get.to(()=>ProductDetailsScreen());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                      child: Container(
+                          height: height * 0.22,
+                          width: width * 0.4,
+                          child: Image.asset(
+                              "assets/images/home/secondrefrig.png")
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                    child: Container(
-                        height: height * 0.22,
-                        width: width * 0.4,
-                        child: Image.asset(
-                            "assets/images/home/secondrefrig.png")
+                  InkWell(
+                    onTap: ()
+                    {
+                      Get.to(()=>ProductDetailsScreen());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                      child: Container(
+                          height: height * 0.22,
+                          width: width * 0.4,
+                          child: Image.asset(
+                              "assets/images/home/secondrefrig.png")
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                    child: Container(
-                        height: height * 0.22,
-                        width: width * 0.4,
-                        child: Image.asset(
-                            "assets/images/home/secondrefrig.png")
+                  InkWell(
+                    onTap: ()
+                    {
+                      Get.to(()=>ProductDetailsScreen());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                      child: Container(
+                          height: height * 0.22,
+                          width: width * 0.4,
+                          child: Image.asset(
+                              "assets/images/home/secondrefrig.png")
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                    child: Container(
-                        height: height * 0.22,
-                        width: width * 0.4,
-                        child: Image.asset(
-                            "assets/images/home/secondrefrig.png")
+                  InkWell(
+                    onTap: ()
+                    {
+                      Get.to(()=>ProductDetailsScreen());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                      child: Container(
+                          height: height * 0.22,
+                          width: width * 0.4,
+                          child: Image.asset(
+                              "assets/images/home/secondrefrig.png")
+                      ),
                     ),
                   ),
                 ],

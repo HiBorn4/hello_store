@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hello_store/controllers/auth_controller.dart';
+import 'package:hello_store/controllers/homepage_controller.dart';
 import 'package:hello_store/screens/address_screen.dart';
 import 'package:hello_store/screens/buy_again_screen.dart';
 import 'package:hello_store/screens/cart_screen.dart';
