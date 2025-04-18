@@ -5,6 +5,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class HomePageController extends GetxController {
+
+  var street="".obs;
+  var sublocality="".obs;
+  var locality="".obs;
+
+
+
   Future<void> getCurrentLocation() async {
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -27,7 +34,11 @@ class HomePageController extends GetxController {
 
 
       List<Placemark> placemarks = await placemarkFromCoordinates(
-        17.385044, 78.486671,
+       position.latitude
+       //17.385044
+        ,
+        position.longitude,
+        // 78.486671,
       );
 
       if (placemarks.isNotEmpty) {
@@ -36,7 +47,9 @@ class HomePageController extends GetxController {
         String address =
             "${place.locality}, ${place.administrativeArea}, ${place.country}";
         print("📍 User Location: $address");
-         print(place);
+        street.value=place.street!;
+        sublocality.value=place.subLocality!;
+        locality.value=place.locality!;
 
       } else {
         print("No placemark data found.");

@@ -166,14 +166,17 @@ class _HomePageState extends State<HomePage> {
                    SizedBox(height: height*0.009,),
                    Row(
                      children: [
-                       Text('Garden Layout, HSR layout, Sector 2, HSR', textAlign: TextAlign.center, style: TextStyle(
-                           color: Color.fromRGBO(61, 61, 61, 1),
-                           fontFamily: 'regular',
-                           fontSize: height*0.015,
-                           letterSpacing: 0,
-                           fontWeight: FontWeight.normal,
-                           height: 1
-                       ),),
+                       Obx(
+                       ()=> Text('${homecontroller.street} ${homecontroller.sublocality} ${homecontroller.locality}'
+                             , textAlign: TextAlign.center, style: TextStyle(
+                             color: Color.fromRGBO(61, 61, 61, 1),
+                             fontFamily: 'regular',
+                             fontSize: height*0.015,
+                             letterSpacing: 0,
+                             fontWeight: FontWeight.normal,
+                             height: 1
+                         ),),
+                       ),
                        SizedBox(width: width*0.01,),
                        SvgPicture.asset("assets/images/chevron_down.svg")
                      ],
