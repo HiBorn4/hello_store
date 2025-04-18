@@ -38,7 +38,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Hello Stores',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: (isLoggedIn) ? HomeMenu() : SignUpScreen2()// Set your desired starting screen
+      home: (isLoggedIn) ? HomeMenu() : LoginScreen()// Set your desired starting screen
     );
   }
 }

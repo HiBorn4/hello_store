@@ -29,7 +29,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
     return Obx(
       ()=> Stack(
         children: [ Scaffold(
-          resizeToAvoidBottomInset: true, // Prevents overflow when keyboard appears
+          resizeToAvoidBottomInset: true,
           body: SafeArea(
             child: LayoutBuilder(
               builder: (context, constraints) {

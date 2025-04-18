@@ -8,6 +8,8 @@ import 'dart:math' as math;
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:hello_store/controllers/auth_controller.dart';
+import 'package:hello_store/screens/login_screen2.dart';
 var cartitems=0.obs;
 
 
@@ -18,6 +20,7 @@ class HomePage extends StatefulWidget
 }
 
 class _HomePageState extends State<HomePage> {
+  final authcontroller=Get.find<AuthController>();
 
 
   var data = [
@@ -172,7 +175,13 @@ class _HomePageState extends State<HomePage> {
                  ],
                ),
                Spacer(),
-              Icon(Icons.person,color: Colors.black,size: height*0.04,)
+              GestureDetector(
+                  key: _buttonKey,
+                  onTap: () {
+                    _showPopupAboveButton(context, _buttonKey);
+                  },
+                  child: Icon(Icons.person,color: Colors.black,size: height*0.04,)
+              )
 
              ],
            ),
@@ -2549,6 +2558,67 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  void _showPopupAboveButton(BuildContext context, GlobalKey key) {
+    final RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
+    final Size size = renderBox.size;
+    final Offset offset = renderBox.localToGlobal(Offset.zero);
+
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    final double popupWidth = screenWidth * 0.2;
+
+    double popupLeft = offset.dx + size.width - popupWidth;
+
+    if (popupLeft + popupWidth > screenWidth) {
+      popupLeft = screenWidth - popupWidth - 10;
+    }
+
+    OverlayEntry? overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          overlayEntry?.remove();
+        },
+        child: Stack(
+          children: [
+            Positioned(
+              top: offset.dy + size.height + 5,
+              left: popupLeft,
+              child: GestureDetector(
+                onTap: () {
+                  overlayEntry?.remove();
+                  authcontroller.logout(context);
+                  Get.offAll(()=>LoginScreen());
+                },
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    color: Colors.black,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Logout",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: height * 0.02,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(overlayEntry);
+  }
+
 
 }
 class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
