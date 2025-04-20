@@ -19,6 +19,9 @@ import 'package:hello_store/screens/signup_screen.dart';
 import 'package:hello_store/screens/signup_screen2.dart';
 import 'firebase_options.dart';
 import 'screens/category_screen.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -28,6 +31,7 @@ Future<void> main() async {
   runApp(const App());
 }
 
+
 class App extends StatelessWidget {
   const App({super.key});
 
@@ -36,6 +40,7 @@ class App extends StatelessWidget {
     Get.put(AuthController());
     bool isLoggedIn = FirebaseAuth.instance.currentUser != null;
     return GetMaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Hello Stores',
       theme: ThemeData(primarySwatch: Colors.deepPurple),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../controllers/category_controller.dart';
 import '../widgets/category_product_widget.dart';
 import '../widgets/custom_dropdown.dart';
+import 'product_list.dart';
 
 class CategoryScreen extends StatefulWidget {
   @override
@@ -538,14 +539,23 @@ class ViewAllProductsButton extends StatelessWidget {
         onTap: () {/* TODO: Handle navigation */},
         child: Row(
           children: [
-            Text(
-              "View All Products",
-              style: TextStyle(
-                color: Colors.green,
-                fontWeight: FontWeight.w500,
-                fontSize: screenSize.width * 0.052,
-              ),
-            ),
+            GestureDetector(
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ProductListingScreen()), // Replace with your actual screen
+    );
+  },
+  child: Text(
+    "View All Products",
+    style: TextStyle(
+      color: Colors.green,
+      fontWeight: FontWeight.w500,
+      fontSize: screenSize.width * 0.052,
+    ),
+  ),
+),
+
             SizedBox(width: screenSize.width * 0.03),
             Icon(
               Icons.arrow_forward_ios_sharp,

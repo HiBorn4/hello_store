@@ -14,7 +14,7 @@ class _CartScreenState extends State<CartScreen> {
     5,
     (index) => CartItem(
       // id: 'item$index',
-      image: 'assets/images/product.png',
+      image: 'assets/product.png',
       title: 'Samsung Refrigerator 255L',
       size: '255L',
       rating: 4.5,
@@ -85,44 +85,43 @@ class ProductCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
+          mainAxisSize: MainAxisSize.min, // Add this line
           children: [
-            Flexible(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset(
-                    item.image,
-                    height: 100,
-                    width: 100,
+            Row( // Changed from Flexible to direct Row
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  item.image,
+                  height: 100,
+                  width: 100,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.body(context),
+                      ),
+                      const SizedBox(height: 4),
+                      _SizeChip(size: item.size),
+                      const SizedBox(height: 8),
+                      _RatingStars(
+                        rating: item.rating,
+                        ratingsCount: item.ratingsCount,
+                      ),
+                      const SizedBox(height: 8),
+                      _PriceDisplay(
+                        price: item.price,
+                        originalPrice: item.originalPrice,
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.body(context),
-                        ),
-                        const SizedBox(height: 4),
-                        _SizeChip(size: item.size),
-                        const SizedBox(height: 8),
-                        _RatingStars(
-                          rating: item.rating,
-                          ratingsCount: item.ratingsCount,
-                        ),
-                        const SizedBox(height: 8),
-                        _PriceDisplay(
-                          price: item.price,
-                          originalPrice: item.originalPrice,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
             const SizedBox(height: 12),
             Row(

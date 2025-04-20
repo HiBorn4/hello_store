@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 import '../widgets/category_product_widget.dart';
 import '../widgets/custom_dropdown.dart';
+import '../widgets/price_filter_overlay_widget.dart';
 
 class ProductListingScreen extends StatefulWidget {
   @override
@@ -76,7 +78,6 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
 
           // Brand section
           _buildBrandSection(screenWidth),
-
           // First 4 products (2 rows)
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
@@ -120,40 +121,64 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
     );
   }
 
-  // Filter row converted to a SliverToBoxAdapter
   SliverToBoxAdapter _buildFilterRow(Size screenSize) {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: screenSize.width * 0.03,
-          vertical: screenSize.height * 0.015,
-        ),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: const [
-              CustomDropdown(
-                label: "Filters",
-                items: ["Filters", "All", "Electronics", "Kitchen"],
-              ),
-              SizedBox(width: 8),
-              CustomDropdown(label: "Price", items: ["Price", "4★", "3★"]),
-              SizedBox(width: 8),
-              CustomDropdown(
-                label: "Sort by",
-                items: ["Sort by", "Popular", "Low", "High"],
-              ),
-              SizedBox(width: 8),
-              CustomDropdown(
-                label: "Custom",
-                items: ["Custom", "Popular", "Low", "High"],
-              ),
-            ],
-          ),
+  return SliverToBoxAdapter(
+    child: Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: screenSize.width * 0.03,
+        vertical: screenSize.height * 0.015,
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            const CustomDropdown(
+              label: "Filters",
+              items: ["Filters", "All", "Electronics", "Kitchen"],
+            ),
+            const SizedBox(width: 8),
+            buildPriceDropdown(), // 👈 Special function
+            const SizedBox(width: 8),
+            const CustomDropdown(
+              label: "Sort by",
+              items: ["Sort by", "Popular", "Low", "High"],
+            ),
+            const SizedBox(width: 8),
+            const CustomDropdown(
+              label: "Custom",
+              items: ["Custom", "Popular", "Low", "High"],
+            ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
+Widget buildPriceDropdown() {
+  return GestureDetector(
+    onTap: () => showModalBottomSheet(
+      context: navigatorKey.currentContext!,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => const PriceFilterOverlay(),
+    ),
+    child: Container(
+      height: 40,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade400),
+        borderRadius: BorderRadius.circular(6),
+        color: Colors.white,
+      ),
+      child: const Center(child: Text("Price")),
+    ),
+  );
+}
+
 
   // Brand section as a SliverToBoxAdapter
   SliverToBoxAdapter _buildSponsoredSection(double screenWidth) {
@@ -238,6 +263,7 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
                   ),
             ),
           ),
+          SizedBox(height: 30,)
         ],
       ),
     );
