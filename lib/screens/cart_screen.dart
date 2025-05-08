@@ -1,15 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:hello_store/controllers/cart_controller.dart';
 import '../models/cart_item.dart';
 import '../utils/app_colors.dart';
 import 'address_screen.dart';
-
+final CartController controller=Get.put<CartController>(CartController());
 class CartScreen extends StatefulWidget {
   @override
   _CartScreenState createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
+
+  final CartController controller=Get.put<CartController>(CartController());
+
+  var cartitems = [
+    {
+      "image": "assets/product.png",
+      "title": "Samsung Refrigerator 255L",
+      "size":'255L',
+      "rating":4.5,
+      "ratingsCount":"1.2k",
+      "price": '₹32,999',
+      "originalPrice": '₹45,999',
+      "deliveryInfo": 'Delivery by Mon, 25th Sep',
+    },
+    {
+      "image": "assets/product.png",
+      "title": "Samsung Refrigerator 255L",
+      "size":'255L',
+      "rating":4.5,
+      "ratingsCount":"1.2k",
+      "price": '₹32,999',
+      "originalPrice": '₹45,999',
+      "deliveryInfo": 'Delivery by Mon, 25th Sep',
+    },
+    {
+      "image": "assets/product.png",
+      "title": "Samsung Refrigerator 255L",
+      "size":'255L',
+      "rating":4.5,
+      "ratingsCount":"1.2k",
+      "price": '₹32,999',
+      "originalPrice": '₹45,999',
+      "deliveryInfo": 'Delivery by Mon, 25th Sep',
+    },
+
+
+  ];
+
+
   final List<CartItem> items = List.generate(
     5,
     (index) => CartItem(
@@ -35,6 +77,8 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    controller.fetchCartItems();
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -42,36 +86,54 @@ class _CartScreenState extends State<CartScreen> {
       appBar: AppBar(
         title: Text('Cart'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ...items.map((item) => ProductCard(
-                  item: item,
-                  isWishlist: false,
-                  onRemove: () => _handleRemove(item),
-                  onMoveToCart: () => _handleMoveToCart(item),
-                )),
-            _CouponSection(),
-            _PriceSummary(),
-            _ProceedToBuySection(),
-          ],
+      body:  SingleChildScrollView(
+          child: Column(
+
+            children: [
+
+          Obx(
+              ()=> SizedBox(
+              height: MediaQuery.of(context).size.height*0.5,
+              child: ListView.builder(
+              itemCount: controller.cartItems.length,
+                itemBuilder: (context, index) {
+                  var item = controller.cartItems[index];  // Get the current item
+                  return ProductCard(item: item,index: index,);
+                },
+              ),
+            ),
+          ),
+
+
+            /*  ...items.map((item) => ProductCard(
+                    item: item,
+                    isWishlist: false,
+                    onRemove: () => _handleRemove(item),
+                    onMoveToCart: () => _handleMoveToCart(item),
+                  )),*/
+              _CouponSection(),
+              _PriceSummary(),
+              _ProceedToBuySection(),
+            ],
+          ),
         ),
-      ),
     );
   }
 }
 
 class ProductCard extends StatelessWidget {
-  final CartItem item;
+  final  item;
   final bool isWishlist;
   final VoidCallback? onRemove;
   final VoidCallback? onMoveToCart;
+  final int index;
 
   const ProductCard({
     required this.item,
     this.isWishlist = false,
     this.onRemove,
     this.onMoveToCart,
+    required this.index
   });
 
   @override
@@ -90,33 +152,36 @@ class ProductCard extends StatelessWidget {
             Row( // Changed from Flexible to direct Row
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  item.image,
+                Image.network(
+                  item['image'] != null && item['image'].isNotEmpty
+                      ? item['image']
+                      : 'assets/iron_table', // Provide a default or placeholder image if the URL is null or empty
                   height: 100,
                   width: 100,
                 ),
+
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        item.title,
+                        item['title'],
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.body(context),
                       ),
                       const SizedBox(height: 4),
-                      _SizeChip(size: item.size),
+                      _SizeChip(size: '255L'),
                       const SizedBox(height: 8),
                       _RatingStars(
-                        rating: item.rating,
-                        ratingsCount: item.ratingsCount,
+                        rating: 4.5,
+                        ratingsCount:"1.2k"
                       ),
                       const SizedBox(height: 8),
                       _PriceDisplay(
-                        price: item.price,
-                        originalPrice: item.originalPrice,
+                        price:'${item['price'] * item['count']}' ,
+                        originalPrice: '${item['price']+200}',
                       ),
                     ],
                   ),
@@ -128,15 +193,15 @@ class ProductCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _DeliveryInfo(
-                  info: item.deliveryInfo,
-                  originalPrice: item.originalPrice,
+                  info: 'Delivery by Mon, 25th Sep',
+                  originalPrice: "₹600",
                 ),
                 isWishlist
                     ? _WishlistActions(
                         onRemove: onRemove,
                         onMoveToCart: onMoveToCart,
                       )
-                    : _QuantitySelector(),
+                    : _QuantitySelector(index,item),
               ],
             ),
           ],
@@ -236,6 +301,10 @@ class _PriceDisplay extends StatelessWidget {
 }
 
 class _QuantitySelector extends StatefulWidget {
+  final int index;
+  final  item;
+
+  const _QuantitySelector(this.index, this.item, {Key? key}) : super(key: key);
   @override
   __QuantitySelectorState createState() => __QuantitySelectorState();
 }
@@ -248,38 +317,50 @@ class __QuantitySelectorState extends State<_QuantitySelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.borderColor),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: _decrement,
-            child: Icon(
-              Icons.remove,
-              color: AppColors.primaryGreen,
-              size: 20,
+    return  Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.borderColor),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: ()
+              async {
+                if(widget.item['count']>=2) {
+                  _decrement();
+                  await controller.decrementCount(widget.index);
+                  await controller.fetchCartItems();
+                }
+              },
+              child: Icon(
+                Icons.remove,
+                color: AppColors.primaryGreen,
+                size: 20,
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            '$_quantity',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(width: 12),
-          GestureDetector(
-            onTap: _increment,
-            child: Icon(
-              Icons.add,
-              color: AppColors.primaryGreen,
-              size: 20,
+            const SizedBox(width: 12),
+            Text(
+              '${widget.item['count']}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-          ),
-        ],
-      ),
+            const SizedBox(width: 12),
+            GestureDetector(
+              onTap: ()
+              async {
+                _increment();
+              await  controller.incrementCount(widget.index);
+               await controller.fetchCartItems();
+              },
+              child: Icon(
+                Icons.add,
+                color: AppColors.primaryGreen,
+                size: 20,
+              ),
+            ),
+          ],
+        ),
     );
   }
 }
@@ -414,7 +495,7 @@ class _CouponSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.fromLTRB(12, 0, 12,12),
       decoration: BoxDecoration(
         color: AppColors.secondaryGreen,
         borderRadius: BorderRadius.circular(8),
@@ -472,28 +553,30 @@ class _CouponSection extends StatelessWidget {
 class _PriceSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Price Details',
-            style: AppTextStyles.title(context),
-          ),
-          const SizedBox(height: 12),
-          _buildPriceRow('Price (32 items)', '₹1599', '₹1299'),
-          const SizedBox(height: 8),
-          _buildPriceRow('Discount', '-₹300', null),
-          const SizedBox(height: 8),
-          _buildPriceRow('Platform fee', '₹02', null, isUnderlined: true),
-          const SizedBox(height: 8),
-          _buildPriceRow('Shipping fee', '-40₹', 'Free', isUnderlined: true),
-          const SizedBox(height: 12),
-          _DashedDivider(),
-          const SizedBox(height: 12),
-          _buildPriceRow('TOTAL AMOUNT', '₹12999', null, isTotal: true),
-        ],
+    return Obx(
+        ()=> Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Price Details',
+              style: AppTextStyles.title(context),
+            ),
+            const SizedBox(height: 12),
+            _buildPriceRow('Price (${controller.cartItems.length} items)', '₹${controller.totalPrice}', '${controller.totalPrice+300}'),
+            const SizedBox(height: 8),
+            _buildPriceRow('Discount', '-₹${controller.discount}', null),
+            const SizedBox(height: 8),
+            _buildPriceRow('Platform fee', '₹0${controller.platformFee}', null, isUnderlined: true),
+            const SizedBox(height: 8),
+            _buildPriceRow('Shipping fee', 'Free', '-40₹', isUnderlined: true),
+            const SizedBox(height: 12),
+            _DashedDivider(),
+            const SizedBox(height: 12),
+            _buildPriceRow('TOTAL AMOUNT', '₹${controller.finaltotalPrice}', null, isTotal: true),
+          ],
+        ),
       ),
     );
   }
@@ -584,7 +667,7 @@ class _ProceedToBuySection extends StatelessWidget {
                 SvgPicture.asset("assets/images/discount_star.svg"),
                 const SizedBox(width: 8),
                 Text(
-                  'Saved ₹12,000 on this order',
+                  'Saved ₹${controller.discount} on this order',
                   style: TextStyle(
                     color: AppColors.primaryGreen,
                     fontSize: 14,
@@ -601,7 +684,7 @@ class _ProceedToBuySection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '₹20000',
+                      '₹${controller.totalwithDiscount}',
                       style: TextStyle(
                         color: AppColors.mediumText,
                         decoration: TextDecoration.lineThrough,
@@ -612,7 +695,7 @@ class _ProceedToBuySection extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '₹14990',
+                          '₹${controller.finaltotalPrice}',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -655,6 +738,7 @@ class _ProceedToBuySection extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(height:80 ,)
         ],
       ),
     );

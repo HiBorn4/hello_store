@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:hello_store/controllers/product_details_cotroller.dart';
 import 'package:hello_store/screens/product_details_screen/widgets/product_image_display.dart';
 import 'product_details_screen/widgets/custom_bottom_nav_bar.dart';
 import 'product_details_screen/widgets/product_info.dart';
@@ -17,12 +20,18 @@ import 'product_details_screen/widgets/customer_reviews_section.dart';
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key});
 
+
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   // int _selectedIndex = 0;
+  final item = Get.arguments;
+
+  final controller=Get.put<ProductDetailsCotroller>(ProductDetailsCotroller());
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +89,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Product Image Carousel
-            const ProductImageDisplay(),
+             ProductImageDisplay( item: item,),
 
             // Product Info
-            ProductInfo(),
+            ProductInfo(item : item),
 
             const SizedBox(height: 8),
 
@@ -142,9 +151,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
+     // bottomNavigationBar: CustomBottomNavBar(
         
-      ),
+      //),
     );
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:hello_store/controllers/homepage_controller.dart';
 import '../controllers/category_controller.dart';
 import '../widgets/category_product_widget.dart';
 import '../widgets/custom_dropdown.dart';
@@ -11,6 +14,7 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   final CategoryController _controller = CategoryController();
+  final HomePageController homePageController=Get.find<HomePageController>();
   int _currentIndex = 0;
   final PageController _bannerController = PageController();
   int _currentBannerPage = 0;
@@ -81,12 +85,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: GridRowBuilder(
-          itemCount: _controller.categories.length,
+          itemCount: homePageController.categoryList.length,
           crossAxisCount: 2,
           itemBuilder: (index) => CategoryGridItem(
             screenSize: screenSize,
-            image: _controller.categories[index]['image'],
-            title: _controller.categories[index]['name'],
+            image: homePageController.categoryList[index].img,
+            title: homePageController.categoryList[index].description?? "",
           ),
         ),
       ),
@@ -277,9 +281,12 @@ class CategoryGridItem extends StatelessWidget {
         width: screenSize.width * 0.22,
         child: Column(
           children: [
+
+
+
             ClipRRect(
               borderRadius: BorderRadius.circular(screenSize.width * 0.03),
-              child: Image.asset(
+              child: Image.network(
                 image,
                 width: screenSize.width * 0.16,
                 height: screenSize.width * 0.16,
@@ -288,7 +295,11 @@ class CategoryGridItem extends StatelessWidget {
             ),
             SizedBox(height: screenSize.height * 0.005),
             Text(
-              title,
+              title != null
+                  ? (title!.length > 6
+                  ? '${title!.substring(0, 6)}...'
+                  : title!)
+                  : 'No description',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: screenSize.width * 0.032,
