@@ -1,83 +1,41 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'dart:math' as math;
-
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hello_store/controllers/auth_controller.dart';
 import 'package:hello_store/controllers/homepage_controller.dart';
 import 'package:hello_store/screens/category_screen.dart';
 import 'package:hello_store/screens/login_screen2.dart';
-import 'package:hello_store/screens/product_details_screen.dart';
-import 'package:hello_store/screens/product_details_screen/widgets/product_details_section.dart';
-var cartitems=0.obs;
 
+var cartitems = 0.obs;
 
-class HomePage extends StatefulWidget
-{
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final authcontroller=Get.find<AuthController>();
-  final homecontroller=Get.put(HomePageController());
-
+  final authcontroller = Get.find<AuthController>();
+  final homecontroller = Get.put(HomePageController());
 
   var data = [
-    {"img": "assets/images/home/item.png", "text": "Trending"},
-    {"img": "assets/images/home/item.png", "text": "Restaurnet\n Equpiment"},
-    {"img": "assets/images/home/item.png", "text": "Commercial\n Refrigeration"},
+    {"img": "assets/images/summer.png", "text": "Trending"},
+    {"img": "assets/images/home/item.png", "text": "Restaurant\n Equpiment"},
+    {
+      "img": "assets/images/home/utensil.png",
+      "text": "Commercial\n Refrigeration",
+    },
     {"img": "assets/images/home/item.png", "text": "Electronics"},
     {"img": "assets/images/home/item.png", "text": "Meat"},
     {"img": "assets/images/home/item.png", "text": "Bridal"},
-    {"img": "assets/images/home/item.png", "text": "Furniture"}
-
+    {"img": "assets/images/home/item.png", "text": "Furniture"},
   ];
-
-
-  var seconddata=
- [
-    {"img": "assets/images/home/utensil.png", "text": "Dairy\n Products"},
-    {"img": "assets/images/home/carrot.png", "text": "Dairy\n Products"},
-    {"img": "assets/images/home/carrot.png", "text": "Dairy\n Products"},
-   {"img": "assets/images/home/carrot.png", "text": "Dairy\n Products"},
-
-  ];
-
-  var thirddata=[
-    {"img": "assets/images/home/carrot.png", "text": "Dairy\n Products"},
-    {"img": "assets/images/home/carrot.png", "text": "Dairy\n Products"},
-    {"img": "assets/images/home/carrot.png", "text": "Dairy\n Products"},
-    {"img": "assets/images/home/carrot.png", "text": "Dairy\n Products"},
-  ];
-
-
-  var fourthdummy=[
-    {"img": "assets/images/home/meat.png", "text": "All"},
-    {"img": "assets/images/home/meat.png", "text": "Vegetables"},
-    {"img": "assets/images/home/meat.png", "text": "Electronics"},
-    {"img": "assets/images/home/meat.png", "text": "Furniture"},
-    {"img": "assets/images/home/meat.png", "text": "Bridal"},
-    {"img": "assets/images/home/meat.png", "text": "Bridal"},
-  ];
-
-  var fivthdata=[
-    {"img": "assets/images/home/carrot.png", "text": "Fresh Organic Kashmir\n Apples",
-     "quant":"1","rating":"4.4","price":"189","dashedprice":"199"},
-    {"img": "assets/images/home/carrot.png", "text": "Fresh Organic Kashmir\n Apples",
-      "quant":"1","rating":"4.4","price":"189","dashedprice":"199"},
-    {"img": "assets/images/home/carrot.png", "text": "Fresh Organic Kashmir\n Apples",
-      "quant":"1","rating":"4.4","price":"189","dashedprice":"199"},
-    {"img": "assets/images/home/carrot.png", "text": "Fresh Organic Kashmir\n Apples",
-      "quant":"1","rating":"4.4","price":"189","dashedprice":"199"},
-  ];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +43,7 @@ class _HomePageState extends State<HomePage> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(top: 40),
@@ -96,182 +54,1374 @@ class _HomePageState extends State<HomePage> {
               pinned: true,
               delegate: _StickyHeaderDelegate(
                 child: Container(
-                  color: Colors.white,
-                    child: _buildHeader(context, height, width)
-                ), height: height*0.09,
-                
-              ),
-            ),
-
-
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _StickyHeaderDelegate(
-                child: Container(
-                  color: Colors.white,
-                    child: _buildSearchBar(context, height, width)
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Color(0xFFCFF4FC), Color(0xFFFAE3D1)],
+                    ),
+                  ),
+                  child: _buildAppBar(context, height, width),
                 ),
-                height: height*0.07,
+
+                height:
+                    height * 0.16, // Combined height of both previous headers
               ),
             ),
-
 
             SliverToBoxAdapter(child: _buildmainthings(context, height, width)),
-            SliverToBoxAdapter(child: _buildFlashSale(context, height, width)),
-            SliverToBoxAdapter(child: _buildBestSelling(context, height, width)),
-            SliverToBoxAdapter(child: _buildElevation(context, height, width)),
-            SliverToBoxAdapter(child: _buildCards(context, height, width)),
-            SliverToBoxAdapter(child: _buildCategory(context, height, width)),
-            SliverToBoxAdapter(child: _buildItems(context, height, width)),
-            SliverToBoxAdapter(child: _buildViewAllProducts(context, height, width)),
-            SliverToBoxAdapter(child: Divider()),
-            SliverToBoxAdapter(child: _buildTopSellingUtensils(context, height, width)),
-            SliverToBoxAdapter(child: Divider()),
-            SliverToBoxAdapter(child: _buildDealsOnElectronics(context, height, width)),
-            SliverToBoxAdapter(child: _buildViewAllProducts(context, height, width)),
-            SliverToBoxAdapter(child: Divider()),
-            SliverToBoxAdapter(child: _buildVegetableCards(context, height, width)),
-            SliverToBoxAdapter(child: _buildDiscoverProductsHeading(context, height, width)),
-            SliverToBoxAdapter(child: _buildDiscoverProducts(context, height, width)),
-            SliverToBoxAdapter(child: _buildBrandsRelatedToSearch(context, height, width)),
+            SliverToBoxAdapter(
+              child: previouslyBoughtSection(context, height, width),
+            ),
+            SliverToBoxAdapter(
+              child: bestsellerSection(context, height, width),
+            ),
+            SliverToBoxAdapter(child: buildStealDealsSection()),
+            SliverToBoxAdapter(child: buildUtensilsAndCookwareSection()),
+            SliverToBoxAdapter(child: buildGroceryAndKitchenSection()),
+            SliverToBoxAdapter(child: shopByStore(context, height, width)),
+            SliverToBoxAdapter(child: buildStealDealsHappyCulturesSection()),
+            SliverToBoxAdapter(child: buildStealDealsFootwearSection()),
+            SliverToBoxAdapter(child: buildStealDealsProtronicsSection()),
+            SliverToBoxAdapter(child: todaysEditSection(context)),
+            SliverToBoxAdapter(child: mostLovedBrandsSection(context)),
+            SliverToBoxAdapter(child: buildmostLovedBrandsSection2()),
+            SliverToBoxAdapter(child: gadgetCentralSection()),
+            SliverToBoxAdapter(child: SizedBox(height: height * 0.04)),
+            SliverToBoxAdapter(child: buildmostLovedBrandsSection2()),
+            SliverToBoxAdapter(child: SizedBox(height: height * 0.04)),
+            SliverToBoxAdapter(child: buildpinkBannerSection()),
+            SliverToBoxAdapter(child: SizedBox(height: height * 0.04)),
+            SliverToBoxAdapter(child: buildsavingsBannerSection()),
+            SliverToBoxAdapter(child: SizedBox(height: height * 0.04)),
+            SliverToBoxAdapter(child: recommendedSection(context)),
+            SliverToBoxAdapter(child: recommendedSection2(context)),
+
             SliverToBoxAdapter(child: SizedBox(height: height * 0.15)),
           ],
         ),
       ),
     );
-
-
   }
 
-
-  Widget _buildHeader(BuildContext context,var height,var width)
-  {
+  Widget _buildAppBar(BuildContext context, var height, var width) {
     GlobalKey _buttonKey = GlobalKey();
-   return Padding(
-     padding: const EdgeInsets.fromLTRB(12, 8, 12,8),
-     child: Container(
-           child: Row(
-             children: [
-               Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [
-                   Text("11 minutes", textAlign: TextAlign.left, style: TextStyle(
-                       color: Color.fromRGBO(25, 25, 25, 1),
-                       fontFamily: 'bold',
-                       fontSize: height * 0.03,
-                       letterSpacing: 0,
-                       fontWeight: FontWeight.bold,
-                       height: 1
-                   ),),
-                   SizedBox(height: height*0.009,),
-                   Row(
-                     children: [
-                       Obx(
-                       ()=> Text('${homecontroller.street} ${homecontroller.sublocality} ${homecontroller.locality}'
-                             , textAlign: TextAlign.center, style: TextStyle(
-                             color: Color.fromRGBO(61, 61, 61, 1),
-                             fontFamily: 'regular',
-                             fontSize: height*0.015,
-                             letterSpacing: 0,
-                             fontWeight: FontWeight.normal,
-                             height: 1
-                         ),),
-                       ),
-                       SizedBox(width: width*0.01,),
-                       SvgPicture.asset("assets/images/chevron_down.svg")
-                     ],
-                   )
-                 ],
-               ),
-               Spacer(),
-              GestureDetector(
+    return Column(
+      children: [
+        // Header Section
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+          child: Container(
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "HELLO ",
+                          style: GoogleFonts.outfit(
+                            color: Color(0xFF0118BAB),
+                            fontSize: height * 0.024,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "STORES",
+                          style: GoogleFonts.outfit(
+                            color: Color(0xFFF15A29),
+                            fontSize: height * 0.024,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: height * 0.009),
+                    Row(
+                      children: [
+                        Obx(
+                          () => Text(
+                            '${homecontroller.street} ${homecontroller.sublocality} ${homecontroller.locality}',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.outfit(
+                              color: Color.fromRGBO(61, 61, 61, 1),
+                              fontSize: height * 0.015,
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.normal,
+                              height: 1,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: width * 0.01),
+                        SvgPicture.asset("assets/images/chevron_down.svg"),
+                      ],
+                    ),
+                  ],
+                ),
+                Spacer(),
+                GestureDetector(
                   key: _buttonKey,
                   onTap: () {
                     _showPopupAboveButton(context, _buttonKey);
                   },
-                  child: Icon(Icons.person,color: Colors.black,size: height*0.04,)
-              )
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Icon(
+                          Icons.person_outline,
+                          color: Colors.black,
+                          size: height * 0.04,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
 
-             ],
-           ),
-     ),
-   );
+        // Search Bar Section
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          child: TextField(
+            style: GoogleFonts.outfit(fontSize: height * 0.017),
+            decoration: InputDecoration(
+              hintText: 'Search "pooja needs"',
+              prefixIcon: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: SvgPicture.asset('assets/images/home/search.svg'),
+              ),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 4, 8, 4),
+                child: SvgPicture.asset(
+                  'assets/images/home/Frame 1321314348.svg',
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Colors.grey, width: 0.5),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Colors.black, width: 1),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 12,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
-  Widget _buildSearchBar(BuildContext context,var height, var width)
-  {
-   return   Padding(
-     padding: const EdgeInsets.fromLTRB(12,0,12,0),
-     child: TextField(
-       style: TextStyle(
-         fontSize: height*0.017,
-         fontFamily: 'regular'
-       ),
-       decoration: InputDecoration(
-         hintText: 'Search "pooja needs" ',
-         prefixIcon: Padding(
-           padding: const EdgeInsets.all(12.0),
-           child: SvgPicture.asset(
-             'assets/images/home/search.svg',
-           ),
-         ),
-         suffixIcon:
-             Padding(
-               padding: const EdgeInsets.fromLTRB(0,4,8,4),
-               child: SvgPicture.asset(
-                 'assets/images/home/Frame 1321314348.svg',
-               ),
-         ),
-         enabledBorder: OutlineInputBorder(
-           borderRadius: BorderRadius.circular(12),
-           borderSide: const BorderSide(
-             color: Colors.grey, // Thin black border
-             width: 0.5,
-           ),
-         ),
-         focusedBorder: OutlineInputBorder(
-           borderRadius: BorderRadius.circular(12),
-           borderSide: const BorderSide(
-             color: Colors.black,
-             width: 1,
-           ),
-         ),
-         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-       ),
-     ),
-   );
-  }
-  Widget _buildmainthings(BuildContext context,var height, var width)
-  {
-    return  Container(
-      height: height*0.166,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(8,8,0,8),
-        child: ListView.builder(
-          itemCount: data.length,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: ()
-              {
-                Get.to(()=>CategoryScreen());
+  Widget _buildmainthings(BuildContext context, var height, var width) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Category header with "See all" text
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Category",
+                  style: GoogleFonts.inter(
+                    fontSize: height * 0.02,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xff333333),
+                  ),
+                ),
+              ),
+              Text(
+                "See all",
+                style: GoogleFonts.inter(
+                  fontSize: height * 0.014,
+                  color: Color(0xff666666),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        Container(
+          height: height * 0.145,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 0, 8),
+            child: ListView.builder(
+              itemCount: data.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    Get.to(() => CategoryScreen());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: height * 0.08,
+                            child: Image.asset("${data[index]['img']}"),
+                          ),
+                          SizedBox(height: height * 0.007),
+                          Text(
+                            "${data[index]['text']}",
+                            style: GoogleFonts.outfit(fontSize: height * 0.015),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
               },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 8),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // PREVIOUSLY BOUGHT SECTION
+  Widget previouslyBoughtSection(BuildContext context, var height, var width) {
+    var productData = [
+      {
+        "img": "assets/images/home/frame4.png",
+        "brand": "HAPPY CULTURES",
+        "name": "great sleep awaits",
+        "currentPrice": "₹189",
+        "originalPrice": "₹199",
+        "discount": "53% off",
+        "purchaseCount": "20+ bought in past month",
+        "rating": "4.3",
+      },
+      {
+        "img": "assets/images/home/stove.png",
+        "brand": "HAPPY CULTURES",
+        "name": "great sleep awaits",
+        "currentPrice": "₹189",
+        "originalPrice": "₹199",
+        "discount": "53% off",
+        "purchaseCount": "20+ bought in past month",
+        "rating": "4.3",
+      },
+      {
+        "img": "assets/images/home/frame4.png",
+        "brand": "HAPPY CULTURES",
+        "name": "great sleep awaits",
+        "currentPrice": "₹189",
+        "originalPrice": "₹199",
+        "discount": "53% off",
+        "purchaseCount": "20+ bought in past month",
+        "rating": "4.3",
+      },
+      {
+        "img": "assets/images/home/stove.png",
+        "brand": "HAPPY CULTURES",
+        "name": "great sleep awaits",
+        "currentPrice": "₹189",
+        "originalPrice": "₹199",
+        "discount": "53% off",
+        "purchaseCount": "20+ bought in past month",
+        "rating": "4.3",
+      },
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "PREVIOUSLY BOUGHT",
+                style: GoogleFonts.inter(
+                  fontSize: height * 0.018,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xff333333),
+                ),
+              ),
+              Text(
+                "VIEW ALL",
+                style: GoogleFonts.inter(
+                  fontSize: height * 0.014,
+                  color: Color(0xff666666),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: height * 0.32,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.only(left: 12),
+            itemCount: productData.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 12.0),
                 child: Container(
-                   child: Column(
-                     children: [
-                       Container(
-                           height: height*0.08,
-                           child: Image.asset("${data[index]['img']}")
-                       ),
-                       SizedBox(height: height*0.007,),
-                       Text("${data[index]['text']}",style: TextStyle(
-                         fontFamily: 'regular',
-                         fontSize: height*0.015
-                       ),)
-                     ],
-                   ),
+                  width: width * 0.45,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey.shade300, width: 1),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Product image with rating and add button overlay
+                      Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 135,
+                              width: 135,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                ),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                ),
+                                child: Image.asset(
+                                  "${productData[index]['img']}",
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Rating badge
+                          Positioned(
+                            bottom: 8,
+                            left: 8,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.white,
+                                    size: 14,
+                                  ),
+                                  SizedBox(width: 2),
+                                  Text(
+                                    "${productData[index]['rating']}",
+                                    style: GoogleFonts.outfit(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // Add to cart button
+                          Positioned(
+                            bottom: 8,
+                            right: 8,
+                            child: Container(
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFF4BA8E),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                "ADD",
+                                style: GoogleFonts.outfit(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Product details
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Brand name
+                            Text(
+                              "${productData[index]['brand']}",
+                              style: GoogleFonts.outfit(
+                                fontSize: 10,
+                                color: Color(0xff808080),
+                                fontWeight: FontWeight.w400,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: 2),
+                            // Product name
+                            Text(
+                              "${productData[index]['name']}",
+                              style: GoogleFonts.outfit(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xff333333),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: 4),
+                            // Price information
+                            Row(
+                              children: [
+                                Text(
+                                  "${productData[index]['currentPrice']}",
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(width: 4),
+                                Text(
+                                  "${productData[index]['originalPrice']}",
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 12,
+                                    decoration: TextDecoration.lineThrough,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(width: 4),
+                                Text(
+                                  "${productData[index]['discount']}",
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 12,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4),
+                            // Purchase history
+                            Text(
+                              "${productData[index]['purchaseCount']}",
+                              style: GoogleFonts.outfit(
+                                fontSize: 10,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget bestsellerSection(BuildContext context, var height, var width) {
+    // Category data with appropriate labels from the design
+    var categoryData = [
+      {"img": "assets/images/home/fruits.png", "text": "Grocery and veggies"},
+      {
+        "img": "assets/images/home/equipements.png",
+        "text": "Restaurant equipments",
+      },
+      {"img": "assets/images/home/fruits.png", "text": "Vegetables and fruits"},
+      {"img": "assets/images/home/fruits.png", "text": "Onions and cereals"},
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 28, 12, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "BEST SELLING",
+                style: GoogleFonts.inter(
+                  fontSize: height * 0.018,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xff333333),
+                ),
+              ),
+              Row(
+                children: [
+                  Icon(Icons.arrow_forward, size: 20, color: Color(0xff666666)),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 1.4,
+            ),
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300, width: 1),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Image.asset(
+                          "${categoryData[index]['img']}",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withOpacity(0.6),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Category text at bottom
+                      Positioned(
+                        bottom: 10,
+                        left: 10,
+                        right: 10,
+                        child: Text(
+                          "${categoryData[index]['text']}",
+                          style: GoogleFonts.outfit(
+                            fontSize: height * 0.015,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildStealDealsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          child: Text(
+            'STEAL DEALS: LIMITED UNITS ONLY',
+            style: GoogleFonts.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        SizedBox(height: 12),
+        SizedBox(
+          height: 160,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            physics: BouncingScrollPhysics(),
+            child: Row(
+              children: [
+                // First limited time offer card
+                buildStealDealCard(),
+                SizedBox(width: 16), // Add spacing between cards
+                // Second card
+                buildStealDealCard(),
+                SizedBox(width: 8),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildStealDealCard() {
+    return Container(
+      width: 280,
+      height: 154,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFFFABA8E), Color(0xFFCFF2FC)],
+        ),
+      ),
+      child: Stack(
+        children: [
+          // Text content on the left side
+          Positioned(
+            left: 20,
+            top: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Limited time\noffer',
+                  style: GoogleFonts.outfit(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                SizedBox(height: 8),
+                RichText(
+                  text: TextSpan(
+                    style: GoogleFonts.outfit(color: Colors.black),
+                    children: [
+                      TextSpan(
+                        text: 'offer upto ',
+                        style: GoogleFonts.outfit(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      TextSpan(
+                        text: '70%',
+                        style: GoogleFonts.outfit(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Fruit image on the right side
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: Image.asset(
+              'assets/images/home/offer.png',
+              width: 220,
+              height: 170,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Icon(
+                    Icons.shopping_basket,
+                    size: 60,
+                    color: Colors.black38,
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 2. Utensils and Cookware Section Widget
+
+  Widget buildUtensilsAndCookwareSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: const Text(
+            'UTENSILS & COOKWARE',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildCategoryCircle(
+                    imagePath: 'assets/images/home/fruits.png',
+                    backgroundImagePath: 'assets/images/home/pink.png',
+                    label: 'Vegetables and\nfruits',
+                  ),
+                  buildCategoryCircle(
+                    imagePath: 'assets/images/home/cereals.png',
+                    backgroundImagePath: 'assets/images/home/pink.png',
+                    label: 'Dairy products',
+                  ),
+                  buildCategoryCircle(
+                    imagePath: 'assets/images/home/fruits.png',
+                    backgroundImagePath: 'assets/images/home/pink.png',
+                    label: 'Grains and\ncereals',
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildCategoryCircle(
+                    imagePath: 'assets/images/home/fruits.png',
+                    backgroundImagePath: 'assets/images/home/pink.png',
+                    label: 'Vegetables and\nfruits',
+                  ),
+                  buildCategoryCircle(
+                    imagePath: 'assets/images/home/cereals.png',
+                    backgroundImagePath: 'assets/images/home/pink.png',
+                    label: 'Dairy products',
+                  ),
+                  buildCategoryCircle(
+                    imagePath: 'assets/images/home/fruits.png',
+                    backgroundImagePath: 'assets/images/home/pink.png',
+                    label: 'Grains and\ncereals',
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildCategoryCircle({
+    required String imagePath,
+    required String backgroundImagePath,
+    required String label,
+  }) {
+    return Column(
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: AssetImage(backgroundImagePath),
+              fit: BoxFit.cover,
+            ),
+          ),
+          // Overlay the main image on top
+          child: Center(
+            child: Image.asset(
+              imagePath,
+              width: 50,
+              height: 50,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Center(
+                  child: Icon(
+                    Icons.image_not_supported,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+        SizedBox(height: 8),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+        ),
+      ],
+    );
+  }
+
+  // 3. Grocery and Kitchen Section Widget
+  Widget buildGroceryAndKitchenSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Text(
+            'GROCERY & KITCHEN',
+            style: GoogleFonts.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildKitchenCategoryCircle(
+                    imagePath: 'assets/images/home/fruits.png',
+                    backgroundImagePath: 'assets/images/home/grey.png',
+                    label: 'Vegetables and\nfruits',
+                  ),
+                  buildKitchenCategoryCircle(
+                    imagePath: 'assets/images/home/cereals.png',
+                    backgroundImagePath: 'assets/images/home/grey.png',
+                    label: 'Dairy\nproducts',
+                  ),
+                  buildKitchenCategoryCircle(
+                    imagePath: 'assets/images/home/fruits.png',
+                    backgroundImagePath: 'assets/images/home/grey.png',
+                    label: 'Grains and\ncereals',
+                  ),
+                  buildKitchenCategoryCircle(
+                    imagePath: 'assets/images/home/cereals.png',
+                    backgroundImagePath: 'assets/images/home/grey.png',
+                    label: 'Meat and\npoultry',
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildKitchenCategoryCircle(
+                    imagePath: 'assets/images/home/fruits.png',
+                    backgroundImagePath: 'assets/images/home/grey.png',
+                    label: 'Vegetables and\nfruits',
+                  ),
+                  buildKitchenCategoryCircle(
+                    imagePath: 'assets/images/home/cereals.png',
+                    backgroundImagePath: 'assets/images/home/grey.png',
+                    label: 'Dairy\nproducts',
+                  ),
+                  buildKitchenCategoryCircle(
+                    imagePath: 'assets/images/home/fruits.png',
+                    backgroundImagePath: 'assets/images/home/grey.png',
+                    label: 'Grains and\ncereals',
+                  ),
+                  buildKitchenCategoryCircle(
+                    imagePath: 'assets/images/home/cereals.png',
+                    backgroundImagePath: 'assets/images/home/grey.png',
+                    label: 'Meat and\npoultry',
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildKitchenCategoryCircle({
+    required String imagePath,
+    required String backgroundImagePath,
+    required String label,
+  }) {
+    return Column(
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: AssetImage(backgroundImagePath),
+              fit: BoxFit.cover,
+            ),
+          ),
+          // Overlay the main image on top
+          child: Center(
+            child: Image.asset(
+              imagePath,
+              width: 50,
+              height: 50,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Center(
+                  child: Icon(
+                    Icons.image_not_supported,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+        SizedBox(height: 8),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w500),
+        ),
+      ],
+    );
+  }
+
+  Widget shopByStore(BuildContext context, var height, var width) {
+    // Category data with appropriate labels from the design
+    var categoryData = [
+      {"img": "assets/images/home/fruits.png", "text": "Grocery and veggies"},
+      {
+        "img": "assets/images/home/equipements.png",
+        "text": "Restaurant equipments",
+      },
+      {"img": "assets/images/home/fruits.png", "text": "Vegetables and fruits"},
+      {"img": "assets/images/home/fruits.png", "text": "Onions and cereals"},
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 28, 12, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "SHOP BY STORE",
+                style: GoogleFonts.inter(
+                  fontSize: height * 0.018,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xff333333),
+                ),
+              ),
+              Row(
+                children: [
+                  Icon(Icons.arrow_forward, size: 20, color: Color(0xff666666)),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 1.4,
+            ),
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300, width: 1),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Image.asset(
+                          "${categoryData[index]['img']}",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withOpacity(0.6),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Category text at bottom
+                      Positioned(
+                        bottom: 10,
+                        left: 10,
+                        right: 10,
+                        child: Text(
+                          "${categoryData[index]['text']}",
+                          style: GoogleFonts.outfit(
+                            fontSize: height * 0.015,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // First Steal Deals Section - Happy Cultures Cards
+  Widget buildStealDealsHappyCulturesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Text(
+            'STEAL DEALS: LIMITED UNITS ONLY',
+            style: GoogleFonts.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        SizedBox(height: 12),
+        Container(
+          height: 360,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  buildHappyCulturesCard(
+                    imagePath:
+                        'assets/images/home/frame4.png', // Main product image
+                    backgroundImagePath:
+                        'assets/images/home/pink2.png', // Background image
+                    title: 'HAPPY CULTURES',
+                    description: 'great sleep awaits',
+                    price: '₹189',
+                    originalPrice: '₹199',
+                    discount: '5% off',
+                  ),
+                  SizedBox(width: 12), // Gap between cards
+                  buildHappyCulturesCard(
+                    imagePath:
+                        'assets/images/home/frame4.png', // Main product image
+                    backgroundImagePath:
+                        'assets/images/home/pink2.png', // Background image
+                    title: 'HAPPY CULTURES',
+                    description: 'great sleep awaits',
+                    price: '₹189',
+                    originalPrice: '₹199',
+                    discount: '5% off',
+                  ),
+                  SizedBox(width: 12),
+                  buildHappyCulturesCard(
+                    imagePath:
+                        'assets/images/home/frame4.png', // Main product image
+                    backgroundImagePath:
+                        'assets/images/home/pink2.png', // Background image
+                    title: 'HAPPY CULTURES',
+                    description: 'great sleep awaits',
+                    price: '₹189',
+                    originalPrice: '₹199',
+                    discount: '5% off',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Happy Cultures Card Widget
+  Widget buildHappyCulturesCard({
+    required String imagePath,
+    required String title,
+    required String description,
+    required String price,
+    required String originalPrice,
+    required String discount,
+    String backgroundImagePath = 'assets/images/home/pink_background.png',
+  }) {
+    return Container(
+      width: 220, // Fixed width as per specs
+      height: 360, // Fixed height as per specs
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Product Image Area with Background and Main Image
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            child: Container(
+              width: 220, // Image width as per specs
+              height: 270, // Image height as per specs
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(backgroundImagePath),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Center(
+                child: Image.asset(
+                  imagePath,
+                  width:
+                      160, // Adjust size as needed for the main product image
+                  height: 160,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(
+                      Icons.image_not_supported,
+                      color: Colors.white,
+                      size: 40,
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          // Product Details
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.outfit(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+                SizedBox(height: 2),
+                Text(
+                  description,
+                  style: GoogleFonts.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      price,
+                      style: GoogleFonts.outfit(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      originalPrice,
+                      style: GoogleFonts.outfit(
+                        fontSize: 14,
+                        decoration: TextDecoration.lineThrough,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      discount,
+                      style: GoogleFonts.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Second Steal Deals Section - Footwear Banner
+  Widget buildStealDealsFootwearSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Text(
+            'STEAL DEALS: LIMITED UNITS ONLY',
+            style: GoogleFonts.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        SizedBox(height: 12),
+        Container(
+          height: 332, // Fixed height as per specs
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  buildPromotionalBanner(
+                    imagePath: 'assets/images/home/footwear.png',
+                  ),
+                  SizedBox(width: 12), // Gap between banners
+                  buildPromotionalBanner(
+                    imagePath: 'assets/images/home/footwear.png',
+                  ),
+                  SizedBox(width: 12),
+                  buildPromotionalBanner(
+                    imagePath: 'assets/images/home/footwear.png',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Third Steal Deals Section - Protronics Banner
+  Widget buildStealDealsProtronicsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Text(
+            'STEAL DEALS: LIMITED UNITS ONLY',
+            style: GoogleFonts.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        SizedBox(height: 12),
+        Container(
+          height: 332, // Fixed height as per specs
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  buildPromotionalBanner(
+                    imagePath: 'assets/images/home/protronics.png',
+                  ),
+                  SizedBox(width: 12), // Gap between banners
+                  buildPromotionalBanner(
+                    imagePath: 'assets/images/home/protronics.png',
+                  ),
+                  SizedBox(width: 12),
+                  buildPromotionalBanner(
+                    imagePath: 'assets/images/home/protronics.png',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Promotional Banner Widget for the second and third sections
+  Widget buildPromotionalBanner({required String imagePath}) {
+    return Container(
+      width: 280, // Fixed width as per specs
+      height: 332, // Fixed height as per specs
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Image.asset(
+          imagePath,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              width: 280,
+              height: 332,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.image_not_supported,
+                  color: Colors.grey,
+                  size: 40,
                 ),
               ),
             );
@@ -280,2422 +1430,861 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  Widget _buildFlashSale(BuildContext context,var height, var width)
-  {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12,10),
-      child: Container(
-      //  height: height*0.56,
-        width: width,
-        color: Color(0xFFE7F6EF),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 0,0),
-          child: Column(
-            children: [
-              Text('Limited time offer', textAlign: TextAlign.center, style: TextStyle(
-                  color: Color.fromRGBO(0, 0, 0, 1),
-                  fontFamily: 'bold',
-                  fontSize: height*0.02,
-                  letterSpacing: 0 ,
-                  fontWeight: FontWeight.normal,
-                  height: 1.5
-              ),),
-              Container(
-                 height: height*0.13,
-                  width: width,
-                  child: Image.asset('assets/images/home/flashsale.png')
-              ),
-              Text('Up to 90% Off', textAlign: TextAlign.center, style: TextStyle(
-                  color: Color.fromRGBO(0, 0, 0, 1),
-                  fontFamily: 'bold',
-                  fontSize: 14,
-                  letterSpacing: 0 ,
-                  fontWeight: FontWeight.normal,
-                  height: 1.5
-              ),),
-              SizedBox(height: height*0.01,),
-              Container(
-                height: height*0.16,
-                child: ListView.builder(
-                  itemCount: seconddata.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Container(
-                                height: height*0.07,
-                                child: Image.asset("${seconddata[index]['img']}")
-                            ),
-                            SizedBox(height: height*0.007,),
-                            Text('Upto 50% off', textAlign: TextAlign.center, style: TextStyle(
-                                color: Color.fromRGBO(13, 118, 0, 1),
-                                fontFamily: 'bold',
-                                fontSize: height*0.014,
-                                letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                fontWeight: FontWeight.normal,
-                                height: 1.5
-                            ),),
-                            SizedBox(height: height*0.007,),
 
-                            Text("${seconddata[index]['text']}",style: TextStyle(
-                                fontFamily: 'regular',
-                                fontSize: height*0.015
-                            ),)
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: height*0.01,),
-
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Container(
-                  height: height*0.16,
-                  child: ListView.builder(
-                    itemCount: thirddata.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: Container(
-                          child: Column(
-                            children: [
-                              Container(
-                                  height: height*0.07,
-                                  child: Image.asset("${thirddata[index]['img']}")
-                              ),
-                              SizedBox(height: height*0.007,),
-                              Text('Upto 50% off', textAlign: TextAlign.center, style: TextStyle(
-                                  color: Color.fromRGBO(13, 118, 0, 1),
-                                  fontFamily: 'bold',
-                                  fontSize: height*0.014,
-                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                  fontWeight: FontWeight.normal,
-                                  height: 1.5
-                              ),),
-                              SizedBox(height: height*0.007,),
-                              Text("${thirddata[index]['text']}",style: TextStyle(
-                                  fontFamily: 'light',
-                                  fontSize: height*0.015
-                              ),)
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-  Widget _buildBestSelling(BuildContext context,var height, var width)
-  {
+  Widget todaysEditSection(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SvgPicture.asset("assets/images/home/crown.svg"),
-        SizedBox(height: height*0.015,),
-        Text('Best selling', textAlign: TextAlign.center, style: TextStyle(
-            color: Color.fromRGBO(87, 87, 87, 1),
-            fontFamily: 'regular',
-            fontSize: height*0.018,
-            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-            fontWeight: FontWeight.w300,
-            height: 1
-        ),),
-        SizedBox(height: height*0.01,),
-
-        Container(
-          width: width,
-          height: height*0.05,
-
-          decoration: BoxDecoration(
-            gradient : LinearGradient(
-                colors: [Color.fromRGBO(242, 196, 79, 0),Color.fromRGBO(242, 196, 79, 1),Color.fromRGBO(242, 196, 79, 0)]
-            ),
-          ),
-          child:  Center(
-            child: Text('Fast-Moving Essentials', textAlign: TextAlign.center, style: TextStyle(
-                color: Color.fromRGBO(0, 0, 0, 1),
-                fontFamily: 'regular',
-                fontSize: height*0.016,
-                letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                fontWeight: FontWeight.w600,
-                height: 1
-            ),),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+          child: Text(
+            "TODAY’S EDIT: EXCLUSIVE DEALS UNLOCKED",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
-
-
-    ]
-    );
-  }
-  Widget _buildElevation(BuildContext context,var height, var width)
-  { 
-    return  Padding(
-      padding: const EdgeInsets.fromLTRB(8, 15, 8, 25),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              InkWell(
-                onTap: ()
-                {
-                  Get.to(()=>ProductDetailsScreen());
-                },
-                child: Container(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: height*0.2,
-                          width: width*0.42,
-                          child: Image.asset("assets/images/home/redbull.png"),
-                        ),
-                      ),
-                      SizedBox(height: height*0.005,),
-                      Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                          fontFamily: 'bold',
-                          fontSize: height*0.016,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1.3333333333333333
-                      ),),
-                      SizedBox(height: height*0.005,),
-                      Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
-                          color: Color.fromRGBO(102, 102, 102, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.013,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: ()
-                {
-                  Get.to(()=>ProductDetailsScreen());
-                },
-                child: Container(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: height*0.2,
-                          width: width*0.42,
-                          child: Image.asset("assets/images/home/redbull.png"),
-                        ),
-                      ),
-                      SizedBox(height: height*0.005,),
-                      Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                          fontFamily: 'bold',
-                          fontSize: height*0.016,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1.3333333333333333
-                      ),),
-                      SizedBox(height: height*0.005,),
-                      Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
-                          color: Color.fromRGBO(102, 102, 102, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.013,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: height*0.01,),
-          Row(
-            children: [
-              InkWell(
-                onTap: ()
-                {
-                  Get.to(()=>ProductDetailsScreen());
-                },
-                child: Container(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: height*0.2,
-                          width: width*0.42,
-                          child: Image.asset("assets/images/home/redbull.png"),
-                        ),
-                      ),
-                      SizedBox(height: height*0.005,),
-                      Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                          fontFamily: 'bold',
-                          fontSize: height*0.016,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1.3333333333333333
-                      ),),
-                      SizedBox(height: height*0.005,),
-                      Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
-                          color: Color.fromRGBO(102, 102, 102, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.013,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: ()
-                {
-                  Get.to(()=>ProductDetailsScreen());
-                },
-                child: Container(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: height*0.2,
-                          width: width*0.42,
-                          child: Image.asset("assets/images/home/redbull.png"),
-                        ),
-                      ),
-                      SizedBox(height: height*0.005,),
-                      Text('Elevation series \n Shelving', textAlign: TextAlign.center, style: TextStyle(
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                          fontFamily: 'bold',
-                          fontSize: height*0.016,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1.3333333333333333
-                      ),),
-                      SizedBox(height: height*0.005,),
-                      Text('Maximize Work space', textAlign: TextAlign.center, style: TextStyle(
-                          color: Color.fromRGBO(102, 102, 102, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.013,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-  Widget _buildCards(BuildContext context,var height, var width)
-  {
-    return Column(
-     children: [
-       Container(
-          height: height*0.23,
-           width: width,
-           child: Image.asset("assets/images/home/shopping.png")
-       ),
-       SizedBox(height: height*0.02,),
-       Container(
-           height: height*0.23,
-           width: width,
-           child: Image.asset("assets/images/home/fresh.png")
-       ),
-     ],
-    );
-  }
-  Widget _buildCategory(BuildContext context,var height, var width)
-  {
-    return  Column(
-      children: [
-        Container(
-          height: height*0.11,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 5, 0, 0),
-            child: ListView.builder(
-              itemCount: fourthdummy.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: height * 0.055,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.asset(
-                              "${fourthdummy[index]['img']}",
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: height*0.007,),
-                        Text("${fourthdummy[index]['text']}",style: TextStyle(
-                            fontFamily: 'light',
-                            fontSize: height*0.015
-                        ),)
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Row(children: List.generate(2, (index) => _productCard())),
         ),
-        Divider(height: 0)
       ],
     );
   }
-  Widget _buildItems(BuildContext context,var height, var width)
-  {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: Column(
-          children: [
-            Container(
-              height: height*0.38,
-              child: ListView.builder(
-                itemCount: 5,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: ()
-                    {
-                      Get.to(()=>ProductDetailsScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                      child: Container(
-                        height: height*0.4,
-                        width: width*0.36,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Stack(
-                                children: [
-                                  Container(
-                                    height: height*0.23,
-                                    width: width*0.35,
-                                    child: Image.asset("assets/images/home/carrot2.png"),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.grey.withOpacity(0.1)
-                                    ),
-                                  ),
-                                  Positioned(
-                                      child:    Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius : BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            topRight: Radius.circular(0),
-                                            bottomLeft: Radius.circular(0),
-                                            bottomRight: Radius.circular(8),
-                                          ),
-                                          color : Color.fromRGBO(200, 3, 51, 1),
-                                        ),
-                                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
 
-                                          children: <Widget>[
-                                            Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                                color: Color.fromRGBO(255, 255, 255, 1),
-                                                fontFamily: 'Segoe UI',
-                                                fontSize: height*0.015,
-                                                letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                                fontWeight: FontWeight.normal,
-                                                height: 1
-                                            ),),
-
-                                          ],
-                                        ),
-                                      )
-                                  ),
-                                  Positioned(
-                                      bottom: 10,
-                                      right: 10,
-                                      child:  Container(
-                                        width: width*0.15,
-                                        height: height*0.04,
-
-                                        decoration: BoxDecoration(
-                                            color: Colors.yellow,
-                                            borderRadius: BorderRadius.circular(8)
-                                        ),
-                                        child:
-                                        Center(
-                                            child: Text('Add', textAlign: TextAlign.left, style: TextStyle(
-                                                color: Color.fromRGBO(0, 0, 0, 1),
-                                                fontFamily: 'Poppins',
-                                                fontSize: 10,
-                                                letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                                fontWeight: FontWeight.normal,
-                                                height: 1
-                                            ),)
-                                        ),
-
-                                      )
-                                  )
-                                ]
-                            ),
-                            SizedBox(height: height*0.01,),
-                            Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                                color: Color.fromRGBO(25, 25, 25, 1),
-                                fontFamily: 'regular',
-                                fontSize: height*0.013,
-                                letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                fontWeight: FontWeight.normal,
-                                height: 1
-                            ),),
-                            SizedBox(height: height*0.01,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('1kg', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(102, 102, 102, 1),
-                                    fontFamily: 'regular',
-                                    fontSize: height*0.013,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1
-                                ),),
-                                Spacer(),
-                                Text('Option', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(31, 121, 211, 1),
-                                    fontFamily: 'regular',
-                                    fontSize: height*0.013,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1
-                                ),)
-                              ],
-                            ),
-                            SizedBox(height: height*0.01,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('₹189',
-                                  style: TextStyle(
-                                      fontSize: height*0.020,
-                                      fontFamily: 'regular'
-                                  ),
-                                ),
-                                SizedBox(width: width*0.02,),
-                                Text('₹199',
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontSize: height*0.020,
-                                    fontFamily: 'regular',
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                            SizedBox(width: width*0.02,),
-                            Text('Tomarrow 7AM-11AM',
-                              style: TextStyle(
-                                  fontSize: height*0.012,
-                                  fontFamily: 'regular'
-                              ),
-                            ),
-
-
-
-
-
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Container(
-              height: height*0.38,
-              child: ListView.builder(
-                itemCount: 5,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: ()
-                    {
-                      Get.to(()=>ProductDetailsScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                        child: Container(
-                          height: height*0.4,
-                          width: width*0.36,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Stack(
-                                  children: [
-                                    Container(
-                                      height: height*0.23,
-                                      width: width*0.35,
-                                      child: Image.asset("assets/images/home/carrot2.png"),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          color: Colors.grey.withOpacity(0.1)
-                                      ),
-                                    ),
-                                    Positioned(
-                                        child:    Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius : BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              topRight: Radius.circular(0),
-                                              bottomLeft: Radius.circular(0),
-                                              bottomRight: Radius.circular(8),
-                                            ),
-                                            color : Color.fromRGBO(200, 3, 51, 1),
-                                          ),
-                                          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-
-                                            children: <Widget>[
-                                              Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                                  color: Color.fromRGBO(255, 255, 255, 1),
-                                                  fontFamily: 'Segoe UI',
-                                                  fontSize: height*0.015,
-                                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                                  fontWeight: FontWeight.normal,
-                                                  height: 1
-                                              ),),
-
-                                            ],
-                                          ),
-                                        )
-                                    ),
-                                    Positioned(
-                                        bottom: 10,
-                                        right: 10,
-                                        child:  Container(
-                                          width: width*0.15,
-                                          height: height*0.04,
-
-                                          decoration: BoxDecoration(
-                                              color: Colors.yellow,
-                                              borderRadius: BorderRadius.circular(8)
-                                          ),
-                                          child:
-                                          Center(
-                                              child: Text('Add', textAlign: TextAlign.left, style: TextStyle(
-                                                  color: Color.fromRGBO(0, 0, 0, 1),
-                                                  fontFamily: 'Poppins',
-                                                  fontSize: 10,
-                                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                                  fontWeight: FontWeight.normal,
-                                                  height: 1
-                                              ),)
-                                          ),
-
-                                        )
-                                    )
-                                  ]
-                              ),
-                              SizedBox(height: height*0.01,),
-                              Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                                  color: Color.fromRGBO(25, 25, 25, 1),
-                                  fontFamily: 'regular',
-                                  fontSize: height*0.013,
-                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                  fontWeight: FontWeight.normal,
-                                  height: 1
-                              ),),
-                              SizedBox(height: height*0.01,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text('1kg', textAlign: TextAlign.left, style: TextStyle(
-                                      color: Color.fromRGBO(102, 102, 102, 1),
-                                      fontFamily: 'regular',
-                                      fontSize: height*0.013,
-                                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1
-                                  ),),
-                                  Spacer(),
-                                  Text('Option', textAlign: TextAlign.left, style: TextStyle(
-                                      color: Color.fromRGBO(31, 121, 211, 1),
-                                      fontFamily: 'regular',
-                                      fontSize: height*0.013,
-                                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1
-                                  ),)
-                                ],
-                              ),
-                              SizedBox(height: height*0.01,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text('₹189',
-                                    style: TextStyle(
-                                        fontSize: height*0.020,
-                                        fontFamily: 'regular'
-                                    ),
-                                  ),
-                                  SizedBox(width: width*0.02,),
-                                  Text('₹199',
-                                    style: TextStyle(
-                                      color: Colors.black.withOpacity(0.5),
-                                      fontSize: height*0.020,
-                                      fontFamily: 'regular',
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-                              SizedBox(width: width*0.02,),
-                              Text('Tomarrow 7AM-11AM',
-                                style: TextStyle(
-                                    fontSize: height*0.012,
-                                    fontFamily: 'regular'
-                                ),
-                              ),
-
-
-
-
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-    );
-  }
-  Widget _buildViewAllProducts(BuildContext context,var height, var width)
-  {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 8, 0,0),
+  Widget _productCard() {
+    return Container(
+      width: 160,
+      margin: const EdgeInsets.symmetric(horizontal: 6),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Column(
         children: [
-          Row(
-            children:
-            [
-              Text('View all Products', textAlign: TextAlign.left, style: TextStyle(
-                  color: Color.fromRGBO(13, 118, 0, 1),
-                  fontFamily: 'Intel',
-                  fontSize: height*0.022,
-                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                  fontWeight: FontWeight.w700,
-                  height: 1
-              ),),
-              SizedBox(width: width*0.05,),
-              Icon(Icons.chevron_right,color: Color.fromRGBO(13, 118, 0, 1),)
-            ],
+          const SizedBox(height: 8),
+          const Text(
+            "IN SPOTLIGHT",
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: height*0.01,),
+          Image.asset(
+            "assets/images/home/frame4.png", // Replace with your asset
+            height: 100,
+          ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("HAPPY CULTURES", style: TextStyle(fontSize: 10)),
+                Text(
+                  "mini rechargeable flashlight",
+                  style: TextStyle(fontSize: 12),
+                ),
+                SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text("₹189", style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(width: 4),
+                    Text(
+                      "₹199",
+                      style: TextStyle(
+                        decoration: TextDecoration.lineThrough,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
-  Widget _buildTopSellingUtensils(BuildContext context,var height, var width)
-  {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 16, 0,20),
-      child: Container(
-        height: height*0.26,
-        width: width,
-        color: Colors.black,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              height: height*0.28,
-              width: width*0.3,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                  child: Image.asset("assets/images/home/cooker.png")
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Explore Top Selling', textAlign: TextAlign.left, style: TextStyle(
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      fontFamily: 'regular',
-                      fontSize: height*0.017,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1.3333333333333333
-                  ),),
-                  SizedBox(height: height*0.02,),
-                  Text('Utensils', textAlign: TextAlign.center, style: TextStyle(
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      fontFamily: 'bold',
-                      fontSize: height*0.023,
-                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                      fontWeight: FontWeight.normal,
-                      height: 1
-                  ),),
-                  SizedBox(height: height*0.02,),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(12,8,8,8),
-                      child: Row(
-                        children: [
-                          Text('Explore', textAlign: TextAlign.center, style: TextStyle(
-                              color: Color.fromRGBO(13, 118, 0, 1),
-                              fontFamily: 'regular',
-                              fontSize: height*0.022,
-                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                              fontWeight: FontWeight.w600,
-                              height: 1
-                          ),),
-                          Icon(Icons.chevron_right,  color: Color.fromRGBO(13, 118, 0, 1),)
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              height: height*0.28,
-              width: width*0.3,
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Image.asset("assets/images/home/spoon.png")
-              ),
-            ),
 
-          ],
+  Widget mostLovedBrandsSection(BuildContext context) {
+    final brandLogos = [
+      "assets/images/home/asaya.png",
+      "assets/images/home/redtape.png",
+      "assets/images/home/asaya.png",
+      "assets/images/home/asaya.png",
+      "assets/images/home/redtape.png",
+      "assets/images/home/asaya.png",
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+          child: Text(
+            "MOST LOVED BRANDS",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: brandLogos.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 12,
+              childAspectRatio: 2,
+            ),
+            itemBuilder: (context, index) {
+              return Image.asset(brandLogos[index]);
+            },
+          ),
+        ),
+      ],
     );
   }
-  Widget _buildDealsOnElectronics(BuildContext context,var height, var width)
-  {
+
+  Widget buildmostLovedBrandsSection2() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text('Deals on electronics', textAlign: TextAlign.left, style: TextStyle(
-              color: Color.fromRGBO(51, 51, 51, 1),
-              fontFamily: 'bold',
-              fontSize: height*0.02,
-              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-              fontWeight: FontWeight.normal,
-              height: 1.1428571428571428
-          ),),
-        ),
-        Column(
-          children: [
-            Row(
-              children: [
-                InkWell(
-                  onTap: ()
-                  {
-                    Get.to(()=>ProductDetailsScreen());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 0,0),
-                    child: Container(
-                      width: width*0.45,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: height*0.2,
-                                    child: Image.asset("assets/images/home/refrig.png")
-                                ),
-                                SizedBox(height: height*0.015,),
-                                Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(25, 25, 25, 1),
-                                    fontFamily: 'regular',
-                                    fontSize: height*0.016,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1
-                                ),),
-                                SizedBox(height: height*0.01,),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text('₹189',
-                                        style: TextStyle(
-                                            fontSize: height*0.022,
-                                            fontFamily: 'regular'
-                                        ),
-                                      ),
-                                      SizedBox(width: width*0.02,),
-                                      Text('₹199',
-                                        style: TextStyle(
-                                          color: Colors.black.withOpacity(0.5),
-                                          fontSize: height*0.022,
-                                          fontFamily: 'regular',
-                                          decoration: TextDecoration.lineThrough,
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: height*0.01,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
-                                    SizedBox(width: width*0.02,),
-                                    Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                        color: Color.fromRGBO(102, 102, 102, 1),
-                                        fontFamily: 'regular',
-                                        fontSize: height*0.012,
-                                        letterSpacing: 0 ,
-                                        fontWeight: FontWeight.normal,
-
-                                    ),)
-                                  ],
-                                ),
-                                SizedBox(height: height*0.01,),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 25),
-                                  child: Row(
-                                    children: [
-                                      Spacer(),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color : Color.fromRGBO(200, 3, 51, 1),
-                                          borderRadius: BorderRadius.circular(4)
-                                        ),
-                                        child:  Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
-                                              color: Color.fromRGBO(249, 249, 249, 1),
-                                              fontFamily: 'regular',
-                                              fontSize: height*0.012,
-                                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                              fontWeight: FontWeight.normal,
-                                              height: 1
-                                          ),
-                                                            ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: ()
-                  {
-                    Get.to(()=>ProductDetailsScreen());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 0,0),
-                    child: Container(
-                      width: width*0.45,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                    height: height*0.2,
-                                    child: Image.asset("assets/images/home/refrig.png")
-                                ),
-                                SizedBox(height: height*0.015,),
-                                Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(25, 25, 25, 1),
-                                    fontFamily: 'regular',
-                                    fontSize: height*0.016,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1
-                                ),),
-                                SizedBox(height: height*0.01,),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text('₹189',
-                                        style: TextStyle(
-                                            fontSize: height*0.022,
-                                            fontFamily: 'regular'
-                                        ),
-                                      ),
-                                      SizedBox(width: width*0.02,),
-                                      Text('₹199',
-                                        style: TextStyle(
-                                          color: Colors.black.withOpacity(0.5),
-                                          fontSize: height*0.022,
-                                          fontFamily: 'regular',
-                                          decoration: TextDecoration.lineThrough,
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: height*0.01,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
-                                    SizedBox(width: width*0.02,),
-                                    Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                      color: Color.fromRGBO(102, 102, 102, 1),
-                                      fontFamily: 'regular',
-                                      fontSize: height*0.012,
-                                      letterSpacing: 0 ,
-                                      fontWeight: FontWeight.normal,
-
-                                    ),)
-                                  ],
-                                ),
-                                SizedBox(height: height*0.01,),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 25),
-                                  child: Row(
-                                    children: [
-                                      Spacer(),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color : Color.fromRGBO(200, 3, 51, 1),
-                                            borderRadius: BorderRadius.circular(4)
-                                        ),
-                                        child:  Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
-                                              color: Color.fromRGBO(249, 249, 249, 1),
-                                              fontFamily: 'regular',
-                                              fontSize: height*0.012,
-                                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                              fontWeight: FontWeight.normal,
-                                              height: 1
-                                          ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Text(
+            'MOST LOVED BRANDS',
+            style: GoogleFonts.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
             ),
-            Row(
-              children: [
-                InkWell(
-                  onTap: ()
-                  {
-                    Get.to(()=>ProductDetailsScreen());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 0,0),
-                    child: Container(
-                      width: width*0.45,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                    height: height*0.2,
-                                    child: Image.asset("assets/images/home/refrig.png")
-                                ),
-                                SizedBox(height: height*0.015,),
-                                Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(25, 25, 25, 1),
-                                    fontFamily: 'regular',
-                                    fontSize: height*0.016,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1
-                                ),),
-                                SizedBox(height: height*0.01,),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text('₹189',
-                                        style: TextStyle(
-                                            fontSize: height*0.022,
-                                            fontFamily: 'regular'
-                                        ),
-                                      ),
-                                      SizedBox(width: width*0.02,),
-                                      Text('₹199',
-                                        style: TextStyle(
-                                          color: Colors.black.withOpacity(0.5),
-                                          fontSize: height*0.022,
-                                          fontFamily: 'regular',
-                                          decoration: TextDecoration.lineThrough,
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: height*0.01,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
-                                    SizedBox(width: width*0.02,),
-                                    Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                      color: Color.fromRGBO(102, 102, 102, 1),
-                                      fontFamily: 'regular',
-                                      fontSize: height*0.012,
-                                      letterSpacing: 0 ,
-                                      fontWeight: FontWeight.normal,
-
-                                    ),)
-                                  ],
-                                ),
-                                SizedBox(height: height*0.01,),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 25),
-                                  child: Row(
-                                    children: [
-                                      Spacer(),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color : Color.fromRGBO(200, 3, 51, 1),
-                                            borderRadius: BorderRadius.circular(4)
-                                        ),
-                                        child:  Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
-                                              color: Color.fromRGBO(249, 249, 249, 1),
-                                              fontFamily: 'regular',
-                                              fontSize: height*0.012,
-                                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                              fontWeight: FontWeight.normal,
-                                              height: 1
-                                          ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: ()
-                  {
-                    Get.to(()=>ProductDetailsScreen());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 0,0),
-                    child: Container(
-                      width: width*0.45,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0,10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                    height: height*0.2,
-                                    child: Image.asset("assets/images/home/refrig.png")
-                                ),
-                                SizedBox(height: height*0.015,),
-                                Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                                    color: Color.fromRGBO(25, 25, 25, 1),
-                                    fontFamily: 'regular',
-                                    fontSize: height*0.016,
-                                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                    fontWeight: FontWeight.normal,
-                                    height: 1
-                                ),),
-                                SizedBox(height: height*0.01,),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text('₹189',
-                                        style: TextStyle(
-                                            fontSize: height*0.022,
-                                            fontFamily: 'regular'
-                                        ),
-                                      ),
-                                      SizedBox(width: width*0.02,),
-                                      Text('₹199',
-                                        style: TextStyle(
-                                          color: Colors.black.withOpacity(0.5),
-                                          fontSize: height*0.022,
-                                          fontFamily: 'regular',
-                                          decoration: TextDecoration.lineThrough,
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: height*0.01,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star,color: Colors.orange,size: height*0.025,),
-                                    Icon(Icons.star_border_outlined,color: Colors.orange,size: height*0.025,),
-                                    SizedBox(width: width*0.02,),
-                                    Text('4,764', textAlign: TextAlign.left, style: TextStyle(
-                                      color: Color.fromRGBO(102, 102, 102, 1),
-                                      fontFamily: 'regular',
-                                      fontSize: height*0.012,
-                                      letterSpacing: 0 ,
-                                      fontWeight: FontWeight.normal,
-
-                                    ),)
-                                  ],
-                                ),
-                                SizedBox(height: height*0.01,),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 25),
-                                  child: Row(
-                                    children: [
-                                      Spacer(),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color : Color.fromRGBO(200, 3, 51, 1),
-                                            borderRadius: BorderRadius.circular(4)
-                                        ),
-                                        child:  Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text('Limited time deal', textAlign: TextAlign.left, style: TextStyle(
-                                              color: Color.fromRGBO(249, 249, 249, 1),
-                                              fontFamily: 'regular',
-                                              fontSize: height*0.012,
-                                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                              fontWeight: FontWeight.normal,
-                                              height: 1
-                                          ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
-
+        SizedBox(height: 12),
+        Container(
+          height: 360,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  buildMostLovedCard(
+                    imagePath:
+                        'assets/images/home/frame4.png', // Main product image
+                    backgroundImagePath:
+                        'assets/images/home/blue.png', // Background image
+                    title: 'HAPPY CULTURES',
+                    description: 'great sleep awaits',
+                    price: '₹189',
+                    originalPrice: '₹199',
+                    discount: '5% off',
+                  ),
+                  SizedBox(width: 12), // Gap between cards
+                  buildMostLovedCard(
+                    imagePath:
+                        'assets/images/home/frame4.png', // Main product image
+                    backgroundImagePath:
+                        'assets/images/home/blue2.png', // Background image
+                    title: 'HAPPY CULTURES',
+                    description: 'great sleep awaits',
+                    price: '₹189',
+                    originalPrice: '₹199',
+                    discount: '5% off',
+                  ),
+                  SizedBox(width: 12),
+                  buildMostLovedCard(
+                    imagePath:
+                        'assets/images/home/frame4.png', // Main product image
+                    backgroundImagePath:
+                        'assets/images/home/blue.png', // Background image
+                    title: 'HAPPY CULTURES',
+                    description: 'great sleep awaits',
+                    price: '₹189',
+                    originalPrice: '₹199',
+                    discount: '5% off',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
-  Widget _buildVegetableCards(BuildContext context,var height, var width)
-  {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
+
+  Widget buildMostLovedCard({
+    required String imagePath,
+    required String title,
+    required String description,
+    required String price,
+    required String originalPrice,
+    required String discount,
+    String backgroundImagePath = 'assets/images/home/pink_background.png',
+  }) {
+    return Container(
+      width: 220,
+      height: 360,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Color(0xFFE5EFEA),
+          // Product Image Area with Background and Main Image
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            child: Container(
+              width: 220,
+              height: 270,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(backgroundImagePath),
+                  fit: BoxFit.cover,
                 ),
-                height: height*0.3,
-                width: width*0.87,
-
-                child: Center(
-                    child: Image.asset("assets/images/home/vegetables.png")
+              ),
+              child: Center(
+                child: Image.asset(
+                  imagePath,
+                  width: 160,
+                  height: 160,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(
+                      Icons.image_not_supported,
+                      color: Colors.white,
+                      size: 40,
+                    );
+                  },
                 ),
               ),
             ),
           ),
-          SizedBox(width: width*0.03,),
+          // Product Details
           Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Color(0xFFE5EFEA),
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.outfit(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade600,
+                  ),
                 ),
-                height: height*0.3,
-                width: width*0.87,
-
-                child: Center(
-                    child: Image.asset("assets/images/home/vegetables.png")
+                SizedBox(height: 2),
+                Text(
+                  description,
+                  style: GoogleFonts.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ),
-          ),
-          SizedBox(width: width*0.03,),
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Color(0xFFE5EFEA),
+                SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      price,
+                      style: GoogleFonts.outfit(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      originalPrice,
+                      style: GoogleFonts.outfit(
+                        fontSize: 14,
+                        decoration: TextDecoration.lineThrough,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      discount,
+                      style: GoogleFonts.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
                 ),
-                height: height*0.3,
-                width: width*0.87,
-
-                child: Center(
-                    child: Image.asset("assets/images/home/vegetables.png")
-                ),
-              ),
+              ],
             ),
           ),
         ],
       ),
     );
   }
-  Widget _buildDiscoverProductsHeading(BuildContext context,var height, var width)
-  {
-    return  Padding(
-      padding: const EdgeInsets.fromLTRB(10, 20, 0, 10),
-      child: Text('Discover the products', textAlign: TextAlign.left, style: TextStyle(
-          color: Color.fromRGBO(51, 51, 51, 1),
-          fontFamily: 'bold',
-          fontSize: height*0.02,
-          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-          fontWeight: FontWeight.normal,
-          height: 1.1428571428571428
-      ),),
+
+  Widget gadgetCentralSection() {
+    return Container(
+      width: 360,
+      height: 450,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+          colors: [Color(0xFFAF5D38), Color(0xFFD7A362)],
+        ),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 20,
+            left: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'gadget',
+                  style: GoogleFonts.cinzel(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Text(
+                  'central',
+                  style: GoogleFonts.cinzel(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Wire image
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Image.asset(
+              'assets/images/home/wire.png',
+              width: 120,
+              height: 120,
+            ),
+          ),
+
+          Positioned(
+            top: 75,
+            left: 20,
+            right: 0,
+            bottom: 0,
+            child: buildgadgetCentralWidget(),
+          ),
+        ],
+      ),
     );
   }
-  Widget _buildDiscoverProducts(BuildContext context,var height, var width)
-  {
+
+  Widget buildgadgetCentralWidget() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            InkWell(
-              onTap: ()
-             {
-               Get.to(()=>ProductDetailsScreen());
-             },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(
-                          children: [
-                            Container(
-                              height: height*0.23,
-                              width: width*0.44,
-                              child: Image.asset("assets/images/home/carrot2.png"),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.grey.withOpacity(0.1)
-                              ),
-                            ),
-                            Positioned(
-                                child:    Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius : BorderRadius.only(
-                                      topLeft: Radius.circular(8),
-                                      topRight: Radius.circular(0),
-                                      bottomLeft: Radius.circular(0),
-                                      bottomRight: Radius.circular(8),
-                                    ),
-                                    color : Color.fromRGBO(200, 3, 51, 1),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                            color: Color.fromRGBO(255, 255, 255, 1),
-                                            fontFamily: 'Segoe UI',
-                                            fontSize: height*0.015,
-                                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                            fontWeight: FontWeight.normal,
-                                            height: 1
-                                        ),),
-                                      ),
-
-                                    ],
-                                  ),
-                                )
-                            ),
-                            Positioned(
-                                bottom: 10,
-                                right: 10,
-                                child:  Container(
-                                  width: width*0.15,
-                                  height: height*0.04,
-
-                                  decoration: BoxDecoration(
-                                      color: Colors.yellow,
-                                      borderRadius: BorderRadius.circular(8)
-                                  ),
-                                  child:
-                                  Center(
-                                      child: Icon(Icons.add,size: height*0.025,)
-                                  ),
-
-                                )
-                            )
-                          ]
-                      ),
-                      SizedBox(height: height*0.01,),
-                      Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(25, 25, 25, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.017,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),),
-                      SizedBox(height: height*0.01,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text('4.4', textAlign: TextAlign.left, style: TextStyle(
-                              color: Color.fromRGBO(25, 25, 25, 1),
-                              fontFamily: 'regular',
-                              fontSize: height*0.014,
-                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                              fontWeight: FontWeight.normal,
-                              height: 1
-                          ),),
-                          SizedBox(width: width*0.02,),
-                          Icon(Icons.star,color: Colors.orange,size: height*0.02,),
-                          SizedBox(width: width*0.02,),
-                          Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
-                              color: Color.fromRGBO(102, 102, 102, 1),
-                              fontFamily: 'regular',
-                              fontSize: height*0.014,
-                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                              fontWeight: FontWeight.normal,
-                              height: 1
-                          ),)
-                        ],
-                      ),
-                      SizedBox(height: height*0.01,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text('₹189',
-                            style: TextStyle(
-                                fontSize: height*0.020,
-                                fontFamily: 'regular'
-                            ),
-                          ),
-                          SizedBox(width: width*0.02,),
-                          Text('₹199',
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.5),
-                              fontSize: height*0.020,
-                              fontFamily: 'regular',
-                              decoration: TextDecoration.lineThrough,
-                            ),
-                          ),
-
-                        ],
-                      ),
-                      SizedBox(height: height*0.01,),
-
-                      Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
-                          color: Color.fromRGBO(25, 25, 25, 1),
-                          fontFamily: 'regular',
-                          fontSize: height*0.012,
-                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                          fontWeight: FontWeight.normal,
-                          height: 1
-                      ),)
-
-                    ],
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: ()
-              {
-                Get.to(()=>ProductDetailsScreen());
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                        children: [
-                          Container(
-                            height: height*0.23,
-                            width: width*0.44,
-                            child: Image.asset("assets/images/home/carrot2.png"),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey.withOpacity(0.1)
-                            ),
-                          ),
-                          Positioned(
-                              child:    Container(
-                                decoration: BoxDecoration(
-                                  borderRadius : BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(0),
-                                    bottomLeft: Radius.circular(0),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                  color : Color.fromRGBO(200, 3, 51, 1),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                          fontFamily: 'Segoe UI',
-                                          fontSize: height*0.015,
-                                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.normal,
-                                          height: 1
-                                      ),),
-                                    ),
-
-                                  ],
-                                ),
-                              )
-                          ),
-                          Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child:  Container(
-                                width: width*0.15,
-                                height: height*0.04,
-
-                                decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(8)
-                                ),
-                                child:
-                                Center(
-                                    child: Icon(Icons.add,size: height*0.025,)
-                                ),
-
-                              )
-                          )
-                        ]
-                    ),
-                    SizedBox(height: height*0.01,),
-                    Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.017,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),),
-                    SizedBox(height: height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('4.4', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(25, 25, 25, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.014,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),),
-                        SizedBox(width: width*0.02,),
-                        Icon(Icons.star,color: Colors.orange,size: height*0.02,),
-                        SizedBox(width: width*0.02,),
-                        Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(102, 102, 102, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.014,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),)
-                      ],
-                    ),
-                    SizedBox(height: height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('₹189',
-                          style: TextStyle(
-                              fontSize: height*0.020,
-                              fontFamily: 'regular'
-                          ),
-                        ),
-                        SizedBox(width: width*0.02,),
-                        Text('₹199',
-                          style: TextStyle(
-                            color: Colors.black.withOpacity(0.5),
-                            fontSize: height*0.020,
-                            fontFamily: 'regular',
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-
-                      ],
-                    ),
-                    SizedBox(height: height*0.01,),
-
-                    Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.012,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),)
-
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: height*0.01,),
-        Row(
-          children: [
-            InkWell(
-              onTap: ()
-              {
-                Get.to(()=>ProductDetailsScreen());
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                        children: [
-                          Container(
-                            height: height*0.23,
-                            width: width*0.44,
-                            child: Image.asset("assets/images/home/carrot2.png"),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey.withOpacity(0.1)
-                            ),
-                          ),
-                          Positioned(
-                              child:    Container(
-                                decoration: BoxDecoration(
-                                  borderRadius : BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(0),
-                                    bottomLeft: Radius.circular(0),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                  color : Color.fromRGBO(200, 3, 51, 1),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                          fontFamily: 'Segoe UI',
-                                          fontSize: height*0.015,
-                                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.normal,
-                                          height: 1
-                                      ),),
-                                    ),
-
-                                  ],
-                                ),
-                              )
-                          ),
-                          Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child:  Container(
-                                width: width*0.15,
-                                height: height*0.04,
-
-                                decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(8)
-                                ),
-                                child:
-                                Center(
-                                    child: Icon(Icons.add,size: height*0.025,)
-                                ),
-
-                              )
-                          )
-                        ]
-                    ),
-                    SizedBox(height: height*0.01,),
-                    Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.017,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),),
-                    SizedBox(height: height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('4.4', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(25, 25, 25, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.014,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),),
-                        SizedBox(width: width*0.02,),
-                        Icon(Icons.star,color: Colors.orange,size: height*0.02,),
-                        SizedBox(width: width*0.02,),
-                        Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(102, 102, 102, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.014,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),)
-                      ],
-                    ),
-                    SizedBox(height: height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('₹189',
-                          style: TextStyle(
-                              fontSize: height*0.020,
-                              fontFamily: 'regular'
-                          ),
-                        ),
-                        SizedBox(width: width*0.02,),
-                        Text('₹199',
-                          style: TextStyle(
-                            color: Colors.black.withOpacity(0.5),
-                            fontSize: height*0.020,
-                            fontFamily: 'regular',
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-
-                      ],
-                    ),
-                    SizedBox(height: height*0.01,),
-
-                    Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.012,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),)
-
-                  ],
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: ()
-              {
-                Get.to(()=>ProductDetailsScreen());
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                        children: [
-                          Container(
-                            height: height*0.23,
-                            width: width*0.44,
-                            child: Image.asset("assets/images/home/carrot2.png"),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey.withOpacity(0.1)
-                            ),
-                          ),
-                          Positioned(
-                              child:    Container(
-                                decoration: BoxDecoration(
-                                  borderRadius : BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(0),
-                                    bottomLeft: Radius.circular(0),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                  color : Color.fromRGBO(200, 3, 51, 1),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                          fontFamily: 'Segoe UI',
-                                          fontSize: height*0.015,
-                                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.normal,
-                                          height: 1
-                                      ),),
-                                    ),
-
-                                  ],
-                                ),
-                              )
-                          ),
-                          Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child:  Container(
-                                width: width*0.15,
-                                height: height*0.04,
-
-                                decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(8)
-                                ),
-                                child:
-                                Center(
-                                    child: Icon(Icons.add,size: height*0.025,)
-                                ),
-
-                              )
-                          )
-                        ]
-                    ),
-                    SizedBox(height: height*0.01,),
-                    Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.017,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),),
-                    SizedBox(height: height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('4.4', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(25, 25, 25, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.014,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),),
-                        SizedBox(width: width*0.02,),
-                        Icon(Icons.star,color: Colors.orange,size: height*0.02,),
-                        SizedBox(width: width*0.02,),
-                        Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(102, 102, 102, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.014,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),)
-                      ],
-                    ),
-                    SizedBox(height: height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('₹189',
-                          style: TextStyle(
-                              fontSize: height*0.020,
-                              fontFamily: 'regular'
-                          ),
-                        ),
-                        SizedBox(width: width*0.02,),
-                        Text('₹199',
-                          style: TextStyle(
-                            color: Colors.black.withOpacity(0.5),
-                            fontSize: height*0.020,
-                            fontFamily: 'regular',
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-
-                      ],
-                    ),
-                    SizedBox(height: height*0.01,),
-
-                    Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.012,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),)
-
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        SizedBox(height: height*0.01,),
-        Row(
-          children: [
-            InkWell(
-              onTap: ()
-              {
-                Get.to(()=>ProductDetailsScreen());
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                        children: [
-                          Container(
-                            height: height*0.23,
-                            width: width*0.44,
-                            child: Image.asset("assets/images/home/carrot2.png"),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey.withOpacity(0.1)
-                            ),
-                          ),
-                          Positioned(
-                              child:    Container(
-                                decoration: BoxDecoration(
-                                  borderRadius : BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(0),
-                                    bottomLeft: Radius.circular(0),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                  color : Color.fromRGBO(200, 3, 51, 1),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                          fontFamily: 'Segoe UI',
-                                          fontSize: height*0.015,
-                                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.normal,
-                                          height: 1
-                                      ),),
-                                    ),
-
-                                  ],
-                                ),
-                              )
-                          ),
-                          Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child:  Container(
-                                width: width*0.15,
-                                height: height*0.04,
-
-                                decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(8)
-                                ),
-                                child:
-                                Center(
-                                    child: Icon(Icons.add,size: height*0.025,)
-                                ),
-
-                              )
-                          )
-                        ]
-                    ),
-                    SizedBox(height: height*0.01,),
-                    Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.017,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),),
-                    SizedBox(height: height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('4.4', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(25, 25, 25, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.014,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),),
-                        SizedBox(width: width*0.02,),
-                        Icon(Icons.star,color: Colors.orange,size: height*0.02,),
-                        SizedBox(width: width*0.02,),
-                        Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(102, 102, 102, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.014,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),)
-                      ],
-                    ),
-                    SizedBox(height: height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('₹189',
-                          style: TextStyle(
-                              fontSize: height*0.020,
-                              fontFamily: 'regular'
-                          ),
-                        ),
-                        SizedBox(width: width*0.02,),
-                        Text('₹199',
-                          style: TextStyle(
-                            color: Colors.black.withOpacity(0.5),
-                            fontSize: height*0.020,
-                            fontFamily: 'regular',
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-
-                      ],
-                    ),
-                    SizedBox(height: height*0.01,),
-
-                    Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.012,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),)
-
-                  ],
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: ()
-              {
-                Get.to(()=>ProductDetailsScreen());
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                        children: [
-                          Container(
-                            height: height*0.23,
-                            width: width*0.44,
-                            child: Image.asset("assets/images/home/carrot2.png"),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey.withOpacity(0.1)
-                            ),
-                          ),
-                          Positioned(
-                              child:    Container(
-                                decoration: BoxDecoration(
-                                  borderRadius : BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(0),
-                                    bottomLeft: Radius.circular(0),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                  color : Color.fromRGBO(200, 3, 51, 1),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text('10% \nOff', textAlign: TextAlign.left, style: TextStyle(
-                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                          fontFamily: 'Segoe UI',
-                                          fontSize: height*0.015,
-                                          letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.normal,
-                                          height: 1
-                                      ),),
-                                    ),
-
-                                  ],
-                                ),
-                              )
-                          ),
-                          Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child:  Container(
-                                width: width*0.15,
-                                height: height*0.04,
-
-                                decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(8)
-                                ),
-                                child:
-                                Center(
-                                    child: Icon(Icons.add,size: height*0.025,)
-                                ),
-
-                              )
-                          )
-                        ]
-                    ),
-                    SizedBox(height: height*0.01,),
-                    Text('Fresh organic Kashmir \napples', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.017,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),),
-                    SizedBox(height: height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('4.4', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(25, 25, 25, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.014,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),),
-                        SizedBox(width: width*0.02,),
-                        Icon(Icons.star,color: Colors.orange,size: height*0.02,),
-                        SizedBox(width: width*0.02,),
-                        Text('( 21,002)', textAlign: TextAlign.left, style: TextStyle(
-                            color: Color.fromRGBO(102, 102, 102, 1),
-                            fontFamily: 'regular',
-                            fontSize: height*0.014,
-                            letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                            fontWeight: FontWeight.normal,
-                            height: 1
-                        ),)
-                      ],
-                    ),
-                    SizedBox(height: height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('₹189',
-                          style: TextStyle(
-                              fontSize: height*0.020,
-                              fontFamily: 'regular'
-                          ),
-                        ),
-                        SizedBox(width: width*0.02,),
-                        Text('₹199',
-                          style: TextStyle(
-                            color: Colors.black.withOpacity(0.5),
-                            fontSize: height*0.020,
-                            fontFamily: 'regular',
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-
-                      ],
-                    ),
-                    SizedBox(height: height*0.01,),
-
-                    Text('20k+ bought in past month', textAlign: TextAlign.left, style: TextStyle(
-                        color: Color.fromRGBO(25, 25, 25, 1),
-                        fontFamily: 'regular',
-                        fontSize: height*0.012,
-                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                        fontWeight: FontWeight.normal,
-                        height: 1
-                    ),)
-
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-
-      ],
-    );
-  }
-  Widget _buildBrandsRelatedToSearch(BuildContext context,var height, var width) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Container(
-        height: height * 0.32,
-        width: width,
-        color: Color(0xFFBBDEFB),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-              child: Text(
-                'Brands related to your search', textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Color.fromRGBO(51, 51, 51, 1),
-                    fontFamily: 'bold',
-                    fontSize: height*0.02,
-                    letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                    fontWeight: FontWeight.normal,
-                    height: 1.1428571428571428
-                ),),
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+        SizedBox(height: 12),
+        Container(
+          height: 360,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 children: [
-                  InkWell(
-                    onTap: ()
-                    {
-                      Get.to(()=>ProductDetailsScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                      child: Container(
-                          height: height * 0.22,
-                          width: width * 0.4,
-                          child: Image.asset(
-                              "assets/images/home/secondrefrig.png")
-                      ),
-                    ),
+                  buildgadgetCentralCard(
+                    imagePath:
+                        'assets/images/home/frame4.png', // Main product image
+                    backgroundImagePath:
+                        'assets/images/home/blue.png', // Background image
+                    title: 'HAPPY CULTURES',
+                    description: 'great sleep awaits',
+                    price: '₹189',
+                    originalPrice: '₹199',
+                    discount: '5% off',
                   ),
-                  InkWell(
-                    onTap: ()
-                    {
-                      Get.to(()=>ProductDetailsScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                      child: Container(
-                          height: height * 0.22,
-                          width: width * 0.4,
-                          child: Image.asset(
-                              "assets/images/home/secondrefrig.png")
-                      ),
-                    ),
+                  SizedBox(width: 12), // Gap between cards
+                  buildgadgetCentralCard(
+                    imagePath:
+                        'assets/images/home/frame4.png', // Main product image
+                    backgroundImagePath:
+                        'assets/images/home/blue2.png', // Background image
+                    title: 'HAPPY CULTURES',
+                    description: 'great sleep awaits',
+                    price: '₹189',
+                    originalPrice: '₹199',
+                    discount: '5% off',
                   ),
-                  InkWell(
-                    onTap: ()
-                    {
-                      Get.to(()=>ProductDetailsScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                      child: Container(
-                          height: height * 0.22,
-                          width: width * 0.4,
-                          child: Image.asset(
-                              "assets/images/home/secondrefrig.png")
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: ()
-                    {
-                      Get.to(()=>ProductDetailsScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                      child: Container(
-                          height: height * 0.22,
-                          width: width * 0.4,
-                          child: Image.asset(
-                              "assets/images/home/secondrefrig.png")
-                      ),
-                    ),
+                  SizedBox(width: 12),
+                  buildgadgetCentralCard(
+                    imagePath:
+                        'assets/images/home/frame4.png', // Main product image
+                    backgroundImagePath:
+                        'assets/images/home/blue.png', // Background image
+                    title: 'HAPPY CULTURES',
+                    description: 'great sleep awaits',
+                    price: '₹189',
+                    originalPrice: '₹199',
+                    discount: '5% off',
                   ),
                 ],
               ),
-            )
-          ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildgadgetCentralCard({
+    required String imagePath,
+    required String title,
+    required String description,
+    required String price,
+    required String originalPrice,
+    required String discount,
+    String backgroundImagePath = 'assets/images/home/pink_background.png',
+  }) {
+    return Container(
+      width: 220,
+      height: 290,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Product Image Area with Background and Main Image
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            child: Container(
+              width: 220,
+              height: 200,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(backgroundImagePath),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Center(
+                child: Image.asset(
+                  imagePath,
+                  width: 160,
+                  height: 160,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(
+                      Icons.image_not_supported,
+                      color: Colors.white,
+                      size: 40,
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          // Product Details
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.outfit(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+                SizedBox(height: 2),
+                Text(
+                  description,
+                  style: GoogleFonts.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      price,
+                      style: GoogleFonts.outfit(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      originalPrice,
+                      style: GoogleFonts.outfit(
+                        fontSize: 14,
+                        decoration: TextDecoration.lineThrough,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      discount,
+                      style: GoogleFonts.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildpinkBannerSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // SizedBox(height: 12),
+        Container(
+          height: 154, // Fixed height as per specs
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  buildPinkBanner(
+                    imagePath: 'assets/images/home/pink_poster.png',
+                  ),
+                  SizedBox(width: 12), // Gap between banners
+                  buildPinkBanner(
+                    imagePath: 'assets/images/home/pink_poster.png',
+                  ),
+                  SizedBox(width: 12),
+                  buildPinkBanner(
+                    imagePath: 'assets/images/home/pink_poster.png',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildPinkBanner({required String imagePath}) {
+    return Container(
+      width: 280,
+      height: 154,
+      child: ClipRRect(
+        borderRadius: BorderRadius.zero,
+        child: Image.asset(
+          imagePath,
+          fit: BoxFit.cover,
+          // errorBuilder: (context, error, stackTrace) {
+          //   return Container(
+          //     width: 280,
+          //     height: 154,
+          //     decoration: BoxDecoration(
+          //       color: Colors.grey.shade200,
+          //       borderRadius: BorderRadius.zero,
+          //     ),
+
+          //   );
+          // },
         ),
       ),
     );
   }
 
+  Widget buildsavingsBannerSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          height: 154,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  buildsavingsBanner(
+                    imagePath: 'assets/images/home/saved189.png',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildsavingsBanner({required String imagePath}) {
+    return Container(
+      width: 328,
+      height: 120,
+      child: ClipRRect(
+        borderRadius: BorderRadius.zero,
+        child: Image.asset(imagePath, fit: BoxFit.cover),
+      ),
+    );
+  }
+
+  Widget recommendedSection(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header row: "RECOMMENDED" + Icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'RECOMMENDED',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.5,
+                  color: Colors.black87,
+                ),
+              ),
+              Icon(
+                Icons.more_vert,
+                size: 18,
+                color: Colors.grey[700],
+              ), // Replace with image if needed
+            ],
+          ),
+
+          // Grid of cards
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 16,
+            physics: NeverScrollableScrollPhysics(),
+            childAspectRatio: 158 / 240,
+            children: List.generate(6, (index) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 158,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          'assets/images/home/grey.png',
+                        ), // Background
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/home/frame4.png', // Foreground
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    'HAPPY CULTURES',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey[600],
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    'great sleep awaits',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 2),
+                  Row(
+                    children: [
+                      Text(
+                        '₹189',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        '₹399',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        '53% off',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.green,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+
+ Widget recommendedSection2(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'RECOMMENDED',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            Icon(Icons.more_vert, size: 18, color: Colors.grey[700]),
+          ],
+        ),
+        SizedBox(height: 12),
+
+        // Grid
+        GridView.builder(
+          itemCount: 9,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.62, // Increased height per item
+          ),
+          itemBuilder: (context, index) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 105,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/home/grey.png'),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/home/frame4.png',
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'HAPPY CULTURES',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[600],
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                Text(
+                  'great sleep awaits',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      '₹189',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      '₹399',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.grey,
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      '53% off',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.green,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+
   void _showPopupAboveButton(BuildContext context, GlobalKey key) {
-    final RenderBox renderBox = key.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox renderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
     final Size size = renderBox.size;
     final Offset offset = renderBox.localToGlobal(Offset.zero);
 
@@ -2712,50 +2301,50 @@ class _HomePageState extends State<HomePage> {
     OverlayEntry? overlayEntry;
 
     overlayEntry = OverlayEntry(
-      builder: (context) => GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () {
-          overlayEntry?.remove();
-        },
-        child: Stack(
-          children: [
-            Positioned(
-              top: offset.dy + size.height + 5,
-              left: popupLeft,
-              child: GestureDetector(
-                onTap: () {
-                  overlayEntry?.remove();
-                  authcontroller.logout(context);
-                  Get.offAll(()=>LoginScreen());
-                },
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    color: Colors.black,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Logout",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: height * 0.02,
+      builder:
+          (context) => GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              overlayEntry?.remove();
+            },
+            child: Stack(
+              children: [
+                Positioned(
+                  top: offset.dy + size.height + 5,
+                  left: popupLeft,
+                  child: GestureDetector(
+                    onTap: () {
+                      overlayEntry?.remove();
+                      authcontroller.logout(context);
+                      Get.offAll(() => LoginScreen());
+                    },
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Container(
+                        color: Colors.black,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Logout",
+                            style: GoogleFonts.outfit(
+                              color: Colors.white,
+                              fontSize: height * 0.02,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
     );
 
     Overlay.of(context).insert(overlayEntry);
   }
-
-
 }
+
 class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
   final double height;
@@ -2763,12 +2352,12 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   _StickyHeaderDelegate({required this.child, required this.height});
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-
-    return SizedBox(
-      height: height,
-      child: child,
-    );
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return SizedBox(height: height, child: child);
   }
 
   @override
@@ -2778,6 +2367,6 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   double get minExtent => height;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      false;
 }
-
