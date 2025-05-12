@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ProductImageDisplay extends StatefulWidget {
-  const ProductImageDisplay({super.key});
+  final dynamic item;
+  const ProductImageDisplay({required this.item, super.key});
 
   @override
   State<ProductImageDisplay> createState() => _ProductImageDisplayState();
@@ -9,10 +10,17 @@ class ProductImageDisplay extends StatefulWidget {
 
 class _ProductImageDisplayState extends State<ProductImageDisplay> {
   int _currentImageIndex = 0;
-  final List<String> _images = [
-    'assets/images/fridge.png',
-    'assets/images/fridge.png',
-  ];
+  List<String> _images = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize _images from the item if you need to display multiple images
+    if (widget.item != null && widget.item['images'] != null) {
+      _images = List<String>.from(widget.item['images']);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +40,7 @@ class _ProductImageDisplayState extends State<ProductImageDisplay> {
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Image.asset(
+                child: Image.network(
                   _images[index],
                   fit: BoxFit.contain,
                 ),

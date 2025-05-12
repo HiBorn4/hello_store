@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hello_store/controllers/product_details_cotroller.dart';
 import 'package:hello_store/screens/homepage.dart';
+import 'package:hello_store/screens/product_details_screen.dart';
 
 class ProductInfo extends StatefulWidget {
-  const ProductInfo({super.key});
+  final dynamic item;
+  const ProductInfo({required this.item, super.key});
+
+
 
   @override
   State<ProductInfo> createState() => _ProductInfoState();
 }
 
 class _ProductInfoState extends State<ProductInfo> {
+
+  final ProductDetailsCotroller cotroller=Get.find<ProductDetailsCotroller>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -162,7 +170,7 @@ class _ProductInfoState extends State<ProductInfo> {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              print("ss");
+               cotroller.addToCart(widget.item,context);
               cartitems.value=cartitems.value+1;
               print(cartitems.value);
             },
