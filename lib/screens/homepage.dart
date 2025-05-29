@@ -263,31 +263,56 @@ class _HomePageState extends State<HomePage> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 0, 8),
             child: ListView.builder(
-              itemCount: data.length,
+              itemCount: homecontroller.categoryList.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Get.to(() => CategoryScreen());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            height: height * 0.08,
-                            child: Image.asset("${data[index]['img']}"),
+                String? title=homecontroller.categoryList[index].description;
+                return Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => CategoryScreen());
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: Container(
+                          child: Column(
+                            children: [
+                              Container(
+                                height: height * 0.08,
+                                width: height * 0.08, // optional: keeps it square
+                                clipBehavior: Clip.hardEdge, // clips overflowed content
+                                decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(8), // optional: for rounded corners
+                                ),
+                                child: Image.network(
+                                  homecontroller.categoryList[index].img,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      'assets/refrigerator.png',
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                ),
+                              ),
+
+                              SizedBox(height: height * 0.007),
+                              Text(
+                                title != null
+                                    ? (title!.length > 6
+                                    ? '${title!.substring(0, 6)}...'
+                                    : title!)
+                                    : 'No description',
+                                style: GoogleFonts.outfit(fontSize: height * 0.015),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: height * 0.007),
-                          Text(
-                            "${data[index]['text']}",
-                            style: GoogleFonts.outfit(fontSize: height * 0.015),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                    SizedBox(height: height*0.01,)
+                  ],
                 );
               },
             ),
