@@ -6,7 +6,7 @@
 
 ### 📄 **README.md**
 
-````markdown
+
 # hello_stores
 
 A responsive, multi-tab Flutter application for showcasing real estate unit details and buyer information. The app integrates with Firebase and uses GetX for state management to display key sections like Applicant Details, Agreement Info, and Allotment Summary.
